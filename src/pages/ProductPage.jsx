@@ -4,6 +4,7 @@ import {
   Heart, ShieldCheck, RefreshCcw, Truck, MessageCircle as WhatsApp, BadgeCheck
 } from 'lucide-react'
 import { products, categoryPath, categorySizes, defaultSizes } from '../data/mockData.js'
+import { buildSingleProductEnquiryUrl } from '../lib/whatsapp.js'
 
 export function ProductPage({ onAdd, wishlist, setWishlist }) {
   const { id } = useParams()
@@ -19,14 +20,12 @@ export function ProductPage({ onAdd, wishlist, setWishlist }) {
   ]
   const liked = wishlist.includes(product.id)
   
-  const waMessage = encodeURIComponent(
-    `Namaste Riti Handlooms! I would like to enquire about this product:\n\n` +
-    `*Product:* ${product.title}\n` +
-    `*Category:* ${product.category}\n` +
-    `*Selected Size:* ${selectedSize}\n` +
-    `*Product Link:* ${typeof window !== 'undefined' ? window.location.href : `/product/${product.id}`}\n\n` +
-    `Please share price and availability.`
-  )
+  const waMessageUrl = buildSingleProductEnquiryUrl({
+    title: product.title,
+    category: product.category,
+    selectedSize: selectedSize,
+    url: typeof window !== 'undefined' ? window.location.href : `https://ritihandloom.in/product/${product.id}`
+  })
 
   const handleAdd = () => {
     onAdd({
@@ -119,7 +118,7 @@ export function ProductPage({ onAdd, wishlist, setWishlist }) {
 
             <a
               className="whatsapp-link"
-              href={`https://wa.me/919555790429?text=${waMessage}`}
+              href={waMessageUrl}
               target="_blank"
               rel="noopener noreferrer"
               style={{
