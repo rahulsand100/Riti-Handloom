@@ -25,20 +25,20 @@ const PLACEHOLDER_VALUES = new Set([
   'YOUR_WHATSAPP_NUMBER'
 ])
 
-function cleanEnv(key, devFallback = '') {
+function cleanEnv(key, fallback = '', allowInProd = true) {
   const value = typeof rawEnv[key] === 'string' ? rawEnv[key].trim() : ''
   if (value && !PLACEHOLDER_VALUES.has(value)) {
     return value
   }
-  if (!isProd && devFallback) {
-    return devFallback
+  if ((!isProd || allowInProd) && fallback) {
+    return fallback
   }
   return ''
 }
 
-const sanityProjectId = cleanEnv('VITE_SANITY_PROJECT_ID', isDev ? 'rhynfvzd' : '')
-const sanityDataset = cleanEnv('VITE_SANITY_DATASET', 'production')
-const sanityApiVersion = cleanEnv('VITE_SANITY_API_VERSION', '2024-01-01')
+const sanityProjectId = cleanEnv('VITE_SANITY_PROJECT_ID', 'rhynfvzd', false)
+const sanityDataset = cleanEnv('VITE_SANITY_DATASET', 'production', true)
+const sanityApiVersion = cleanEnv('VITE_SANITY_API_VERSION', '2024-01-01', true)
 
 const missingEnvVars = []
 if (!sanityProjectId) missingEnvVars.push('VITE_SANITY_PROJECT_ID')
