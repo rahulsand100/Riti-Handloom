@@ -1,14 +1,16 @@
 import { Link } from 'react-router-dom'
 import { Phone, Mail, MessageCircle as WhatsApp, Camera as Instagram } from 'lucide-react'
 import { useSanityCatalog } from '../../context/useSanityCatalog.js'
+import { siteConfig } from '../../lib/config.js'
+import { getWhatsAppUrl } from '../../lib/whatsapp.js'
 
 export function Footer() {
   const { categories, siteSettings } = useSanityCatalog()
   const displayCategories = categories || []
 
-  const primaryPhone = siteSettings?.primaryWhatsAppNumber || '919555790429'
-  const displayPhone = siteSettings?.secondaryPhoneNumber || '+91 95557 90429'
-  const storeAddress = siteSettings?.storeAddress || 'Jagat Farm Commercial Complex, Near Knowledge Park 2 & Pari Chowk, Greater Noida, UP 201308'
+  const primaryPhone = siteSettings?.primaryWhatsAppNumber || siteConfig.whatsappNumber
+  const displayPhone = siteSettings?.secondaryPhoneNumber || siteConfig.contactPhone
+  const storeAddress = siteSettings?.storeAddress || siteConfig.storeAddress
 
   return (
     <footer className="footer">
@@ -54,11 +56,11 @@ export function Footer() {
           <a href={`tel:${displayPhone.replace(/\s+/g, '')}`} className="footer-contact-link">
             <Phone size={15} /> {displayPhone}
           </a>
-          <a href="mailto:hello@ritihandloom.in" className="footer-contact-link">
-            <Mail size={15} /> hello@ritihandloom.in
+          <a href={`mailto:${siteConfig.contactEmail}`} className="footer-contact-link">
+            <Mail size={15} /> {siteConfig.contactEmail}
           </a>
           <a
-            href={`https://wa.me/${primaryPhone}?text=Namaste%20Riti%20Handlooms!%20I%20have%20an%20enquiry.`}
+            href={getWhatsAppUrl('Namaste Riti Handlooms! I have an enquiry.', primaryPhone)}
             target="_blank"
             rel="noopener noreferrer"
             className="footer-contact-link"
@@ -66,7 +68,7 @@ export function Footer() {
             <WhatsApp size={15} /> Chat on WhatsApp
           </a>
           <a
-            href="https://instagram.com/ritihandloom"
+            href={siteConfig.instagramUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="footer-contact-link"

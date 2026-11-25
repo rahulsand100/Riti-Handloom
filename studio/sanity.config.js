@@ -6,8 +6,8 @@ export default defineConfig({
   name: 'default',
   title: 'Riti Handlooms Admin Studio',
 
-  projectId: process.env.SANITY_STUDIO_PROJECT_ID || 'rhynfvzd',
-  dataset: process.env.SANITY_STUDIO_DATASET || 'production',
+  projectId: process.env.SANITY_STUDIO_PROJECT_ID || process.env.VITE_SANITY_PROJECT_ID || 'rhynfvzd',
+  dataset: process.env.SANITY_STUDIO_DATASET || process.env.VITE_SANITY_DATASET || 'production',
 
   plugins: [structureTool()],
 

@@ -4,6 +4,8 @@ import {
   ChevronDown, Heart, Search, ShoppingBag, Menu, X, Phone, Package
 } from 'lucide-react'
 import { useSanityCatalog } from '../../context/useSanityCatalog.js'
+import { siteConfig } from '../../lib/config.js'
+import { getWhatsAppUrl } from '../../lib/whatsapp.js'
 import { categoryPath } from '../../data/mockData.js'
 
 export function Header({ cartCount, onCart, wishlistCount, onSearchOpen, onOpenBulkModal }) {
@@ -39,8 +41,8 @@ export function Header({ cartCount, onCart, wishlistCount, onSearchOpen, onOpenB
                 <Package size={12} /> Wholesale & Bulk Orders
               </button>
             )}
-            <a href={`tel:${siteSettings?.secondaryPhoneNumber || '+919555790429'}`}><Phone size={13} /> {siteSettings?.secondaryPhoneNumber || '+91 95557 90429'}</a>
-            <a href={`https://wa.me/${siteSettings?.primaryWhatsAppNumber || '919555790429'}?text=Namaste%20Riti%20Handlooms!%20I%20have%20an%20enquiry.`}>WhatsApp</a>
+            <a href={`tel:${(siteSettings?.secondaryPhoneNumber || siteConfig.contactPhone).replace(/\s+/g, '')}`}><Phone size={13} /> {siteSettings?.secondaryPhoneNumber || siteConfig.contactPhone}</a>
+            <a href={getWhatsAppUrl('Namaste Riti Handlooms! I have an enquiry.', siteSettings?.primaryWhatsAppNumber)}>WhatsApp</a>
           </div>
         </div>
       </div>
@@ -130,7 +132,7 @@ export function Header({ cartCount, onCart, wishlistCount, onSearchOpen, onOpenB
                 <Heart size={17} /> Wishlist
               </Link>
               <a
-                href="https://wa.me/919555790429?text=Namaste%20Riti%20Handlooms!%20I%20have%20an%20enquiry."
+                href={getWhatsAppUrl('Namaste Riti Handlooms! I have an enquiry.', siteSettings?.primaryWhatsAppNumber)}
                 target="_blank"
                 rel="noopener noreferrer"
               >

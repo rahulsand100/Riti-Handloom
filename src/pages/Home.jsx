@@ -9,6 +9,8 @@ import { SectionTitle } from '../components/common/SectionTitle.jsx'
 import { ProductCard } from '../components/product/ProductCard.jsx'
 import { SEO } from '../components/common/SEO.jsx'
 import { useSanityCatalog } from '../context/useSanityCatalog.js'
+import { siteConfig } from '../lib/config.js'
+import { getWhatsAppUrl } from '../lib/whatsapp.js'
 import { categoryPath, bedsheetImages, image } from '../data/mockData.js'
 
 export function Home({ onAdd, wishlist, setWishlist }) {
@@ -269,7 +271,10 @@ export function Home({ onAdd, wishlist, setWishlist }) {
             </div>
             <a
               className="btn primary"
-              href="https://wa.me/919555790429?text=Namaste%20Riti%20Handlooms!%20I%20would%20like%20to%20discuss%20home%20furnishings%20or%20a%20wholesale%20enquiry."
+              href={getWhatsAppUrl(
+                'Namaste Riti Handlooms! I would like to discuss home furnishings or a wholesale enquiry.',
+                siteSettings?.primaryWhatsAppNumber
+              )}
               target="_blank"
               rel="noopener noreferrer"
               style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#25D366', color: '#fff', border: 'none' }}
@@ -317,7 +322,7 @@ export function Home({ onAdd, wishlist, setWishlist }) {
                 <div className="prox-item">
                   <Phone size={18} />
                   <div>
-                    <b>+91 95557 90429</b>
+                    <b>{siteSettings?.secondaryPhoneNumber || siteConfig.contactPhone}</b>
                     <small>Workshop & Customer Support</small>
                   </div>
                 </div>
@@ -334,7 +339,10 @@ export function Home({ onAdd, wishlist, setWishlist }) {
                   <Navigation size={16} /> Get Directions on Google Maps
                 </a>
                 <a
-                  href="https://wa.me/919555790429?text=Namaste%20Riti%20Handlooms!%20I%20am%20visiting%20your%20store%20in%20Jagat%20Farm."
+                  href={getWhatsAppUrl(
+                    'Namaste Riti Handlooms! I am visiting your store in Jagat Farm.',
+                    siteSettings?.primaryWhatsAppNumber
+                  )}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn secondary"
@@ -368,13 +376,13 @@ export function Home({ onAdd, wishlist, setWishlist }) {
         <div className="container">
           <div className="instagram-head">
             <h2><Instagram /> @ritihandloom</h2>
-            <a className="btn secondary" href="https://instagram.com/ritihandloom" target="_blank" rel="noopener noreferrer">
+            <a className="btn secondary" href={siteConfig.instagramUrl} target="_blank" rel="noopener noreferrer">
               Follow
             </a>
           </div>
           <div className="insta-grid">
             {[...products.slice(0, 6)].map(p => (
-              <a href="https://instagram.com/ritihandloom" target="_blank" rel="noopener noreferrer" key={p.id}>
+              <a href={siteConfig.instagramUrl} target="_blank" rel="noopener noreferrer" key={p.id}>
                 <img src={p.image} alt="Riti Handloom on Instagram" />
               </a>
             ))}

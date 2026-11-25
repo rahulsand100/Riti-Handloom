@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { ArrowRight, Phone, Mail, MapPin } from 'lucide-react'
 import { SEO } from '../components/common/SEO.jsx'
+import { siteConfig, getCanonicalUrl } from '../lib/config.js'
 
 export function StaticPage({ title }) {
   return (
@@ -8,7 +9,7 @@ export function StaticPage({ title }) {
       <SEO
         title={`${title} | Riti Handlooms Jagat Farm Greater Noida`}
         description="Discover the Riti Handlooms story — handcrafted bedsheets, dohars, blankets, and home furnishings in Jagat Farm, Greater Noida."
-        url={title === 'About the Brand' ? 'https://ritihandloom.in/about' : 'https://ritihandloom.in/'}
+        url={title === 'About the Brand' ? getCanonicalUrl('/about') : getCanonicalUrl('/')}
       />
       <div className="container">
         <div className="breadcrumb">
@@ -72,9 +73,9 @@ export function StaticPage({ title }) {
           <div className="policy-content">
             <p>Our team is happy to help with product, bulk order and delivery information.</p>
             <h3>Get in touch</h3>
-            <p><Phone size={16} /> +91 95557 90429</p>
-            <p><Mail size={16} /> hello@ritihandloom.in</p>
-            <p><MapPin size={16} /> Jagat Farm, Greater Noida, Uttar Pradesh</p>
+            <p><Phone size={16} /> {siteConfig.contactPhone}</p>
+            <p><Mail size={16} /> {siteConfig.contactEmail}</p>
+            <p><MapPin size={16} /> {siteConfig.storeAddress}</p>
           </div>
         )}
       </div>

@@ -4,6 +4,7 @@ import { SlidersHorizontal, Grid2X2, Grid3X3, ChevronDown, X, RotateCcw } from '
 import { ProductCard } from '../components/product/ProductCard.jsx'
 import { SEO } from '../components/common/SEO.jsx'
 import { useSanityCatalog } from '../context/useSanityCatalog.js'
+import { getCanonicalUrl } from '../lib/config.js'
 
 export function Shop({ onAdd, wishlist, setWishlist, categorySlug }) {
   const { products, categories, getCategory, loading, error, refetch } = useSanityCatalog()
@@ -89,8 +90,8 @@ export function Shop({ onAdd, wishlist, setWishlist, categorySlug }) {
         title={activeCategoryName ? `${activeCategoryName} Collection | Riti Handlooms Jagat Farm Greater Noida` : 'Our Handloom Collection | Riti Handlooms Jagat Farm Greater Noida'}
         description={activeCategoryName ? `Browse handcrafted ${activeCategoryName.toLowerCase()} at Riti Handlooms, Jagat Farm, Greater Noida. Near Knowledge Park 2 & Pari Chowk. WhatsApp enquiry available.` : 'Explore handcrafted bedsheets, dohars, blankets, and towels at Riti Handlooms in Jagat Farm, Greater Noida (near Knowledge Park 2).'}
         breadcrumbs={[
-          { name: 'Home', url: 'https://ritihandloom.in/' },
-          { name: activeCategoryName || 'Our Collection', url: categorySlug ? `https://ritihandloom.in/category/${categorySlug}` : 'https://ritihandloom.in/shop' }
+          { name: 'Home', url: getCanonicalUrl('/') },
+          { name: activeCategoryName || 'Our Collection', url: categorySlug ? getCanonicalUrl(`/category/${categorySlug}`) : getCanonicalUrl('/shop') }
         ]}
       />
       <div className="container">

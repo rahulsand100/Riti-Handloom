@@ -1,23 +1,23 @@
 import { createClient } from '@sanity/client'
 import { createImageUrlBuilder } from '@sanity/image-url'
+import { siteConfig } from './config.js'
 
 /**
  * Sanity Client Configuration
  * Public read-only access for storefront presentation.
  * All write mutations are restricted to authenticated Sanity Studio users.
  */
-// Resolve environment variables safely in both Vite and Node.js environments
-const env = typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : (typeof process !== 'undefined' ? process.env : {})
+export const sanityClient = siteConfig.sanity.isConfigured
+  ? createClient({
+      projectId: siteConfig.sanity.projectId,
+      dataset: siteConfig.sanity.dataset,
+      apiVersion: siteConfig.sanity.apiVersion,
+      useCdn: true, // Globally distributed edge caching
+    })
+  : null
 
-export const sanityClient = createClient({
-  projectId: env?.VITE_SANITY_PROJECT_ID || 'rhynfvzd',
-  dataset: env?.VITE_SANITY_DATASET || 'production',
-  apiVersion: env?.VITE_SANITY_API_VERSION || '2024-01-01',
-  useCdn: true, // Globally distributed edge caching
-})
-
-// Initialize the Sanity image URL builder instance
-const builder = createImageUrlBuilder(sanityClient)
+// Initialize the Sanity image URL builder instance only when configured
+const builder = sanityClient ? createImageUrlBuilder(sanityClient) : null
 
 /**
  * Validates whether an image source can be safely handled by the Sanity image builder.
@@ -45,7 +45,7 @@ export function isValidImageSource(source) {
  * @returns {import('@sanity/image-url/lib/types/builder').ImageUrlBuilder | null}
  */
 export function urlFor(source) {
-  if (!isValidImageSource(source)) return null
+  if (!builder || !isValidImageSource(source)) return null
   try {
     return builder.image(source)
   } catch {

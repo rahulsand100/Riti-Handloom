@@ -7,11 +7,12 @@ import { ProductCard } from '../components/product/ProductCard.jsx'
 import { SEO } from '../components/common/SEO.jsx'
 import { useSanityCatalog } from '../context/useSanityCatalog.js'
 import { categoryPath } from '../data/mockData.js'
+import { getCanonicalUrl } from '../lib/config.js'
 import { buildSingleProductEnquiryUrl } from '../lib/whatsapp.js'
 
 export function ProductPage({ onAdd, wishlist, setWishlist }) {
   const { id } = useParams()
-  const { getProduct, products, loading } = useSanityCatalog()
+  const { getProduct, products, loading, siteSettings } = useSanityCatalog()
   const product = getProduct(id)
   const [activeImageIndex, setActiveImageIndex] = useState(0)
 
@@ -50,7 +51,8 @@ export function ProductPage({ onAdd, wishlist, setWishlist }) {
   const waMessageUrl = buildSingleProductEnquiryUrl({
     title: product.title,
     category: product.category,
-    url: typeof window !== 'undefined' ? window.location.href : `https://ritihandloom.in/product/${product.id}`
+    url: typeof window !== 'undefined' ? window.location.href : getCanonicalUrl(`/product/${product.id}`),
+    phone: siteSettings?.primaryWhatsAppNumber
   })
 
   const handleAdd = () => {
@@ -73,9 +75,9 @@ export function ProductPage({ onAdd, wishlist, setWishlist }) {
         image={product.image}
         product={product}
         breadcrumbs={[
-          { name: 'Home', url: 'https://ritihandloom.in/' },
-          { name: product.category, url: `https://ritihandloom.in/category/${product.categorySlug || 'bedsheets'}` },
-          { name: product.title, url: `https://ritihandloom.in/product/${product.id}` }
+          { name: 'Home', url: getCanonicalUrl('/') },
+          { name: product.category, url: getCanonicalUrl(categoryHref) },
+          { name: product.title, url: getCanonicalUrl(`/product/${product.id}`) }
         ]}
       />
       <div className="container">

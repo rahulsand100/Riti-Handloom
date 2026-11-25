@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { SanityCatalogContext } from './SanityCatalogContext.js'
 import { sanityClient } from '../lib/sanity.js'
+import { sanityConfigError, siteConfig } from '../lib/config.js'
 import {
   PRODUCTS_QUERY,
   CATEGORIES_QUERY,
@@ -14,9 +15,9 @@ import {
 
 const defaultSettings = {
   announcementText: 'Handcrafted Handloom & Home Linen · Greater Noida',
-  primaryWhatsAppNumber: '919555790429',
-  secondaryPhoneNumber: '+91 95557 90429',
-  storeAddress: 'Jagat Farm, Greater Noida, Gautam Buddha Nagar, Uttar Pradesh 201308',
+  primaryWhatsAppNumber: siteConfig.whatsappNumber,
+  secondaryPhoneNumber: siteConfig.contactPhone,
+  storeAddress: siteConfig.storeAddress,
   heroSlides: null
 }
 
@@ -64,11 +65,19 @@ export function SanityCatalogProvider({ children }) {
   const [products, setProducts] = useState([])
   const [categories, setCategories] = useState([])
   const [siteSettings, setSiteSettings] = useState(defaultSettings)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(Boolean(sanityClient))
+  const [error, setError] = useState(() =>
+    !sanityClient ? sanityConfigError || 'Sanity CMS is not configured.' : null
+  )
 
   useEffect(() => {
     let active = true
+
+    if (!sanityClient) {
+      return () => {
+        active = false
+      }
+    }
 
     const load = async () => {
       try {
@@ -101,6 +110,11 @@ export function SanityCatalogProvider({ children }) {
   }, [])
 
   const refetch = useCallback(() => {
+    if (!sanityClient) {
+      setError(sanityConfigError || 'Sanity CMS is not configured.')
+      setLoading(false)
+      return
+    }
     setLoading(true)
     setError(null)
     Promise.allSettled([

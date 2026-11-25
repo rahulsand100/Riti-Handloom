@@ -5,6 +5,7 @@ import {
   categoryCardImageUrl,
   heroBannerImageUrl
 } from './sanity.js'
+import { siteConfig } from './config.js'
 
 // Neutral SVG placeholder shown only when a Sanity product/category has no image uploaded
 export const NO_IMAGE_PLACEHOLDER =
@@ -129,9 +130,9 @@ export function normalizeSiteSettings(doc) {
 
   return {
     announcementText: doc.announcementText || 'Handcrafted with tradition · Wholesale & Retail Enquiries · Greater Noida',
-    primaryWhatsAppNumber: doc.primaryWhatsAppNumber || '919555790429',
-    secondaryPhoneNumber: doc.secondaryPhoneNumber || '+91 95557 90429',
-    storeAddress: doc.storeAddress || 'Jagat Farm, Greater Noida, Gautam Buddha Nagar, Uttar Pradesh 201308',
+    primaryWhatsAppNumber: doc.primaryWhatsAppNumber || siteConfig.whatsappNumber,
+    secondaryPhoneNumber: doc.secondaryPhoneNumber || siteConfig.contactPhone,
+    storeAddress: doc.storeAddress || siteConfig.storeAddress,
     heroSlides: heroSlides
   }
 }

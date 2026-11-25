@@ -1,16 +1,16 @@
 import { useEffect } from 'react'
+import { siteConfig, getCanonicalUrl } from '../../lib/config.js'
 
 /**
  * Hyper-Local SEO Component for Riti Handlooms
- * Injects dynamic Meta tags, OpenGraph, Twitter Cards, and Schema.org JSON-LD
- * specifically optimized for Jagat Farm, Knowledge Park 2, Pari Chowk & Greater Noida searches.
+ * Injects dynamic Meta tags, Canonical URL, OpenGraph, and Schema.org JSON-LD.
  */
 export function SEO({
   title = 'Riti Handlooms | Handloom & Home Linen Store in Jagat Farm, Greater Noida',
   description = 'Visit Riti Handlooms at Jagat Farm, Greater Noida (near Knowledge Park 2 & Pari Chowk). Premium handcrafted bedsheets, dohars, blankets, towels, and custom handloom furnishings. Direct workshop rates & WhatsApp enquiry.',
   keywords = 'handloom store jagat farm, nearest handloom store knowledge park 2, handloom shop near me greater noida, bedsheets store jagat farm, dohars quilts blankets greater noida, handloom store near pari chowk, wholesale home linen noida',
   image = 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&h=630&q=85',
-  url = typeof window !== 'undefined' ? window.location.href : 'https://ritihandloom.in',
+  url = typeof window !== 'undefined' ? window.location.href : getCanonicalUrl('/'),
   type = 'website',
   product = null,
   breadcrumbs = null
@@ -18,6 +18,15 @@ export function SEO({
   useEffect(() => {
     // 1. Document Title
     document.title = title
+
+    // 1b. Dynamic Canonical Link
+    let canonicalTag = document.querySelector('link[rel="canonical"]')
+    if (!canonicalTag) {
+      canonicalTag = document.createElement('link')
+      canonicalTag.rel = 'canonical'
+      document.head.appendChild(canonicalTag)
+    }
+    canonicalTag.href = url
 
     // 2. Meta description
     let metaDesc = document.querySelector('meta[name="description"]')
@@ -75,20 +84,18 @@ export function SEO({
     const localBusinessSchema = {
       '@context': 'https://schema.org',
       '@type': ['LocalBusiness', 'HomeGoodsStore'],
-      '@id': 'https://ritihandloom.in/#localbusiness',
+      '@id': `${siteConfig.siteUrl}/#localbusiness`,
       name: 'Riti Handlooms',
       alternateName: 'Riti Handloom Jagat Farm Greater Noida',
+      url: siteConfig.siteUrl,
       image: [
         'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&h=800&q=85'
       ],
-      description: 'Premier handloom and home furnishing store located in Jagat Farm, Greater Noida, near Knowledge Park 2 and Pari Chowk. Authentic bedsheets, dohars, blankets, towels, and custom linen.',
-      telephone: '+919555790429',
-      priceRange: '₹₹ - Artisan & Wholesale Rates',
-      currenciesAccepted: 'INR',
-      paymentAccepted: 'Cash, UPI, Bank Transfer',
+      description: 'Premier handloom and home furnishing store located in Jagat Farm, Greater Noida, near Knowledge Park 2 and Pari Chowk. Authentic bedsheets, dohars, blankets, towels, and home linen.',
+      telephone: siteConfig.contactPhone.replace(/\s+/g, ''),
       address: {
         '@type': 'PostalAddress',
-        streetAddress: 'Jagat Farm Commercial Complex, Near Pari Chowk',
+        streetAddress: siteConfig.storeAddress,
         addressLocality: 'Greater Noida',
         addressRegion: 'Uttar Pradesh',
         postalCode: '201308',
@@ -123,8 +130,8 @@ export function SEO({
       ],
       hasMap: 'https://maps.google.com/?q=Jagat+Farm+Greater+Noida',
       sameAs: [
-        'https://instagram.com/ritihandloom',
-        'https://wa.me/919555790429'
+        siteConfig.instagramUrl,
+        `https://wa.me/${siteConfig.whatsappNumber}`
       ]
     }
 

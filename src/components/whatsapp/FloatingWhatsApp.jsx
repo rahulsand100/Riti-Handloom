@@ -6,9 +6,13 @@ import {
   buildBulkWholesaleEnquiryUrl,
   buildGeneralEnquiryUrl
 } from '../../lib/whatsapp.js'
+import { useSanityCatalog } from '../../context/useSanityCatalog.js'
+import { siteConfig } from '../../lib/config.js'
 
 export function FloatingWhatsApp({ onOpenBulkModal }) {
+  const { siteSettings } = useSanityCatalog()
   const [isOpen, setIsOpen] = useState(false)
+  const displayPhone = siteSettings?.secondaryPhoneNumber || siteConfig.contactPhone
 
   const generalChatUrl = buildGeneralEnquiryUrl('product enquiries and availability')
 
@@ -72,7 +76,7 @@ export function FloatingWhatsApp({ onOpenBulkModal }) {
             </button>
 
             <a
-              href="tel:+919555790429"
+              href={`tel:${displayPhone.replace(/\s+/g, '')}`}
               className="floating-menu-item"
               onClick={() => setIsOpen(false)}
             >
@@ -81,7 +85,7 @@ export function FloatingWhatsApp({ onOpenBulkModal }) {
               </div>
               <div>
                 <b>Call Workshop Direct</b>
-                <small>+91 95557 90429 (10 AM – 9 PM)</small>
+                <small>{displayPhone} (10 AM – 9 PM)</small>
               </div>
             </a>
           </div>

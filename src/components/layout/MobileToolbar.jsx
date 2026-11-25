@@ -1,7 +1,15 @@
 import { Link } from 'react-router-dom'
 import { Grid2X2, Search, Heart, ShoppingBag, MessageCircle as WhatsApp } from 'lucide-react'
+import { useSanityCatalog } from '../../context/useSanityCatalog.js'
+import { getWhatsAppUrl } from '../../lib/whatsapp.js'
 
 export function MobileToolbar({ onCart, onSearch }) {
+  const { siteSettings } = useSanityCatalog()
+  const waUrl = getWhatsAppUrl(
+    'Namaste Riti Handlooms! I have an enquiry.',
+    siteSettings?.primaryWhatsAppNumber
+  )
+
   return (
     <nav className="mobile-toolbar">
       <Link to="/shop">
@@ -21,7 +29,7 @@ export function MobileToolbar({ onCart, onSearch }) {
         <span>Enquiry</span>
       </button>
       <a
-        href="https://wa.me/919555790429?text=Namaste%20Riti%20Handlooms!%20I%20have%20an%20enquiry."
+        href={waUrl}
         target="_blank"
         rel="noopener noreferrer"
       >

@@ -1,10 +1,10 @@
 /**
  * Riti Handlooms — WhatsApp Commerce & Enquiry Message Engine
  * Standardized URL-encoded WhatsApp deep-link generation.
- * Phone: +91 95557 90429
  */
+import { siteConfig, getCanonicalUrl } from './config.js'
 
-export const RITI_WHATSAPP_PHONE = '919555790429'
+export const RITI_WHATSAPP_PHONE = siteConfig.whatsappNumber
 
 /**
  * Builds a direct wa.me link with URL-encoded text.
@@ -14,7 +14,8 @@ export const RITI_WHATSAPP_PHONE = '919555790429'
  * @returns {string} WhatsApp URL
  */
 export function getWhatsAppUrl(text, phone = RITI_WHATSAPP_PHONE) {
-  return `https://wa.me/${phone}?text=${encodeURIComponent(text.trim())}`
+  const cleanPhone = String(phone || RITI_WHATSAPP_PHONE).replace(/[^\d]/g, '')
+  return `https://wa.me/${cleanPhone}?text=${encodeURIComponent(text.trim())}`
 }
 
 /**
@@ -24,12 +25,14 @@ export function getWhatsAppUrl(text, phone = RITI_WHATSAPP_PHONE) {
  * @param {string} params.title Product title
  * @param {string} params.category Category name
  * @param {string} [params.url] Canonical product URL
+ * @param {string} [params.phone] Business WhatsApp number
  * @returns {string} Formatted WhatsApp URL
  */
 export function buildSingleProductEnquiryUrl({
   title,
   category = 'Handloom',
-  url = typeof window !== 'undefined' ? window.location.href : 'https://ritihandloom.in'
+  url = typeof window !== 'undefined' ? window.location.href : getCanonicalUrl('/'),
+  phone
 }) {
   const message = [
     'Namaste Riti Handlooms!',
@@ -44,7 +47,7 @@ export function buildSingleProductEnquiryUrl({
     'Please share the pricing and delivery details.'
   ].join('\n')
 
-  return getWhatsAppUrl(message)
+  return getWhatsAppUrl(message, phone)
 }
 
 /**

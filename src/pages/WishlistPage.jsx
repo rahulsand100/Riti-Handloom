@@ -2,16 +2,19 @@ import { Link } from 'react-router-dom'
 import { ProductCard } from '../components/product/ProductCard.jsx'
 import { SEO } from '../components/common/SEO.jsx'
 import { useSanityCatalog } from '../context/useSanityCatalog.js'
+import { getCanonicalUrl } from '../lib/config.js'
+import { getWhatsAppUrl } from '../lib/whatsapp.js'
 import { MessageCircle as WhatsApp, ShoppingBag } from 'lucide-react'
 
 export function WishlistPage({ wishlist, setWishlist, onAdd }) {
-  const { products } = useSanityCatalog()
+  const { products, siteSettings } = useSanityCatalog()
   const wishlistProducts = products.filter(p => wishlist.includes(p.id))
 
-  const waWishlistEnquiry = encodeURIComponent(
+  const waWishlistUrl = getWhatsAppUrl(
     `Namaste Riti Handlooms! Here are the items from my wishlist that I would like to enquire about:\n\n` +
     wishlistProducts.map((p, i) => `${i + 1}. ${p.title} (${p.category} · ALL SIZE)`).join('\n') +
-    `\n\nPlease share availability and estimated delivery dates.`
+    `\n\nPlease share availability and estimated delivery dates.`,
+    siteSettings?.primaryWhatsAppNumber
   )
 
   const handleAddAllToCart = () => {
@@ -23,7 +26,7 @@ export function WishlistPage({ wishlist, setWishlist, onAdd }) {
       <SEO
         title="My Wishlist | Riti Handlooms Jagat Farm Greater Noida"
         description="Your saved handloom favourites at Riti Handlooms, Greater Noida. Move items to your enquiry bag or enquire directly on WhatsApp."
-        url="https://ritihandloom.in/wishlist"
+        url={getCanonicalUrl('/wishlist')}
       />
       <div className="container">
         <div className="breadcrumb">
@@ -43,7 +46,7 @@ export function WishlistPage({ wishlist, setWishlist, onAdd }) {
               </button>
               <a
                 className="btn primary"
-                href={`https://wa.me/919555790429?text=${waWishlistEnquiry}`}
+                href={waWishlistUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#25D366' }}
