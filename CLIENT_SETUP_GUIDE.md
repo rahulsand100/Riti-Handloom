@@ -1,209 +1,239 @@
-# Riti Handlooms — Client-Owned Production Setup & Handover Guide
+# Riti Handlooms — Client-Owned Production Setup & DevOps Handover Guide
 
-This guide walks through every step needed to move **Riti Handlooms** from demo/development configuration to the client's own accounts (GitHub, Sanity, Vercel, Custom Domain, Google Search Console, and Google Business Profile) without needing code changes.
+**Target Architecture:** Vite + React 19 Storefront (Vercel) · Sanity CMS v3 (`rhynfvzd` / `production`) · GitHub Source Repo · WhatsApp-First Enquiry (`ALL SIZE`, zero prices/checkout)
 
-> **Before You Start — Gather From the Client:**
-> 1. Client Gmail address (`client@gmail.com`) and phone access for 2FA/OTP.
-> 2. Confirmed business WhatsApp number (digits with country code, e.g., `91XXXXXXXXXX`) and display phone number.
-> 3. Confirmed store address, opening hours, and exact Google Maps location pin.
-> 4. Custom domain registrar login (if a custom domain like `ritihandloom.in` is purchased), or use the free `*.vercel.app` URL first.
+> **STRICT SECURITY & OWNERSHIP RULES (READ FIRST)**
+> 1. **Never ask for the client's password or OTP.** The client must sign in personally on their own device (or during a live screen-share) and invite you or accept transfers.
+> 2. **Never commit secrets.** `.env`, `studio/.env`, and `.tar.gz` Sanity backups must stay out of Git.
+> 3. **Never put private tokens in `VITE_*` variables.** Everything prefixed with `VITE_` is compiled into public browser JavaScript.
+> 4. **Preserve `rhynfvzd` during setup.** `rhynfvzd` (`production` dataset) is the currently tested working Sanity project. Do **not** delete it or its documents until a replacement (if chosen) is 100% verified live.
 
 ---
 
-## Step 1: Create or Access the Client's GitHub Account
-- **Where to go:** [https://github.com](https://github.com)
+## TOMORROW'S CRITICAL PATH (Execution Order)
+
+### Phase A — Must Happen First (Blocking Go-Live Path)
+1. **Client Accounts & Ownership:** Client logs into their Gmail → creates/accesses **GitHub** (Step 1) and **Sanity** (Step 3).
+2. **Repo & CMS Ownership:** Transfer/grant **GitHub** repo access (Step 2) → decide **keep `rhynfvzd` vs. migrate to new Sanity project** (Step 4) → invite client to Sanity (Step 5).
+3. **Studio & Storefront Hosting:** Verify matching **Project ID & Dataset** across Studio and Vercel → deploy **Sanity Studio** (Step 6) → connect GitHub to **Vercel**, set `VITE_*` env vars, and deploy (Steps 7–8).
+4. **API Connectivity:** Add live Vercel URL(s) to **Sanity CORS Origins** (Step 9). *Without this, the live site cannot fetch products.*
+5. **End-to-End Verification:** Test Create/Edit/Publish/Unpublish in deployed Studio + live WhatsApp enquiry links (Step 12).
+
+### Phase B — Can Wait / Parallelize After Core Site Works on `*.vercel.app`
+1. **Custom Domain & SSL:** Point registrar DNS to Vercel and update static SEO files (`index.html`, `public/sitemap.xml`, `public/robots.txt`) if the domain is not `ritihandloom.in` (Step 10).
+2. **Google Search Console:** Verify domain ownership and submit `sitemap.xml` *after* the final domain + HTTPS are live (Step 11a).
+3. **Google Business Profile:** Claim/verify physical Jagat Farm store listing (Step 11b — Google verification can take days).
+
+---
+
+## Sequential Production Setup Steps
+
+### Step 1: Client GitHub Account Access
+- **Prerequisites:** Client has access to their Gmail account.
+- **Where to go:** [https://github.com](https://github.com) (on the client's device/session).
 - **What to do:**
-  1. Sign in with the client's Gmail account (or create a new free GitHub account using their Gmail).
-  2. Verify their email address and enable 2FA if prompted.
-- **Information needed:** Client Gmail address, password, and chosen GitHub username.
-- **How to verify:** You can log in to `github.com` and view the client's GitHub profile/dashboard.
+  1. Client signs in or creates a new GitHub account using their Gmail address.
+  2. Client enables 2FA in GitHub **Settings → Password and authentication** (do not share recovery codes or passwords with third parties).
+- **Verification Check:** Client can view their GitHub profile dashboard (`github.com/<client-username>`).
 
 ---
 
-## Step 2: Give Client Repository Access or Transfer Ownership
-- **Where to go:** Your current GitHub repository (`https://github.com/rahulsand100/Riti-Handloom`) → **Settings**.
-- **What to do (choose one):**
-  - **Option A — Invite as Collaborator (Recommended while you assist):**
-    1. Click **Collaborators** (left sidebar) → **Add people**.
-    2. Enter the client's GitHub username or Gmail → click **Add**.
-    3. Have the client accept the email invitation.
-  - **Option B — Transfer Full Ownership (Final handover):**
-    1. Scroll to the bottom of **Settings** → **Danger Zone** → click **Transfer ownership**.
-    2. Enter the repository name (`Riti-Handloom`) and the client's GitHub username → confirm.
-    3. Have the client accept the transfer email.
-- **Information needed:** Client's GitHub username.
-- **How to verify:** The repository appears under the client's GitHub **Repositories** tab and you/they can see all commits on `main`.
+### Step 2: Repository Access vs. Ownership Transfer
+- **Prerequisites:** Step 1 complete; you know the client's GitHub username.
+- **Who must perform the transfer:** Only the **current repository owner** (`rahulsand100`) can initiate a transfer. Only the **client** can accept it.
+- **Where to go:** `https://github.com/rahulsand100/Riti-Handloom` → **Settings**.
+- **Choose Ownership Model:**
+  - **Model A — Collaborator Access First (Safest during setup):**
+    1. Go to **Settings → Collaborators → Add people** → add `<client-username>` with **Admin** role (or **Write** during active setup).
+    2. Once Vercel and DNS are complete, perform Model B for final handover.
+  - **Model B — Full Ownership Transfer (Final client ownership):**
+    1. Ensure Vercel is NOT yet linked under the old personal GitHub account (or be ready to re-link Vercel under the client's GitHub account right after transfer).
+    2. Scroll to **Settings → Danger Zone → Transfer ownership**.
+    3. Enter `Riti-Handloom` and `<client-username>`, then confirm.
+    4. **Client action:** Client opens the GitHub transfer email and clicks **Accept** within **24 hours**.
+    5. After transfer, client can keep you as a **Collaborator** (`Maintain` or `Write`) for future support, or remove access at handover.
+- **Verification Check:** Repository URL resolves cleanly under `https://github.com/<client-username>/Riti-Handloom` with full commit history intact.
+- **Rollback Precaution:** Keep a local clone on your machine (`git fetch --all`) before transferring; if the transfer expires (>24h), simply re-initiate from **Danger Zone**.
 
 ---
 
-## Step 3: Create or Access the Client's Sanity Account
-- **Where to go:** [https://www.sanity.io/manage](https://www.sanity.io/manage)
+### Step 3: Client Sanity Account Access
+- **Prerequisites:** Client Gmail access.
+- **Where to go:** [https://www.sanity.io/manage](https://www.sanity.io/manage) (client logs in personally).
 - **What to do:**
-  1. Click **Get started** / **Log in** → choose **Continue with Google** → sign in with the client's Gmail account.
-  2. Complete the initial onboarding prompt if it is a new account.
-- **Information needed:** Client Gmail account.
-- **How to verify:** You can access the Sanity Manage dashboard logged in as the client.
+  1. Client clicks **Log in / Get started → Continue with Google** using their Gmail.
+  2. Complete the Sanity account creation prompt if new.
+- **Verification Check:** Client sees their Sanity Organizations/Projects dashboard.
 
 ---
 
-## Step 4: Decide — Keep Existing Sanity Project (`rhynfvzd`) or Create a Client-Owned Project
+### Step 4: Sanity Project Strategy (`rhynfvzd` vs. New Client-Owned Project)
+- **Current Working Configuration:** Project ID **`rhynfvzd`**, Dataset **`production`**.
 
-### Option A: Keep Existing Project (`rhynfvzd`) & Transfer/Invite Client
-- Easiest if you already loaded products into `rhynfvzd`.
-- **Where to go:** [https://www.sanity.io/manage](https://www.sanity.io/manage) → select **Riti Handlooms** (`rhynfvzd`).
-- **What to do:** Go to **Members** → **Invite members** → enter client's Gmail with role **Administrator** (so they have full billing/ownership control).
-
-### Option B: Create a Brand-New Sanity Project Under the Client's Account (Recommended for Clean Ownership)
-- **Where to go:** [https://www.sanity.io/manage](https://www.sanity.io/manage) (logged in as the client) → **Create project**.
+#### Option A: Keep Existing Project `rhynfvzd` (Fastest)
+- **When to use:** You want zero migration risk and immediate continuity with the tested catalogue.
 - **What to do:**
-  1. Name the project `Riti Handlooms`, choose dataset **`production`** (public read), and copy the new **Project ID** (8-character ID).
-  2. **If you want to copy existing categories/products from `rhynfvzd` to the new project:**
-     ```bash
-     # 1. Export current data from old project (inside studio/)
-     cd studio
-     npx sanity dataset export production riti-backup.tar.gz
+  1. Log in as the current `rhynfvzd` Administrator at [sanity.io/manage](https://www.sanity.io/manage).
+  2. Go to **Members → Invite members** → enter the client's Gmail with role **Administrator**.
+  3. Client accepts the email invite and gains full admin rights (including member management and CORS).
+  4. *(Optional)* To transfer billing/org ownership completely, invite the client at the **Organization** level as **Administrator**.
 
-     # 2. Update studio/.env or pass the new Project ID, then import
-     # Set SANITY_STUDIO_PROJECT_ID=<NEW_PROJECT_ID>
-     npx sanity dataset import riti-backup.tar.gz production --replace
-     ```
-  3. Update your local `.env` and Vercel variables with the new `VITE_SANITY_PROJECT_ID`.
-- **Information needed:** New 8-character Sanity Project ID (or `rhynfvzd` if keeping existing).
-- **How to verify:** In Sanity Manage, the project shows dataset `production` and your imported/created documents under **Content**.
-
----
-
-## Step 5: Invite the Client to Sanity Studio
-- **Where to go:** [https://www.sanity.io/manage](https://www.sanity.io/manage) → select your project → **Members**.
+#### Option B: Migrate to a Brand-New Client-Owned Sanity Project (Cleanest Legal Ownership)
+- **When to use:** Client requires the Sanity project itself to sit inside their own Sanity Organization.
 - **What to do:**
-  1. Click **Invite members**.
-  2. Enter the client's Gmail address.
-  3. Assign **Administrator** (full owner) or **Editor** (content-only: add/edit/publish products & categories without deleting project settings).
-  4. Have the client open the email invite and accept it.
-- **Information needed:** Client Gmail address.
-- **How to verify:** The client's Gmail appears as **Active** under **Members**.
-
----
-
-## Step 6: Deploy Sanity Studio
-- **Where to go:** Local terminal inside `studio/` folder.
-- **What to do:**
-  1. Set the target project ID in your terminal (or `studio/.env`):
+  1. **Client action:** In [sanity.io/manage](https://www.sanity.io/manage), client clicks **Create project**, names it `Riti Handlooms`, selects dataset **`production`** (public read), and shares the new **8-character Project ID** with you.
+  2. **Export documents + binary image assets from `rhynfvzd`:**
      ```powershell
      cd studio
-     $env:SANITY_STUDIO_PROJECT_ID="YOUR_SANITY_PROJECT_ID"
-     $env:SANITY_STUDIO_DATASET="production"
+     # Ensure SANITY_STUDIO_PROJECT_ID is rhynfvzd (or unset, which defaults to rhynfvzd)
      npx sanity login
-     npx sanity deploy
+     npx sanity dataset export production ..\riti-rhynfvzd-backup.tar.gz
      ```
-  2. When prompted for a Studio hostname, enter a clean name (e.g., `riti-handlooms`), giving the client a permanent admin URL: `https://riti-handlooms.sanity.studio`.
-- **Information needed:** Sanity Project ID and Sanity login.
-- **How to verify:** Open `https://<chosen-name>.sanity.studio` in Chrome, sign in with the client's Gmail, and confirm **Product**, **Category**, and **Site Settings** appear.
+     *(A `.tar.gz` export includes both JSON documents and all uploaded image assets, preventing broken asset references.)*
+  3. **Import into the new client project:**
+     ```powershell
+     # Point CLI to the NEW client Project ID in studio/.env or shell
+     $env:SANITY_STUDIO_PROJECT_ID="<NEW_CLIENT_PROJECT_ID>"
+     $env:SANITY_STUDIO_DATASET="production"
+     npx sanity dataset import ..\riti-rhynfvzd-backup.tar.gz production --replace
+     ```
+  4. Delete `..\riti-rhynfvzd-backup.tar.gz` locally once verified (never commit it to Git).
+- **Verification Check:** In Sanity Manage under the chosen Project ID → **Datasets → production**, all categories, products, and image assets appear.
+- **Rollback Precaution:** **Do NOT delete `rhynfvzd` or its documents.** If anything goes wrong with the new project, simply point `VITE_SANITY_PROJECT_ID` back to `rhynfvzd`.
 
 ---
 
-## Step 7: Connect the GitHub Repository to Vercel
-- **Where to go:** [https://vercel.com](https://vercel.com) (log in with the client's GitHub account).
+### Step 5: Invite Client & Team Members to Sanity Studio
+- **Where to go:** [sanity.io/manage](https://www.sanity.io/manage) → Target Project → **Members**.
 - **What to do:**
-  1. Click **Add New…** → **Project**.
-  2. Under **Import Git Repository**, select `Riti-Handloom` → click **Import**.
-  3. Confirm build settings:
+  1. Verify the client is listed as **Administrator** (full owner).
+  2. For store staff who only upload products, invite them with role **Editor** (prevents accidental deletion of API/CORS/project settings).
+- **Verification Check:** All invited emails show status **Active** (not Pending).
+
+---
+
+### Step 6: Configure Studio Env & Deploy Sanity Studio
+- **Critical Environment Note:**
+  - Frontend (`src/`) reads `VITE_SANITY_PROJECT_ID` and `VITE_SANITY_DATASET`.
+  - Studio (`studio/sanity.config.js` and `studio/sanity.cli.js`) reads **`SANITY_STUDIO_PROJECT_ID`** and **`SANITY_STUDIO_DATASET`** from `studio/.env` or your shell (falling back to `rhynfvzd` / `production` only if unset).
+  - **Studio and Frontend Project IDs MUST match exactly.**
+- **What to do:**
+  1. Create `studio/.env` locally (never commit it — `.env` is gitignored? Check: root `.gitignore` ignores `.env` everywhere, verify `git status` before committing):
+     ```env
+     SANITY_STUDIO_PROJECT_ID=<CHOSEN_PROJECT_ID>
+     SANITY_STUDIO_DATASET=production
+     ```
+  2. Test Studio locally first:
+     ```powershell
+     cd studio
+     npm run dev
+     ```
+     Confirm `http://localhost:3333` loads cleanly and displays your target project's documents.
+  3. Deploy hosted Sanity Studio:
+     ```powershell
+     cd studio
+     npx sanity deploy
+     ```
+     Choose a clean Studio hostname (e.g., `riti-handlooms` → `https://riti-handlooms.sanity.studio`).
+- **Verification Check:** Open `https://<hostname>.sanity.studio` in Chrome; client signs in with Google (Gmail) and sees **Product**, **Category**, and **Site Settings** schemas (with zero price/size fields).
+
+---
+
+### Step 7: Connect GitHub Repository to Vercel (Client Account)
+- **Prerequisites:** Step 2 complete; client logged into [https://vercel.com](https://vercel.com) via **Continue with GitHub**.
+- **What to do:**
+  1. In Vercel Dashboard, click **Add New… → Project**.
+  2. Select the client's `Riti-Handloom` repository → click **Import**.
+  3. Verify build settings:
      - **Framework Preset:** `Vite`
      - **Root Directory:** `./`
      - **Build Command:** `npm run build`
      - **Output Directory:** `dist`
      - **Install Command:** `npm install`
-  4. **Do NOT click Deploy yet** — expand **Environment Variables** first (Step 8).
-- **Information needed:** Client GitHub login.
-- **How to verify:** Project import screen shows `Vite` selected and ready for environment variables.
+  4. Expand **Environment Variables** before deploying (Step 8).
+- **Verification Check:** Build preset shows `Vite` and `dist`.
 
 ---
 
-## Step 8: Configure Vercel Environment Variables
-- **Where to go:** Vercel **Environment Variables** section (during import, or later under **Project Settings → Environment Variables**).
-- **What to enter (select Production, Preview, and Development):**
+### Step 8: Configure Vercel Environment Variables & Deploy
+- **Where to go:** Vercel **Environment Variables** (during import, or **Project Settings → Environment Variables**).
+- **Variables to enter** (enable for **Production** and **Preview**):
 
-| Variable Name | Value to Enter | Notes |
-|---|---|---|
-| `VITE_SANITY_PROJECT_ID` | `YOUR_SANITY_PROJECT_ID` | Required (e.g., `rhynfvzd` or client's new ID) |
-| `VITE_SANITY_DATASET` | `production` | Required |
-| `VITE_SANITY_API_VERSION` | `2024-01-01` | Required |
-| `VITE_SITE_URL` | `https://YOUR_DOMAIN.com` | Or your `https://your-project.vercel.app` URL until domain is connected |
-| `VITE_WHATSAPP_NUMBER` | `91XXXXXXXXXX` | Client WhatsApp digits (no `+` or spaces) |
-| `VITE_CONTACT_PHONE` | `+91 XXXXX XXXXX` | Display phone number |
-| `VITE_CONTACT_EMAIL` | `contact@YOUR_DOMAIN.com` | Business email |
-| `VITE_INSTAGRAM_URL` | `https://instagram.com/YOUR_HANDLE` | Business Instagram link |
-| `VITE_STORE_ADDRESS` | `YOUR_SHOP_ADDRESS` | Physical store address |
+| Variable | Example / Real Value | Required? | Purpose |
+|---|---|:---:|---|
+| `VITE_SANITY_PROJECT_ID` | `rhynfvzd` *(or new client ID)* | **Yes** | Connects storefront to Sanity project |
+| `VITE_SANITY_DATASET` | `production` | **Yes** | Target dataset |
+| `VITE_SANITY_API_VERSION` | `2024-01-01` | **Yes** | GROQ API version |
+| `VITE_SITE_URL` | `https://your-domain.com` | **Recommended** | Canonical URLs & JSON-LD `@id`/`url` |
+| `VITE_WHATSAPP_NUMBER` | `91XXXXXXXXXX` | **Recommended** | Business WhatsApp digits (no `+`/spaces) |
+| `VITE_CONTACT_PHONE` | `+91 XXXXX XXXXX` | **Recommended** | Display & `tel:` phone number |
+| `VITE_CONTACT_EMAIL` | `contact@your-domain.com` | **Recommended** | Store contact email |
+| `VITE_INSTAGRAM_URL` | `https://instagram.com/handle` | Optional | Instagram links |
+| `VITE_STORE_ADDRESS` | `Shop address...` | Optional | Fallback address before Sanity `siteSettings` loads |
 
-> **Security Rule:** NEVER add `SANITY_API_TOKEN` or any secret key to `VITE_*` variables.
-- **Now click Deploy.**
-- **How to verify:** Vercel build finishes cleanly and gives you a live `https://<project>.vercel.app` URL.
+- **CRITICAL VERCEL RULE (Build-Time Baking):**
+  - Vite compiles `VITE_*` variables into static JS **at build time**.
+  - Whenever you add or edit ANY `VITE_*` variable in Vercel later, you **must** go to **Deployments → `...` → Redeploy** (and uncheck **Use existing Build Cache**) for the live site to pick up the new value!
+- **Verification Check:** Deployment completes (`Ready`), and visiting `https://<project>.vercel.app` loads the homepage without `Missing required environment variable(s)` errors.
 
 ---
 
-## Step 9: Configure Sanity CORS Origins
-- **Where to go:** [https://www.sanity.io/manage](https://www.sanity.io/manage) → select your Sanity project → **API** → **CORS origins**.
+### Step 9: Configure Sanity CORS Origins
+- **Prerequisites:** Live `https://<project>.vercel.app` URL from Step 8.
+- **Where to go:** [sanity.io/manage](https://www.sanity.io/manage) → Target Project → **API → CORS origins**.
+- **What to add:**
+  1. `https://<your-project>.vercel.app` → **Allow credentials: No** *(public read-only storefront doesn't need cookies/credentials; set `Yes` only if hosting Studio on same domain)*.
+  2. `https://*.vercel.app` → **Allow credentials: No** *(allows Vercel Preview branch deployments to load Sanity data; optionally remove after launch for stricter origin lock-down)*.
+  3. Your custom domain(s) once known: `https://YOUR_DOMAIN.com` and `https://www.YOUR_DOMAIN.com` → **Allow credentials: No**.
+  4. Keep `http://localhost:5173` for local development.
+- **Verification Check:** Open `https://<your-project>.vercel.app` in Chrome → DevTools Network shows `200 OK` from `apicdn.sanity.io` with **0 CORS errors**, and all categories/products appear.
+
+---
+
+### Step 10: Connect Custom Domain, DNS & HTTPS
+- **Prerequisites:** Custom domain registered; registrar DNS access available.
+- **Where to go:** Vercel → **Project Settings → Domains**.
 - **What to do:**
-  1. Click **Add CORS origin** and add:
-     - `https://<your-vercel-project>.vercel.app` (Allow credentials: **Yes**)
-     - `https://*.vercel.app` (Allow credentials: **Yes** — enables Vercel preview deployments)
-     - Your custom domain, e.g. `https://YOUR_DOMAIN.com` and `https://www.YOUR_DOMAIN.com` (Allow credentials: **Yes**)
-     - `http://localhost:5173` (for local development)
-- **Information needed:** Live Vercel URL and custom domain.
-- **How to verify:** Open the live Vercel storefront in Chrome; categories and products load from Sanity with **0 CORS errors** in DevTools Console.
+  1. Add the apex domain (e.g., `ritihandloom.in`) and `www` subdomain (`www.ritihandloom.in`) in Vercel.
+  2. Copy the **exact** `A` and `CNAME` records displayed by Vercel into the client's DNS provider (do not guess IPs; Vercel typically assigns `A` `76.76.21.21` and `CNAME` `cname.vercel-dns.com`).
+  3. **Cloudflare Users:** If DNS is on Cloudflare, set proxy to **DNS Only (grey cloud)** during initial SSL issuance so Vercel's Let's Encrypt verification succeeds cleanly.
+  4. Update `VITE_SITE_URL` in Vercel to `https://<final-domain>`, then **Redeploy** (Step 8 rule).
+  5. **Update Static SEO Files:** Update `index.html`, `public/sitemap.xml`, and `public/robots.txt` in Git if the final domain is not `https://ritihandloom.in`, then commit and push to `main`.
+- **Verification Check:** Vercel **Domains** shows green **Valid Configuration** + SSL active; opening `http://` redirects to `https://` with valid padlock; direct refresh on `/shop`, `/category/bedsheets`, and `/product/<id>` returns `200 OK` (not 404).
 
 ---
 
-## Step 10: Connect the Custom Domain (If Available)
-- **Where to go:** Vercel Dashboard → **Project Settings → Domains**.
+### Step 11: Google Search Console & Google Business Profile
+*(Perform only after the live domain and store details are confirmed.)*
+
+#### 11a. Google Search Console
+- **Where to go:** [https://search.google.com/search-console](https://search.google.com/search-console) (client logged in personally).
 - **What to do:**
-  1. Enter the client's domain (e.g., `ritihandloom.in`) → click **Add**.
-  2. Vercel displays DNS records (`A` record `76.76.21.21` for apex domain and `CNAME` `cname.vercel-dns.com` for `www`).
-  3. Log in to the client's domain registrar (GoDaddy / Namecheap / Cloudflare / Hostinger) and add those DNS records.
-  4. Update `VITE_SITE_URL` in Vercel Environment Variables to `https://YOUR_DOMAIN.com` and redeploy.
-  5. **Important static file update:** Update the domain inside `index.html`, `public/sitemap.xml`, and `public/robots.txt` if the final domain differs from `https://ritihandloom.in`, then commit and push to `main`.
-- **How to verify:** Vercel **Domains** shows a green **Valid Configuration** checkmark and `https://YOUR_DOMAIN.com` loads over HTTPS with automatic redirect from `www`/HTTP.
+  1. Click **Add property** → enter final domain (`https://YOUR_DOMAIN.com`).
+  2. Complete **DNS TXT record** verification at the domain registrar (or HTML meta tag in `index.html` if DNS isn't accessible).
+  3. After verification succeeds, go to **Sitemaps** → submit `https://YOUR_DOMAIN.com/sitemap.xml`.
+- **Verification Check:** Property status shows **Ownership verified** and `sitemap.xml` shows **Success** (Discovered URLs > 0).
 
----
-
-## Step 11: Configure Google Search Console
-- **Where to go:** [https://search.google.com/search-console](https://search.google.com/search-console) (logged in with the client's Gmail).
+#### 11b. Google Business Profile
+- **Where to go:** [https://www.google.com/business/](https://www.google.com/business/) (client logged in personally).
 - **What to do:**
-  1. Click **Add property** → choose **URL prefix** (e.g., `https://YOUR_DOMAIN.com`) or **Domain**.
-  2. Verify ownership using the **DNS TXT record** (at the domain registrar) or **HTML meta tag** (if using HTML tag, place it in `index.html` `<head>` and redeploy).
-  3. Once verified, open **Sitemaps** in the left sidebar → enter `sitemap.xml` → click **Submit**.
-- **Information needed:** Client Gmail, live domain, DNS access.
-- **How to verify:** Search Console shows **Ownership verified** and `sitemap.xml` status as **Success**. *(Do not assume verification before completing this step.)*
+  1. Create or claim **Riti Handlooms** using the **confirmed** physical shop address, phone number, category (*Handloom Shop / Bedding Store*), opening hours, and live website URL.
+  2. Complete Google's required verification flow (video/postcard/SMS).
+  3. Once verified, verify exact Google Maps latitude/longitude and Share link, and update `Home.jsx` / `SEO.jsx` / `index.html` if they differ from the current approximate Jagat Farm coordinates (`28.4744, 77.5030`).
+- **Verification Check:** Profile status is **Verified** in Google Business Profile Manager (never claim verified prior to Google approval).
 
 ---
 
-## Step 12: Set Up Google Business Profile (Subject to Business Verification)
-- **Where to go:** [https://www.google.com/business/](https://www.google.com/business/) (logged in with the client's Gmail).
-- **What to do:**
-  1. Click **Manage now** → enter **Riti Handlooms**, category **Handloom Shop / Home Goods Store / Bedding Store**.
-  2. Enter the **exact confirmed physical store address** (e.g., Jagat Farm Commercial Complex, Greater Noida), confirmed phone number, opening hours, and your live website URL.
-  3. Complete Google's verification method (video verification, postcard, or phone/SMS as required by Google).
-  4. Once verified, upload real storefront and product photos, and copy the exact Google Maps **Share** link and coordinates into `Home.jsx` / `SEO.jsx` if they differ from the placeholder pin.
-- **How to verify:** Business Profile dashboard displays **Verified** and appears on Google Maps.
+### Step 12: Final Production Smoke Test & Client Handover
+1. **Sanity Publishing Test:** In `https://<name>.sanity.studio`, create a test product (2–3 images, title, description, category; no price/size) → Publish → wait ~60s (Sanity APICDN `max-age=60`) → verify on live site → edit title → verify → Unpublish → verify it disappears.
+2. **WhatsApp & Enquiry Bag Test:** On live mobile & desktop, click **Enquire on WhatsApp** on a PDP and **Send Enquiry on WhatsApp** from Enquiry Bag → confirm WhatsApp opens with the client's real phone number, `ALL SIZE`, and live product URL.
+3. **Final Client Handover:** Share live website URL, hosted Studio URL, and quick guide on uploading 2–3 photos + `hotspot` framing.
 
 ---
 
-## Step 13: Test Product Creation, Editing, Publishing, and Unpublishing
-1. Open the deployed Sanity Studio (`https://<name>.sanity.studio`) logged in as the client.
-2. **Create & Publish a Product:** Add Title, click **Generate** Slug, select Category, upload 2–3 images, write Description (no price/size fields needed — storefront displays `ALL SIZE`), click **Publish**.
-3. Wait ~60 seconds (Sanity APICDN edge cache `max-age=60`) and hard-refresh the live Vercel storefront → confirm the new product appears.
-4. **Edit Product:** Change title or description → click **Publish** → refresh after ~60s and confirm update appears.
-5. **Unpublish Product:** Click the `...` menu next to Publish → **Unpublish** → refresh after ~60s and confirm the product disappears from the public storefront.
-6. **Test Enquiry Flow:** Open a product, click **Enquire on WhatsApp** and **Add to Enquiry Bag** → confirm WhatsApp opens with the client's real WhatsApp number and `ALL SIZE` label.
-7. **Test Direct URL Refresh:** Refresh `/shop`, `/category/<slug>`, `/product/<id>`, `/cart`, and `/wishlist` directly in Chrome → confirm zero 404 errors (Vercel SPA rewrite handles all routes).
-
----
-
-## Step 14: Complete Final Client Handover
-Deliver to the client:
-1. Live Storefront URL (`https://YOUR_DOMAIN.com` or `https://<project>.vercel.app`).
-2. Deployed Sanity Studio URL (`https://<name>.sanity.studio`) + login instructions using their Gmail.
-3. GitHub & Vercel project ownership confirmation.
-4. Quick reminder on daily store workflow:
-   - Upload 2–3 clear photos per product in Sanity Studio (use the hotspot circle to frame the main pattern).
-   - No prices or size selection pills are shown on the website (`ALL SIZE` is fixed); all price/order conversations happen directly on WhatsApp.
+## Technical Steps Still Requiring Manual Verification Tomorrow
+1. Confirm with client whether to **keep `rhynfvzd`** (invite client as Admin) or **migrate to a new Sanity project**.
+2. Confirm real business details before updating static SEO/schema files: final domain, WhatsApp/phone number, exact shop address & opening hours, exact Google Maps coordinates, Instagram URL, and email.
+3. Verify `Sanity Studio` login & drag-and-drop image upload + hotspot cropping directly in Chrome on the hosted `*.sanity.studio` URL.
+4. Verify Vercel **Redeploy (without cache)** after final `VITE_*` variables are entered.
+5. Verify DNS propagation, HTTPS certificate issuance, and Search Console / Business Profile verification statuses.
