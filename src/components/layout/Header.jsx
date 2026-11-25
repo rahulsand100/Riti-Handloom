@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
-  ChevronDown, Heart, Search, ShoppingBag, Menu, X, Phone
+  ChevronDown, Heart, Search, ShoppingBag, Menu, X, Phone, Package
 } from 'lucide-react'
 import { categories, categoryPath, products } from '../../data/mockData.js'
 
-export function Header({ cartCount, onCart, wishlistCount, onSearchOpen }) {
+export function Header({ cartCount, onCart, wishlistCount, onSearchOpen, onOpenBulkModal }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [search, setSearch] = useState('')
@@ -26,8 +26,17 @@ export function Header({ cartCount, onCart, wishlistCount, onSearchOpen }) {
     <>
       <div className="topbar">
         <div className="container topbar-inner">
-          <span>Handcrafted Handloom & Home Linen · Greater Noida · Wholesale & Retail Enquiries</span>
-          <div>
+          <span>Handcrafted Handloom & Home Linen · Greater Noida</span>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            {onOpenBulkModal && (
+              <button
+                type="button"
+                className="topbar-link-btn"
+                onClick={onOpenBulkModal}
+              >
+                <Package size={12} /> Wholesale & Bulk Orders
+              </button>
+            )}
             <a href="tel:+919555790429"><Phone size={13} /> +91 95557 90429</a>
             <a href="https://wa.me/919555790429?text=Namaste%20Riti%20Handlooms!%20I%20have%20an%20enquiry.">WhatsApp</a>
           </div>
@@ -105,6 +114,18 @@ export function Header({ cartCount, onCart, wishlistCount, onSearchOpen }) {
               </Link>
             ))}
             <Link to="/about" onClick={() => setMenuOpen(false)}>About the Brand</Link>
+            {onOpenBulkModal && (
+              <button
+                type="button"
+                className="drawer-bulk-btn"
+                onClick={() => {
+                  setMenuOpen(false)
+                  onOpenBulkModal()
+                }}
+              >
+                <Package size={16} /> Wholesale / Bulk Orders
+              </button>
+            )}
             <div className="drawer-bottom">
               <Link to="/wishlist" onClick={() => setMenuOpen(false)}>
                 <Heart size={17} /> Wishlist
