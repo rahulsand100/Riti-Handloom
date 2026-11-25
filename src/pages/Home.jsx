@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import {
   ArrowRight, ArrowLeft, Camera as Instagram,
   BadgeCheck, ShieldCheck, Truck, RefreshCcw, MessageCircle as WhatsApp,
-  MapPin, Navigation, Clock, Phone
+  MapPin, Navigation, Clock, Phone, CheckCircle2
 } from 'lucide-react'
 import { SectionTitle } from '../components/common/SectionTitle.jsx'
 import { ProductCard } from '../components/product/ProductCard.jsx'
@@ -14,6 +14,23 @@ import { categoryPath, bedsheetImages, image } from '../data/mockData.js'
 export function Home({ onAdd, wishlist, setWishlist }) {
   const { categories, products, siteSettings } = useSanityCatalog()
   const [slide, setSlide] = useState(0)
+  const [newsletterEmail, setNewsletterEmail] = useState('')
+  const [newsletterSubscribed, setNewsletterSubscribed] = useState(false)
+
+  const handleNewsletterSubmit = (e) => {
+    e.preventDefault()
+    if (!newsletterEmail || !newsletterEmail.includes('@')) return
+    try {
+      const existing = JSON.parse(localStorage.getItem('riti-newsletter') || '[]')
+      if (!existing.includes(newsletterEmail)) {
+        existing.push(newsletterEmail)
+        localStorage.setItem('riti-newsletter', JSON.stringify(existing))
+      }
+    } catch {
+      // Local storage fallback
+    }
+    setNewsletterSubscribed(true)
+  }
 
   const defaultHeroSlides = [
     {
@@ -328,10 +345,24 @@ export function Home({ onAdd, wishlist, setWishlist }) {
         <div>
           <small>JOIN OUR COMMUNITY</small>
           <h2>Stories, new arrivals & special updates</h2>
-          <form onSubmit={e => e.preventDefault()}>
-            <input type="email" placeholder="Your email address" required />
-            <button className="btn primary">Subscribe</button>
-          </form>
+          {newsletterSubscribed ? (
+            <div className="newsletter-success">
+              <CheckCircle2 size={28} color="#25D366" />
+              <h3>Thank you for subscribing!</h3>
+              <p>We've added <b>{newsletterEmail}</b> to our community list. You'll receive updates on new handloom weaves and artisan stories.</p>
+            </div>
+          ) : (
+            <form onSubmit={handleNewsletterSubmit}>
+              <input
+                type="email"
+                placeholder="Your email address"
+                value={newsletterEmail}
+                onChange={e => setNewsletterEmail(e.target.value)}
+                required
+              />
+              <button type="submit" className="btn primary">Subscribe</button>
+            </form>
+          )}
         </div>
       </section>
     </>

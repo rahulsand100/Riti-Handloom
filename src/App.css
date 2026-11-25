@@ -1256,6 +1256,11 @@
   border-radius: 0 3px 3px 0;
 }
 
+/* --- Desktop: Hide Mobile Toolbar --- */
+.mobile-toolbar {
+  display: none !important;
+}
+
 /* --- Footer --- */
 .footer {
   background: var(--primary);
@@ -1269,20 +1274,65 @@
   padding-bottom: 52px;
 }
 .footer-brand {
+  display: flex;
+  flex-direction: column;
+  width: max-content;
+  line-height: 0.72;
+  letter-spacing: 0.18em;
+  text-decoration: none;
+  margin-bottom: 16px;
+}
+.footer-brand span {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: 30px;
+  font-size: 32px;
   font-weight: 700;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.16em;
   color: white;
 }
 .footer-brand small {
   display: block;
   font-family: 'DM Sans', sans-serif;
   font-size: 8.5px;
-  letter-spacing: 0.42em;
-  margin-top: 6px;
+  letter-spacing: 0.44em;
+  margin: 10px 0 0 3px;
   color: var(--accent-light);
   font-weight: 600;
+}
+.footer-contact-link {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+.footer-contact-link svg {
+  color: var(--accent-light);
+  flex-shrink: 0;
+}
+.newsletter-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 20px 24px;
+  background: white;
+  border: 1px solid rgba(37, 211, 102, 0.4);
+  border-radius: 4px;
+  max-width: 480px;
+  margin: 18px auto 0;
+  box-shadow: var(--shadow-sm);
+  animation: fadeIn 0.3s ease;
+}
+.newsletter-success h3 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 20px;
+  color: var(--primary);
+  margin: 0;
+}
+.newsletter-success p {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.5;
 }
 .footer-grid h3 {
   font-family: 'DM Sans', sans-serif;
@@ -2195,9 +2245,9 @@
   
   .floating-whatsapp { bottom: 72px; }
   .mobile-toolbar {
-    display: grid;
+    display: grid !important;
     position: fixed;
-    z-index: 39;
+    z-index: 999;
     bottom: 0;
     left: 0;
     right: 0;
@@ -2205,7 +2255,7 @@
     grid-template-columns: repeat(5, 1fr);
     background: white;
     border-top: 1px solid var(--border);
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
   }
   .mobile-toolbar a,
   .mobile-toolbar button {
