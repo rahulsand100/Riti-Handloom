@@ -11,10 +11,21 @@ import {
   normalizeCategory,
   normalizeSiteSettings
 } from '../lib/sanityAdapters.js'
-import {
-  products as fallbackProducts,
-  categories as fallbackCategories
-} from '../data/mockData.js'
+
+const isDev = typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.DEV
+
+// Only import mock data for development fallback
+let devFallbackProducts = []
+let devFallbackCategories = []
+if (isDev) {
+  try {
+    const mockData = await import('../data/mockData.js')
+    devFallbackProducts = mockData.products || []
+    devFallbackCategories = mockData.categories || []
+  } catch {
+    // Mock data unavailable — not critical
+  }
+}
 
 const defaultSettings = {
   announcementText: 'Handcrafted Handloom & Home Linen · Greater Noida',
@@ -25,8 +36,8 @@ const defaultSettings = {
 }
 
 export function SanityCatalogProvider({ children }) {
-  const [products, setProducts] = useState(fallbackProducts)
-  const [categories, setCategories] = useState(fallbackCategories)
+  const [products, setProducts] = useState([])
+  const [categories, setCategories] = useState([])
   const [siteSettings, setSiteSettings] = useState(defaultSettings)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -51,10 +62,12 @@ export function SanityCatalogProvider({ children }) {
             .filter(Boolean)
 
           if (sanityNormalized.length > 0) {
-            const sanitySlugs = new Set(sanityNormalized.map(p => p.slug))
-            const remainingMock = fallbackProducts.filter(p => !sanitySlugs.has(String(p.id)) && !sanitySlugs.has(p.title.toLowerCase().replace(/\s+/g, '-')))
-            setProducts([...sanityNormalized, ...remainingMock])
+            setProducts(sanityNormalized)
+          } else if (isDev) {
+            setProducts(devFallbackProducts)
           }
+        } else if (isDev) {
+          setProducts(devFallbackProducts)
         }
 
         // 2. Process Categories
@@ -64,10 +77,12 @@ export function SanityCatalogProvider({ children }) {
             .filter(Boolean)
 
           if (sanityCats.length > 0) {
-            const sanityCatSlugs = new Set(sanityCats.map(c => c.slug))
-            const remainingMockCats = fallbackCategories.filter(c => !sanityCatSlugs.has(c.slug))
-            setCategories([...sanityCats, ...remainingMockCats])
+            setCategories(sanityCats)
+          } else if (isDev) {
+            setCategories(devFallbackCategories)
           }
+        } else if (isDev) {
+          setCategories(devFallbackCategories)
         }
 
         // 3. Process Site Settings
@@ -83,8 +98,13 @@ export function SanityCatalogProvider({ children }) {
         }
       } catch (err) {
         if (!active) return
-        console.warn('Sanity catalog fetch failed, using fallback data:', err)
+        console.warn('Sanity catalog fetch failed:', err)
         setError(err.message)
+        // In development, fall back to mock data so local dev works
+        if (isDev) {
+          setProducts(devFallbackProducts)
+          setCategories(devFallbackCategories)
+        }
       } finally {
         if (active) {
           setLoading(false)
@@ -110,17 +130,13 @@ export function SanityCatalogProvider({ children }) {
       if (productsRes.status === 'fulfilled' && Array.isArray(productsRes.value) && productsRes.value.length > 0) {
         const sanityNormalized = productsRes.value.map(normalizeProduct).filter(Boolean)
         if (sanityNormalized.length > 0) {
-          const sanitySlugs = new Set(sanityNormalized.map(p => p.slug))
-          const remainingMock = fallbackProducts.filter(p => !sanitySlugs.has(String(p.id)) && !sanitySlugs.has(p.title.toLowerCase().replace(/\s+/g, '-')))
-          setProducts([...sanityNormalized, ...remainingMock])
+          setProducts(sanityNormalized)
         }
       }
       if (categoriesRes.status === 'fulfilled' && Array.isArray(categoriesRes.value) && categoriesRes.value.length > 0) {
         const sanityCats = categoriesRes.value.map(normalizeCategory).filter(Boolean)
         if (sanityCats.length > 0) {
-          const sanityCatSlugs = new Set(sanityCats.map(c => c.slug))
-          const remainingMockCats = fallbackCategories.filter(c => !sanityCatSlugs.has(c.slug))
-          setCategories([...sanityCats, ...remainingMockCats])
+          setCategories(sanityCats)
         }
       }
       if (settingsRes.status === 'fulfilled' && settingsRes.value) {

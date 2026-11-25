@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import {
-  MessageCircle as WhatsApp, X, Phone, Layers, Package, Ruler
+  MessageCircle as WhatsApp, X, Phone, Layers, Package
 } from 'lucide-react'
 import {
   buildBulkWholesaleEnquiryUrl,
@@ -11,7 +11,6 @@ export function FloatingWhatsApp({ onOpenBulkModal }) {
   const [isOpen, setIsOpen] = useState(false)
 
   const generalChatUrl = buildGeneralEnquiryUrl('product enquiries and availability')
-  const customSizeUrl = buildGeneralEnquiryUrl('custom dimensions and bespoke handloom sizing')
 
   const handleBulkClick = (e) => {
     e.preventDefault()
@@ -71,22 +70,6 @@ export function FloatingWhatsApp({ onOpenBulkModal }) {
                 <small>Catalogue & bulk rates for 50+ units</small>
               </div>
             </button>
-
-            <a
-              href={customSizeUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="floating-menu-item"
-              onClick={() => setIsOpen(false)}
-            >
-              <div className="item-icon navy">
-                <Ruler size={16} />
-              </div>
-              <div>
-                <b>Custom Sizing Request</b>
-                <small>Bespoke lengths & mattress drops</small>
-              </div>
-            </a>
 
             <a
               href="tel:+919555790429"

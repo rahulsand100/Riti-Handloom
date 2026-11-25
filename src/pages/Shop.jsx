@@ -4,16 +4,14 @@ import { SlidersHorizontal, Grid2X2, Grid3X3, ChevronDown, X, RotateCcw } from '
 import { ProductCard } from '../components/product/ProductCard.jsx'
 import { SEO } from '../components/common/SEO.jsx'
 import { useSanityCatalog } from '../context/useSanityCatalog.js'
-import { categorySizes } from '../data/mockData.js'
 
 export function Shop({ onAdd, wishlist, setWishlist, categorySlug }) {
-  const { products, getCategory } = useSanityCatalog()
+  const { products, categories, getCategory } = useSanityCatalog()
   const [filtersOpen, setFiltersOpen] = useState(false)
   const [sort, setSort] = useState('latest')
   const [columns, setColumns] = useState(4)
 
   const [selectedFabrics, setSelectedFabrics] = useState([])
-  const [selectedSizes, setSelectedSizes] = useState([])
   const [inStockOnly, setInStockOnly] = useState(false)
 
   const category = getCategory(categorySlug)
@@ -24,27 +22,18 @@ export function Shop({ onAdd, wishlist, setWishlist, categorySlug }) {
     return Array.from(set)
   }, [products])
 
-  const availableFilterSizes = ['Single', 'Double', 'King', 'Standard', 'Custom Size']
-
   const toggleFabric = (fabric) => {
     setSelectedFabrics(prev =>
       prev.includes(fabric) ? prev.filter(f => f !== fabric) : [...prev, fabric]
     )
   }
 
-  const toggleSize = (size) => {
-    setSelectedSizes(prev =>
-      prev.includes(size) ? prev.filter(s => s !== size) : [...prev, size]
-    )
-  }
-
   const clearAllFilters = () => {
     setSelectedFabrics([])
-    setSelectedSizes([])
     setInStockOnly(false)
   }
 
-  const hasActiveFilters = selectedFabrics.length > 0 || selectedSizes.length > 0 || inStockOnly
+  const hasActiveFilters = selectedFabrics.length > 0 || inStockOnly
 
   const filteredProducts = useMemo(() => {
     return products.filter(product => {
@@ -65,25 +54,14 @@ export function Shop({ onAdd, wishlist, setWishlist, categorySlug }) {
         }
       }
 
-      // 3. Size filter: check if the product category supports the selected size
-      if (selectedSizes.length > 0) {
-        const catSizes = (categorySizes[product.category] || []).map(s => s.label.toLowerCase())
-        const matchesAnySize = selectedSizes.some(s =>
-          catSizes.some(cs => cs.includes(s.toLowerCase()))
-        )
-        if (!matchesAnySize) {
-          return false
-        }
-      }
-
-      // 4. In-stock filter
+      // 3. In-stock filter
       if (inStockOnly && !product.inStock) {
         return false
       }
 
       return true
     })
-  }, [products, categorySlug, category, selectedFabrics, selectedSizes, inStockOnly])
+  }, [products, categorySlug, category, selectedFabrics, inStockOnly])
 
   const sortedProducts = useMemo(() => {
     const list = [...filteredProducts]
@@ -164,11 +142,6 @@ export function Shop({ onAdd, wishlist, setWishlist, categorySlug }) {
                 {f} <X size={12} />
               </button>
             ))}
-            {selectedSizes.map(s => (
-              <button key={s} className="filter-chip" onClick={() => toggleSize(s)}>
-                Size: {s} <X size={12} />
-              </button>
-            ))}
             {inStockOnly && (
               <button className="filter-chip" onClick={() => setInStockOnly(false)}>
                 In Stock <X size={12} />
@@ -218,22 +191,6 @@ export function Shop({ onAdd, wishlist, setWishlist, categorySlug }) {
                       onChange={() => toggleFabric(fabric)}
                     />
                     {fabric}
-                  </label>
-                ))}
-              </div>
-            </details>
-
-            <details open>
-              <summary>Available Size<ChevronDown /></summary>
-              <div>
-                {availableFilterSizes.map(size => (
-                  <label key={size}>
-                    <input
-                      type="checkbox"
-                      checked={selectedSizes.includes(size)}
-                      onChange={() => toggleSize(size)}
-                    />
-                    {size}
                   </label>
                 ))}
               </div>

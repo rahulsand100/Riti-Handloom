@@ -130,7 +130,7 @@ export function SEO({
 
     const schemas = [localBusinessSchema]
 
-    // If Product Page, add Product Schema
+    // If Product Page, add Product Schema (no price — enquiry-only model)
     if (product) {
       schemas.push({
         '@context': 'https://schema.org',
@@ -142,18 +142,6 @@ export function SEO({
         brand: {
           '@type': 'Brand',
           name: 'Riti Handlooms'
-        },
-        offers: {
-          '@type': 'AggregateOffer',
-          priceCurrency: 'INR',
-          price: '0',
-          priceValidUntil: '2027-12-31',
-          availability: product.inStock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
-          url: url,
-          seller: {
-            '@type': 'LocalBusiness',
-            name: 'Riti Handlooms'
-          }
         }
       })
     }

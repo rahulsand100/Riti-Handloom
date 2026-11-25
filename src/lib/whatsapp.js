@@ -23,14 +23,12 @@ export function getWhatsAppUrl(text, phone = RITI_WHATSAPP_PHONE) {
  * @param {object} params
  * @param {string} params.title Product title
  * @param {string} params.category Category name
- * @param {string} [params.selectedSize] Chosen size
  * @param {string} [params.url] Canonical product URL
  * @returns {string} Formatted WhatsApp URL
  */
 export function buildSingleProductEnquiryUrl({
   title,
   category = 'Handloom',
-  selectedSize = 'ALL SIZE',
   url = typeof window !== 'undefined' ? window.location.href : 'https://ritihandloom.in'
 }) {
   const message = [
@@ -40,7 +38,7 @@ export function buildSingleProductEnquiryUrl({
     '',
     `*Product:* ${title}`,
     `*Category:* ${category}`,
-    `*Size:* ${selectedSize}`,
+    `*Size:* ALL SIZE`,
     `*Product Link:* ${url}`,
     '',
     'Please share the pricing and delivery details.'
@@ -52,16 +50,15 @@ export function buildSingleProductEnquiryUrl({
 /**
  * 2. Multi-Item Quote Bag (From Enquiry Bag / Drawer)
  *
- * @param {Array<{ title: string, selectedSize?: string, quantity?: number }>} items
+ * @param {Array<{ title: string, quantity?: number }>} items
  * @param {object} [options]
  * @param {string} [options.deliveryLocation]
  * @returns {string} Formatted WhatsApp URL
  */
 export function buildMultiItemEnquiryUrl(items = [], { deliveryLocation = '' } = {}) {
   const lines = items.map((item, index) => {
-    const size = item.selectedSize || 'ALL SIZE'
     const qty = item.quantity && item.quantity > 1 ? ` × ${item.quantity}` : ''
-    return `${index + 1}. ${item.title} (Size: ${size}${qty})`
+    return `${index + 1}. ${item.title} (ALL SIZE${qty})`
   })
 
   const totalUnits = items.reduce((sum, item) => sum + (item.quantity || 1), 0)
@@ -125,7 +122,7 @@ export function buildBulkWholesaleEnquiryUrl({
  * @returns {string} Formatted WhatsApp URL
  */
 export function buildCustomerSupportEnquiryUrl({
-  request = 'Inquiry / Sizing Assistance',
+  request = 'Inquiry / General Assistance',
   productName = '',
   details = '',
   reason = ''
@@ -147,12 +144,12 @@ export function buildCustomerSupportEnquiryUrl({
 }
 
 /**
- * General Consultation / Custom Dimensions Enquiry
+ * General Consultation Enquiry
  *
  * @param {string} [topic]
  * @returns {string} Formatted WhatsApp URL
  */
-export function buildGeneralEnquiryUrl(topic = 'custom sizing and home furnishings') {
+export function buildGeneralEnquiryUrl(topic = 'product enquiries and home furnishings') {
   const message = `Namaste Riti Handlooms! I have an enquiry regarding ${topic}. Please share details.`
   return getWhatsAppUrl(message)
 }

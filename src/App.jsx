@@ -42,9 +42,8 @@ function AppContent() {
 
   const handleAddToCartWithToast = (product, selectedSize = 'ALL SIZE', quantity = 1) => {
     addToCart(product, selectedSize, quantity)
-    const size = product.selectedSize || selectedSize || 'ALL SIZE'
     setToast({
-      message: `Added to Enquiry Bag (${size})`,
+      message: 'Added to Enquiry Bag',
       actionLabel: 'View Bag'
     })
   }

@@ -29,13 +29,13 @@ export function MiniCart({ open, onClose, cart, updateQuantity, removeFromCart, 
           <>
             <div className="cart-lines">
               {cart.map(item => {
-                const key = getItemKey ? getItemKey(item) : `${item.id}-${item.selectedSize}`
+                const key = getItemKey ? getItemKey(item) : `${item.id}-ALL_SIZE`
                 return (
                   <div className="cart-line" key={key}>
                     <img src={item.image} alt={item.title} />
                     <div>
                       <b>{item.title}</b>
-                      <small>{item.category} · {item.selectedSize || 'ALL SIZE'}</small>
+                      <small>{item.category} · ALL SIZE</small>
                       <div className="enquiry-qty-row">
                         <button
                           type="button"

@@ -38,12 +38,11 @@ export function EnquiryBagProvider({ children }) {
     }
   }, [wishlist])
 
-  const getItemKey = (item) => `${item.id}-${item.selectedSize || 'ALL SIZE'}`
+  const getItemKey = (item) => `${item.id}-ALL_SIZE`
 
   const addToCart = (product, selectedSize = 'ALL SIZE', quantity = 1) => {
-    const size = product.selectedSize || selectedSize || 'ALL SIZE'
     setCart(prev => {
-      const key = `${product.id}-${size}`
+      const key = `${product.id}-ALL_SIZE`
       const existing = prev.find(item => getItemKey(item) === key)
       if (existing) {
         return prev.map(item =>
@@ -59,7 +58,7 @@ export function EnquiryBagProvider({ children }) {
           title: product.title,
           image: product.image,
           category: product.category,
-          selectedSize: size,
+          selectedSize: 'ALL SIZE',
           quantity: quantity
         }
       ]

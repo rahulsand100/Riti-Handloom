@@ -6,7 +6,7 @@ import {
 import { ProductCard } from '../components/product/ProductCard.jsx'
 import { SEO } from '../components/common/SEO.jsx'
 import { useSanityCatalog } from '../context/useSanityCatalog.js'
-import { categoryPath, categorySizes, defaultSizes } from '../data/mockData.js'
+import { categoryPath } from '../data/mockData.js'
 import { buildSingleProductEnquiryUrl } from '../lib/whatsapp.js'
 
 export function ProductPage({ onAdd, wishlist, setWishlist }) {
@@ -14,9 +14,6 @@ export function ProductPage({ onAdd, wishlist, setWishlist }) {
   const { getProduct, products } = useSanityCatalog()
   const product = getProduct(id) || products[0]
   const [activeImageIndex, setActiveImageIndex] = useState(0)
-
-  const availableSizes = categorySizes[product.category] || defaultSizes
-  const [selectedSize, setSelectedSize] = useState(availableSizes[0]?.label || 'Standard / ALL SIZE')
 
   const galleryImages = (product.gallery && product.gallery.length > 0)
     ? product.gallery
@@ -29,15 +26,11 @@ export function ProductPage({ onAdd, wishlist, setWishlist }) {
   const waMessageUrl = buildSingleProductEnquiryUrl({
     title: product.title,
     category: product.category,
-    selectedSize: selectedSize,
     url: typeof window !== 'undefined' ? window.location.href : `https://ritihandloom.in/product/${product.id}`
   })
 
   const handleAdd = () => {
-    onAdd({
-      ...product,
-      selectedSize: selectedSize
-    })
+    onAdd(product)
   }
 
   const relatedProducts = products
@@ -85,37 +78,12 @@ export function ProductPage({ onAdd, wishlist, setWishlist }) {
             <h1>{product.title}</h1>
             <div className="detail-craft-tag">
               <BadgeCheck size={16} />
-              <span>Direct Handloom Weave · Natural Fibres · Custom Size on Request</span>
+              <span>Direct Handloom Weave · Natural Fibres · ALL SIZE</span>
             </div>
 
             <p>
               Crafted in small batches by skilled artisans, this timeless piece brings natural comfort and considered design to your everyday living.
             </p>
-
-            <div className="size-selector-section">
-              <div className="size-selector-header">
-                <label>Select Size / Dimensions:</label>
-                <span className="selected-size-label">{selectedSize}</span>
-              </div>
-              <div className="size-pill-group">
-                {availableSizes.map(size => (
-                  <button
-                    key={size.id}
-                    type="button"
-                    className={`size-pill ${selectedSize === size.label ? 'active' : ''}`}
-                    onClick={() => setSelectedSize(size.label)}
-                  >
-                    <b>{size.label}</b>
-                    {size.dimensions && <small>{size.dimensions}</small>}
-                  </button>
-                ))}
-              </div>
-              {selectedSize.toLowerCase().includes('custom') && (
-                <div className="custom-size-note">
-                  <small>Need specific dimensions or extra mattress depth? Mention your measurements on WhatsApp for a custom weave.</small>
-                </div>
-              )}
-            </div>
 
             <div className="stock"><span />Available for Handloom Order</div>
 
@@ -174,11 +142,11 @@ export function ProductPage({ onAdd, wishlist, setWishlist }) {
             </p>
           </details>
           <details>
-            <summary>Specifications & Available Sizing</summary>
+            <summary>Specifications</summary>
             <p>
               <b>Category:</b> {product.category}<br />
               <b>Fabric:</b> {product.fabric || '100% Pure Natural Handloom Cotton'}<br />
-              <b>Chosen Size:</b> {selectedSize}<br />
+              <b>Size:</b> ALL SIZE<br />
               <b>Care:</b> Gentle cold machine or hand wash. Dry in shade.
             </p>
           </details>

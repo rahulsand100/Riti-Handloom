@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom'
 import { ProductCard } from '../components/product/ProductCard.jsx'
-import { products } from '../data/mockData.js'
+import { useSanityCatalog } from '../context/useSanityCatalog.js'
 import { MessageCircle as WhatsApp, ShoppingBag } from 'lucide-react'
 
 export function WishlistPage({ wishlist, setWishlist, onAdd }) {
+  const { products } = useSanityCatalog()
   const wishlistProducts = products.filter(p => wishlist.includes(p.id))
 
   const waWishlistEnquiry = encodeURIComponent(

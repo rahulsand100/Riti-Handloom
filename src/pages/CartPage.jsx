@@ -41,7 +41,7 @@ export function CartPage({ cart, updateQuantity, removeFromCart, getItemKey, cle
               </div>
 
               {cart.map(item => {
-                const key = getItemKey ? getItemKey(item) : `${item.id}-${item.selectedSize}`
+                const key = getItemKey ? getItemKey(item) : `${item.id}-ALL_SIZE`
                 return (
                   <div
                     className="cart-table-row"
@@ -65,7 +65,7 @@ export function CartPage({ cart, updateQuantity, removeFromCart, getItemKey, cle
                           {item.title}
                         </b>
                         <small style={{ display: 'block', color: 'var(--text-muted)', marginTop: '4px' }}>
-                          {item.category} · <span className="all-size-tag" style={{ margin: '0 0 0 4px', fontSize: '10px' }}>{item.selectedSize || 'ALL SIZE'}</span>
+                          {item.category} · <span className="all-size-tag" style={{ margin: '0 0 0 4px', fontSize: '10px' }}>ALL SIZE</span>
                         </small>
                         <div className="enquiry-qty-row" style={{ marginTop: '8px' }}>
                           <button
@@ -106,7 +106,7 @@ export function CartPage({ cart, updateQuantity, removeFromCart, getItemKey, cle
             >
               <h3>Enquiry Summary</h3>
               <p style={{ fontSize: '13px', color: 'var(--text-muted)', lineHeight: '1.6' }}>
-                You have selected <b>{cart.length}</b> {cart.length === 1 ? 'item' : 'items'} with custom/standard dimensions.
+                You have selected <b>{cart.length}</b> {cart.length === 1 ? 'item' : 'items'} for enquiry. All items are available in ALL SIZE.
               </p>
 
               <div style={{ marginTop: '16px', marginBottom: '16px' }}>
