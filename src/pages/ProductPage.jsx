@@ -57,6 +57,10 @@ export function ProductPage({ onAdd, wishlist, setWishlist }) {
     onAdd(product)
   }
 
+  const categoryHref = product.categorySlug
+    ? `/category/${product.categorySlug}`
+    : categoryPath(product.category)
+
   const relatedProducts = products
     .filter(p => (p.category === product.category || p.categorySlug === product.categorySlug) && p.id !== product.id)
     .slice(0, 4)
@@ -76,7 +80,7 @@ export function ProductPage({ onAdd, wishlist, setWishlist }) {
       />
       <div className="container">
         <div className="breadcrumb">
-          <Link to="/">Home</Link> / <Link to={categoryPath(product.category)}>{product.category}</Link> / <b>{product.title}</b>
+          <Link to="/">Home</Link> / <Link to={categoryHref}>{product.category}</Link> / <b>{product.title}</b>
         </div>
         <div className="product-detail">
           <div className="gallery">
@@ -93,7 +97,7 @@ export function ProductPage({ onAdd, wishlist, setWishlist }) {
                   onClick={() => setActiveImageIndex(index)}
                   aria-label={`View image ${index + 1}`}
                 >
-                  <img src={item.src} alt="" />
+                  <img src={item.thumbSrc || item.src} alt="" />
                 </button>
               ))}
             </div>
@@ -186,7 +190,7 @@ export function ProductPage({ onAdd, wishlist, setWishlist }) {
           <section className="section product-section" style={{ marginTop: '48px', paddingTop: '32px', borderTop: '1px solid var(--border)' }}>
             <div className="carousel-head">
               <h3>More from {product.category}</h3>
-              <Link to={categoryPath(product.category)}>View Collection</Link>
+              <Link to={categoryHref}>View Collection</Link>
             </div>
             <div className="product-grid">
               {relatedProducts.map(p => (

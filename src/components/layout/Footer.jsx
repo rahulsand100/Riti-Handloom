@@ -1,11 +1,10 @@
 import { Link } from 'react-router-dom'
 import { Phone, Mail, MessageCircle as WhatsApp, Camera as Instagram } from 'lucide-react'
 import { useSanityCatalog } from '../../context/useSanityCatalog.js'
-import { categories as fallbackCategories } from '../../data/mockData.js'
 
 export function Footer() {
   const { categories, siteSettings } = useSanityCatalog()
-  const displayCategories = categories && categories.length > 0 ? categories : fallbackCategories
+  const displayCategories = categories || []
 
   const primaryPhone = siteSettings?.primaryWhatsAppNumber || '919555790429'
   const displayPhone = siteSettings?.secondaryPhoneNumber || '+91 95557 90429'

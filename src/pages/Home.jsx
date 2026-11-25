@@ -12,7 +12,7 @@ import { useSanityCatalog } from '../context/useSanityCatalog.js'
 import { categoryPath, bedsheetImages, image } from '../data/mockData.js'
 
 export function Home({ onAdd, wishlist, setWishlist }) {
-  const { categories, products, siteSettings } = useSanityCatalog()
+  const { categories, products, siteSettings, loading, error, refetch } = useSanityCatalog()
   const [slide, setSlide] = useState(0)
   const [newsletterEmail, setNewsletterEmail] = useState('')
   const [newsletterSubscribed, setNewsletterSubscribed] = useState(false)
@@ -136,14 +136,30 @@ export function Home({ onAdd, wishlist, setWishlist }) {
       <section className="section">
         <div className="container">
           <SectionTitle>SHOP BY CATEGORY</SectionTitle>
-          <div className="arrival-grid category-grid">
-            {categories.map(category => (
-              <Link className="arrival-card" to={`/category/${category.slug}`} key={category.slug}>
-                <img src={category.image} alt={`${category.name} collection`} loading="lazy" />
-                <span>{category.name.toUpperCase()}<ArrowRight /></span>
-              </Link>
-            ))}
-          </div>
+          {loading && categories.length === 0 ? (
+            <div className="category-empty">
+              <p>Loading handloom collections...</p>
+            </div>
+          ) : error && categories.length === 0 ? (
+            <div className="category-empty">
+              <h2>Catalogue temporarily unavailable</h2>
+              <p>We could not load the latest handloom collections right now. Please try again.</p>
+              <button className="btn primary" onClick={refetch}>Retry</button>
+            </div>
+          ) : categories.length === 0 ? (
+            <div className="category-empty">
+              <p>Collections are being updated. Visit our workshop or enquire directly on WhatsApp.</p>
+            </div>
+          ) : (
+            <div className="arrival-grid category-grid">
+              {categories.map(category => (
+                <Link className="arrival-card" to={`/category/${category.slug}`} key={category.slug}>
+                  <img src={category.image} alt={`${category.name} collection`} loading="lazy" />
+                  <span>{category.name.toUpperCase()}<ArrowRight /></span>
+                </Link>
+              ))}
+            </div>
+          )}
           <Link className="wide-banner" to={categoryPath('Bedsheets')}>
             <img src={image('photo-1505693416388-ac5ce068fe85', 1300, 520)} alt="Premium bed linen collection" />
             <div>
@@ -155,10 +171,33 @@ export function Home({ onAdd, wishlist, setWishlist }) {
         </div>
       </section>
 
+      {error && products.length === 0 && (
+        <section className="section product-section">
+          <div className="container">
+            <div className="category-empty">
+              <h2>Unable to load products</h2>
+              <p>{error}</p>
+              <button className="btn primary" onClick={refetch}>Try Again</button>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {!loading && !error && products.length === 0 && (
+        <section className="section product-section">
+          <div className="container">
+            <div className="category-empty">
+              <h2>Our catalogue is currently being curated</h2>
+              <p>New handcrafted weaves will appear here once published. Contact us on WhatsApp for direct assistance.</p>
+            </div>
+          </div>
+        </section>
+      )}
+
       {[
-        ['BED LINEN', 'bedsheets', products.slice(0, 4)],
-        ['PILLOW COVER SETS & PILLOW PAIRS', 'pillow-covers', products.filter(product => ['Pillow Covers', 'Pillows'].includes(product.category))],
-        ['BLANKETS & FLOOR', 'blankets', products.filter(product => ['Blankets', 'Dohars', 'Carpets'].includes(product.category))],
+        ['BED LINEN', 'bedsheets', products.filter(product => ['Bedsheets', 'Bed Sets'].includes(product.category)).slice(0, 4)],
+        ['PILLOW COVERS & CURTAINS', 'pillow-covers', products.filter(product => ['Pillow Covers', 'Pillows', 'Curtains'].includes(product.category)).slice(0, 4)],
+        ['BLANKETS, TOWELS & FLOOR', 'blankets', products.filter(product => ['Blankets', 'Dohars', 'Towels', 'Carpets'].includes(product.category)).slice(0, 4)],
       ]
         .filter(([, , collection]) => collection.length > 0)
         .map(([title, slug, collection]) => (

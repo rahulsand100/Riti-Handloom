@@ -1,9 +1,22 @@
 import {
   productCardImageUrl,
   productDetailGalleryImageUrl,
+  productThumbnailUrl,
   categoryCardImageUrl,
   heroBannerImageUrl
 } from './sanity.js'
+
+// Neutral SVG placeholder shown only when a Sanity product/category has no image uploaded
+export const NO_IMAGE_PLACEHOLDER =
+  "data:image/svg+xml;utf8," +
+  encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000">
+      <rect width="800" height="1000" fill="#F4EFE6"/>
+      <rect x="40" y="40" width="720" height="920" fill="none" stroke="#DFD5C5" stroke-width="2"/>
+      <text x="400" y="485" font-family="Georgia, serif" font-size="28" fill="#1F2A44" text-anchor="middle">RITI HANDLOOM</text>
+      <text x="400" y="528" font-family="sans-serif" font-size="16" letter-spacing="3" fill="#8C7B65" text-anchor="middle">IMAGE COMING SOON</text>
+    </svg>`
+  )
 
 /**
  * Normalizes a Sanity product document into the standard storefront format.
@@ -17,31 +30,33 @@ export function normalizeProduct(doc, index = 0) {
 
   const slug = String(doc.slug || doc._id || `product-${index}`).trim()
   const title = String(doc.title || 'Handloom Textile').trim()
-  const categoryName = String(doc.category?.name || 'Bedsheets').trim()
-  const categorySlug = String(doc.category?.slug || 'bedsheets').trim()
+  const categoryName = String(doc.category?.name || 'Handloom').trim()
+  const categorySlug = String(doc.category?.slug || '').trim()
 
-  // Extract primary image
-  const primarySanityImg = doc.images?.[0]
-  const secondarySanityImg = doc.images?.[1] || primarySanityImg
+  const validImages = Array.isArray(doc.images)
+    ? doc.images.filter(img => Boolean(productCardImageUrl(img)))
+    : []
+
+  // Extract primary & hover images (never silently fall back to mock product photos)
+  const primarySanityImg = validImages[0]
+  const secondarySanityImg = validImages[1] || primarySanityImg
 
   const image = primarySanityImg
     ? productCardImageUrl(primarySanityImg)
-    : '/products/bedsheet-front.jpg'
+    : NO_IMAGE_PLACEHOLDER
 
   const hover = secondarySanityImg
     ? productCardImageUrl(secondarySanityImg)
-    : image
+    : ''
 
-  // Extract gallery
-  const gallery = (doc.images && doc.images.length > 0)
-    ? doc.images.map((img, i) => ({
+  // Extract gallery with optimized thumbnails
+  const gallery = validImages.length > 0
+    ? validImages.map((img, i) => ({
         src: productDetailGalleryImageUrl(img),
+        thumbSrc: productThumbnailUrl(img),
         alt: img.alt || `${title} - Angle ${i + 1}`
       }))
-    : [
-        { src: image, alt: title },
-        { src: hover, alt: `${title} detail` }
-      ]
+    : [{ src: NO_IMAGE_PLACEHOLDER, thumbSrc: NO_IMAGE_PLACEHOLDER, alt: `${title} - image coming soon` }]
 
   return {
     id: doc._id || slug,
@@ -76,8 +91,8 @@ export function normalizeCategory(doc) {
   const name = String(doc.name || 'Handloom').trim()
 
   const image = doc.image
-    ? categoryCardImageUrl(doc.image)
-    : '/products/bedsheet-front.jpg'
+    ? (categoryCardImageUrl(doc.image) || NO_IMAGE_PLACEHOLDER)
+    : NO_IMAGE_PLACEHOLDER
 
   return {
     _id: doc._id,

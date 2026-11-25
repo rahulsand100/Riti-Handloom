@@ -12,27 +12,52 @@ import {
   normalizeSiteSettings
 } from '../lib/sanityAdapters.js'
 
-const isDev = typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.DEV
-
-// Only import mock data for development fallback
-let devFallbackProducts = []
-let devFallbackCategories = []
-if (isDev) {
-  try {
-    const mockData = await import('../data/mockData.js')
-    devFallbackProducts = mockData.products || []
-    devFallbackCategories = mockData.categories || []
-  } catch {
-    // Mock data unavailable — not critical
-  }
-}
-
 const defaultSettings = {
   announcementText: 'Handcrafted Handloom & Home Linen · Greater Noida',
   primaryWhatsAppNumber: '919555790429',
   secondaryPhoneNumber: '+91 95557 90429',
   storeAddress: 'Jagat Farm, Greater Noida, Gautam Buddha Nagar, Uttar Pradesh 201308',
   heroSlides: null
+}
+
+function applyCatalogResults(productsRes, categoriesRes, settingsRes, setProducts, setCategories, setSiteSettings, setError) {
+  let fetchError = null
+
+  // 1. Process Products
+  if (productsRes.status === 'fulfilled' && Array.isArray(productsRes.value)) {
+    const sanityNormalized = productsRes.value
+      .map((doc, idx) => normalizeProduct(doc, idx))
+      .filter(Boolean)
+    setProducts(sanityNormalized)
+  } else if (productsRes.status === 'rejected') {
+    fetchError = productsRes.reason?.message || 'Unable to load products from Sanity CMS.'
+    setProducts([])
+  }
+
+  // 2. Process Categories
+  if (categoriesRes.status === 'fulfilled' && Array.isArray(categoriesRes.value)) {
+    const sanityCats = categoriesRes.value
+      .map(normalizeCategory)
+      .filter(Boolean)
+    setCategories(sanityCats)
+  } else if (categoriesRes.status === 'rejected') {
+    fetchError = fetchError || categoriesRes.reason?.message || 'Unable to load categories from Sanity CMS.'
+    setCategories([])
+  }
+
+  // 3. Process Site Settings
+  if (settingsRes.status === 'fulfilled' && settingsRes.value) {
+    const normalizedSettings = normalizeSiteSettings(settingsRes.value)
+    if (normalizedSettings) {
+      setSiteSettings(prev => ({
+        ...prev,
+        ...normalizedSettings,
+        heroSlides: normalizedSettings.heroSlides || prev.heroSlides
+      }))
+    }
+  }
+
+  setError(fetchError)
 }
 
 export function SanityCatalogProvider({ children }) {
@@ -54,57 +79,13 @@ export function SanityCatalogProvider({ children }) {
         ])
 
         if (!active) return
-
-        // 1. Process Products
-        if (productsRes.status === 'fulfilled' && Array.isArray(productsRes.value) && productsRes.value.length > 0) {
-          const sanityNormalized = productsRes.value
-            .map((doc, idx) => normalizeProduct(doc, idx))
-            .filter(Boolean)
-
-          if (sanityNormalized.length > 0) {
-            setProducts(sanityNormalized)
-          } else if (isDev) {
-            setProducts(devFallbackProducts)
-          }
-        } else if (isDev) {
-          setProducts(devFallbackProducts)
-        }
-
-        // 2. Process Categories
-        if (categoriesRes.status === 'fulfilled' && Array.isArray(categoriesRes.value) && categoriesRes.value.length > 0) {
-          const sanityCats = categoriesRes.value
-            .map(normalizeCategory)
-            .filter(Boolean)
-
-          if (sanityCats.length > 0) {
-            setCategories(sanityCats)
-          } else if (isDev) {
-            setCategories(devFallbackCategories)
-          }
-        } else if (isDev) {
-          setCategories(devFallbackCategories)
-        }
-
-        // 3. Process Site Settings
-        if (settingsRes.status === 'fulfilled' && settingsRes.value) {
-          const normalizedSettings = normalizeSiteSettings(settingsRes.value)
-          if (normalizedSettings) {
-            setSiteSettings(prev => ({
-              ...prev,
-              ...normalizedSettings,
-              heroSlides: normalizedSettings.heroSlides || prev.heroSlides
-            }))
-          }
-        }
+        applyCatalogResults(productsRes, categoriesRes, settingsRes, setProducts, setCategories, setSiteSettings, setError)
       } catch (err) {
         if (!active) return
         console.warn('Sanity catalog fetch failed:', err)
-        setError(err.message)
-        // In development, fall back to mock data so local dev works
-        if (isDev) {
-          setProducts(devFallbackProducts)
-          setCategories(devFallbackCategories)
-        }
+        setError(err.message || 'Unable to connect to catalogue service.')
+        setProducts([])
+        setCategories([])
       } finally {
         if (active) {
           setLoading(false)
@@ -127,26 +108,11 @@ export function SanityCatalogProvider({ children }) {
       sanityClient.fetch(CATEGORIES_QUERY),
       sanityClient.fetch(SITE_SETTINGS_QUERY)
     ]).then(([productsRes, categoriesRes, settingsRes]) => {
-      if (productsRes.status === 'fulfilled' && Array.isArray(productsRes.value) && productsRes.value.length > 0) {
-        const sanityNormalized = productsRes.value.map(normalizeProduct).filter(Boolean)
-        if (sanityNormalized.length > 0) {
-          setProducts(sanityNormalized)
-        }
-      }
-      if (categoriesRes.status === 'fulfilled' && Array.isArray(categoriesRes.value) && categoriesRes.value.length > 0) {
-        const sanityCats = categoriesRes.value.map(normalizeCategory).filter(Boolean)
-        if (sanityCats.length > 0) {
-          setCategories(sanityCats)
-        }
-      }
-      if (settingsRes.status === 'fulfilled' && settingsRes.value) {
-        const normalizedSettings = normalizeSiteSettings(settingsRes.value)
-        if (normalizedSettings) {
-          setSiteSettings(prev => ({ ...prev, ...normalizedSettings, heroSlides: normalizedSettings.heroSlides || prev.heroSlides }))
-        }
-      }
+      applyCatalogResults(productsRes, categoriesRes, settingsRes, setProducts, setCategories, setSiteSettings, setError)
     }).catch(err => {
-      setError(err.message)
+      setError(err.message || 'Unable to connect to catalogue service.')
+      setProducts([])
+      setCategories([])
     }).finally(() => {
       setLoading(false)
     })

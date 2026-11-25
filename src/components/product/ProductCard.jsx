@@ -16,7 +16,7 @@ export function ProductCard({ product, onAdd, wishlist, setWishlist }) {
       <div className="product-image">
         <Link to={`/product/${product.id}`}>
           <img className="main-img" src={product.image} alt={product.title} />
-          <img className="hover-img" src={product.hover} alt="" />
+          {product.hover && <img className="hover-img" src={product.hover} alt="" />}
         </Link>
         {product.badge && (
           <div className={`badge ${product.badge === 'Sold out' ? 'soldout' : 'new'}`}>

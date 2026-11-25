@@ -6,7 +6,7 @@ import { SEO } from '../components/common/SEO.jsx'
 import { useSanityCatalog } from '../context/useSanityCatalog.js'
 
 export function Shop({ onAdd, wishlist, setWishlist, categorySlug }) {
-  const { products, categories, getCategory, loading } = useSanityCatalog()
+  const { products, categories, getCategory, loading, error, refetch } = useSanityCatalog()
   const [filtersOpen, setFiltersOpen] = useState(false)
   const [sort, setSort] = useState('latest')
   const [columns, setColumns] = useState(4)
@@ -234,6 +234,14 @@ export function Shop({ onAdd, wishlist, setWishlist, categorySlug }) {
             <div className="category-empty">
               <h2>Loading collection...</h2>
               <p>Fetching handcrafted weaves from Riti Handlooms catalogue.</p>
+            </div>
+          ) : error && products.length === 0 ? (
+            <div className="category-empty">
+              <h2>Catalogue temporarily unavailable</h2>
+              <p>{error}</p>
+              <button className="btn primary" onClick={refetch}>
+                Retry
+              </button>
             </div>
           ) : sortedProducts.length ? (
             <div className={`shop-grid cols-${columns}`}>

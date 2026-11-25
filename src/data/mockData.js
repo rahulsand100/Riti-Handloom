@@ -165,6 +165,7 @@ export const categories = [
 
 export const categorySlugByName = {
   Bedsheets: 'bedsheets',
+  Curtains: 'curtains',
   Pillows: 'pillows',
   'Pillow Covers': 'pillow-covers',
   'Cushion Covers': 'pillow-covers',
