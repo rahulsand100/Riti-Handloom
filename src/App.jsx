@@ -161,15 +161,19 @@ function SectionTitle({ children }) {
 function Home({ onAdd, wishlist, setWishlist }) {
   const [slide, setSlide] = useState(0)
   const heroSlides = [
-    { title: 'Made by hands, loved for life', label: 'THE HANDLOOM EDIT', image: image('photo-1505693416388-ac5ce068fe85', 1800, 900) },
-    { title: 'Soft comfort in every room', label: 'BED & HOME LINEN', image: image('photo-1631049307264-da0ec9d70304', 1800, 900) },
-    { title: 'Colour, comfort, character', label: 'NEW SEASON', image: image('photo-1522771753035-1a64ed6f5d4d', 1800, 900) }
+    { title: 'A softer kind of everyday.', label: 'RITI HANDLOOM · THE HOME EDIT', description: 'Thoughtful textiles for the little moments that make a home.', image: image('photo-1505693416388-ac5ce068fe85', 1800, 900), link: '/category/bed-sets', linkText: 'Discover the collection' },
+    { title: 'Layers made for living.', label: 'COMFORT, IN EVERY THREAD', description: 'Find your favorite blanket, pillow, and cozy finishing touch.', image: image('photo-1631049307264-da0ec9d70304', 1800, 900), link: '/category/blankets', linkText: 'Shop blankets' },
+    { title: 'Rest easy. Wake inspired.', label: 'BEDROOM ESSENTIALS', description: 'Bring fresh color and everyday comfort to your bedroom.', image: bedsheetImages[2].src, link: '/category/bedsheets', linkText: 'Shop bedsheets' }
   ]
   useEffect(() => { const timer = setInterval(() => setSlide(s => (s + 1) % heroSlides.length), 5000); return () => clearInterval(timer) }, [heroSlides.length])
   return <>
     <section className="hero-slider">
-      {heroSlides.map((s, i) => <div key={s.title} className={`hero-slide ${i === slide ? 'active' : ''}`} style={{backgroundImage: `url(${s.image})`}}><div className="hero-copy"><small>{s.label}</small><h1>{s.title}</h1><Link className="btn light" to="/shop">Shop Now</Link></div></div>)}
-      <button className="hero-arrow left" onClick={() => setSlide((slide - 1 + heroSlides.length) % heroSlides.length)}><ArrowLeft/></button><button className="hero-arrow right" onClick={() => setSlide((slide + 1) % heroSlides.length)}><ArrowRight/></button><div className="hero-dots">{heroSlides.map((_, i) => <button key={i} className={i === slide ? 'active' : ''} onClick={() => setSlide(i)} />)}</div>
+      {heroSlides.map((s, i) => <div key={s.title} className={`hero-slide ${i === slide ? 'active' : ''}`} style={{backgroundImage: `url(${s.image})`}} aria-hidden={i !== slide}>
+        <div className="hero-copy"><small><i/>{s.label}</small><h1>{s.title}</h1><p>{s.description}</p><Link className="hero-cta" to={s.link}>{s.linkText}<ArrowRight size={17}/></Link></div>
+        <div className="hero-stamp"><span>MADE FOR</span><b>your<br/>home</b><i>R</i></div>
+      </div>)}
+      <button className="hero-arrow left" aria-label="Previous slide" onClick={() => setSlide((slide - 1 + heroSlides.length) % heroSlides.length)}><ArrowLeft/></button><button className="hero-arrow right" aria-label="Next slide" onClick={() => setSlide((slide + 1) % heroSlides.length)}><ArrowRight/></button>
+      <div className="hero-controls"><div className="hero-dots">{heroSlides.map((_, i) => <button key={i} className={i === slide ? 'active' : ''} aria-label={`Go to slide ${i + 1}`} aria-current={i === slide ? 'true' : undefined} onClick={() => setSlide(i)} />)}</div><span className="hero-count"><b>0{slide + 1}</b><i/>0{heroSlides.length}</span></div>
     </section>
 
     <section className="section"><div className="container"><SectionTitle>SHOP BY CATEGORY</SectionTitle><div className="arrival-grid category-grid">{categories.map(category => <Link className="arrival-card" to={`/category/${category.slug}`} key={category.slug}><img src={category.image} alt={`${category.name} collection`} loading="lazy"/><span>{category.name.toUpperCase()}<ArrowRight/></span></Link>)}</div><Link className="wide-banner" to={categoryPath('Bedsheets')}><img src={image('photo-1505693416388-ac5ce068fe85', 1300, 520)} alt="Premium bed linen collection"/><div><small>THE BEDROOM EDIT</small><h3>Comfort, colour and calm for every bedroom</h3><b>Discover the collection <ArrowRight size={16}/></b></div></Link></div></section>
