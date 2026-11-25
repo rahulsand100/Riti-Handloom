@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+.env
+.sanity
+PROJECT_STATUS.md
+audit.json
+*.log
