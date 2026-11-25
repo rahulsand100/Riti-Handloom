@@ -11,6 +11,12 @@ export function Footer() {
             RITI <small>HANDLOOM</small>
           </div>
           <p>Woven with tradition, made for your home.</p>
+          <p style={{ fontSize: '12px', color: '#9CA3AF', marginTop: '10px', lineHeight: '1.6' }}>
+            <b>Visit Store:</b><br />
+            Jagat Farm Commercial Complex,<br />
+            Near Knowledge Park 2 & Pari Chowk,<br />
+            Greater Noida, UP 201308
+          </p>
         </div>
         <div>
           <h3>ONLINE CATALOGUE</h3>
@@ -44,8 +50,8 @@ export function Footer() {
         </div>
       </div>
       <div className="container footer-bottom">
-        <span>© 2026 Riti Handloom</span>
-        <span>Handcrafted with tradition in Greater Noida · Direct WhatsApp Enquiries</span>
+        <span>© 2026 Riti Handlooms</span>
+        <span>Store in Jagat Farm, Greater Noida (near Knowledge Park 2 & Pari Chowk) · Direct WhatsApp Enquiries</span>
       </div>
     </footer>
   )

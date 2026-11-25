@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   ArrowRight, ArrowLeft, Camera as Instagram,
-  BadgeCheck, ShieldCheck, Truck, RefreshCcw, MessageCircle as WhatsApp
+  BadgeCheck, ShieldCheck, Truck, RefreshCcw, MessageCircle as WhatsApp,
+  MapPin, Navigation, Clock, Phone
 } from 'lucide-react'
 import { SectionTitle } from '../components/common/SectionTitle.jsx'
 import { ProductCard } from '../components/product/ProductCard.jsx'
+import { SEO } from '../components/common/SEO.jsx'
 import { useSanityCatalog } from '../context/useSanityCatalog.js'
 import { categoryPath, bedsheetImages, image } from '../data/mockData.js'
 
@@ -51,6 +53,11 @@ export function Home({ onAdd, wishlist, setWishlist }) {
 
   return (
     <>
+      <SEO
+        title="Riti Handlooms | Handloom & Home Linen Store in Jagat Farm, Greater Noida"
+        description="Visit Riti Handlooms at Jagat Farm Commercial Complex, Greater Noida — 5 mins from Knowledge Park 2 & Pari Chowk. Authentic artisan bedsheets, dohars, blankets, towels, and custom linen. WhatsApp enquiry & store walk-ins welcome."
+        keywords="handloom store jagat farm, nearest handloom store knowledge park 2, handloom shop near me greater noida, bedsheets store jagat farm, dohars quilts blankets greater noida, handloom store near pari chowk, home furnishings greater noida, wholesale linen noida"
+      />
       <section className="hero-slider">
         {heroSlides.map((s, i) => (
           <div
@@ -211,6 +218,90 @@ export function Home({ onAdd, wishlist, setWishlist }) {
             >
               <WhatsApp size={18} /> Chat with Our Team
             </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Hyper-Local Store Locator Section (Jagat Farm & Knowledge Park 2) */}
+      <section className="section local-store-section">
+        <div className="container">
+          <SectionTitle>VISIT OUR STORE & WORKSHOP</SectionTitle>
+          <div className="local-store-card">
+            <div className="local-store-info">
+              <span className="local-tag">JAGAT FARM · GREATER NOIDA</span>
+              <h2>Your Nearest Handloom Store in Greater Noida</h2>
+              <p className="local-lead">
+                Conveniently located at <b>Jagat Farm Commercial Market</b>, just minutes from <b>Knowledge Park 2</b>, <b>Pari Chowk</b>, and the Alpha/Beta commercial hub. Walk in to explore our tactile fabric swatches, pure cotton weaves, or discuss bespoke sizes with our artisan team.
+              </p>
+
+              <div className="local-proximity-grid">
+                <div className="prox-item">
+                  <MapPin size={18} />
+                  <div>
+                    <b>Jagat Farm Complex</b>
+                    <small>Primary Greater Noida Shopping Market</small>
+                  </div>
+                </div>
+                <div className="prox-item">
+                  <Navigation size={18} />
+                  <div>
+                    <b>5 Mins from Knowledge Park 2</b>
+                    <small>Direct access via Pari Chowk corridor</small>
+                  </div>
+                </div>
+                <div className="prox-item">
+                  <Clock size={18} />
+                  <div>
+                    <b>Open All 7 Days</b>
+                    <small>10:00 AM – 9:00 PM</small>
+                  </div>
+                </div>
+                <div className="prox-item">
+                  <Phone size={18} />
+                  <div>
+                    <b>+91 95557 90429</b>
+                    <small>Workshop & Customer Support</small>
+                  </div>
+                </div>
+              </div>
+
+              <div className="local-store-actions">
+                <a
+                  href="https://maps.google.com/?q=Jagat+Farm+Greater+Noida"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn primary"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+                >
+                  <Navigation size={16} /> Get Directions on Google Maps
+                </a>
+                <a
+                  href="https://wa.me/919555790429?text=Namaste%20Riti%20Handlooms!%20I%20am%20visiting%20your%20store%20in%20Jagat%20Farm."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn secondary"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+                >
+                  <WhatsApp size={16} /> WhatsApp Store Location
+                </a>
+              </div>
+            </div>
+
+            <div className="local-store-map-preview">
+              <div className="map-badge">
+                <b>RITI HANDLOOMS</b>
+                <span>Jagat Farm, Greater Noida</span>
+                <div className="landmark-pills">
+                  <span>Knowledge Park 2 (2.4 km)</span>
+                  <span>Pari Chowk (1.8 km)</span>
+                </div>
+              </div>
+              <img
+                src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&h=700&q=80"
+                alt="Riti Handlooms Workshop in Jagat Farm Greater Noida"
+                loading="lazy"
+              />
+            </div>
           </div>
         </div>
       </section>

@@ -2723,3 +2723,183 @@
     justify-content: space-between;
   }
 }
+
+/* ==========================================================================
+   HYPER-LOCAL STORE & WORKSHOP SHOWCASE (JAGAT FARM & KNOWLEDGE PARK 2)
+   ========================================================================== */
+
+.local-store-section {
+  background: #FAF7F2;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 80px 0;
+}
+
+.local-store-card {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 40px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(17, 25, 43, 0.05);
+}
+
+.local-store-info {
+  padding: 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.local-tag {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  display: inline-block;
+}
+
+.local-store-info h2 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 30px;
+  color: var(--primary);
+  line-height: 1.25;
+  margin: 0 0 16px 0;
+}
+
+.local-lead {
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: var(--text-muted);
+  margin-bottom: 28px;
+}
+
+.local-lead b {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.local-proximity-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-bottom: 32px;
+  padding: 20px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.prox-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.prox-item svg {
+  color: var(--accent);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.prox-item b {
+  display: block;
+  font-size: 13.5px;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.prox-item small {
+  display: block;
+  font-size: 11.5px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.local-store-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.local-store-map-preview {
+  position: relative;
+  min-height: 380px;
+  overflow: hidden;
+  background: var(--primary);
+}
+
+.local-store-map-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.88;
+  transition: transform 0.6s ease;
+}
+
+.local-store-card:hover .local-store-map-preview img {
+  transform: scale(1.04);
+}
+
+.map-badge {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  background: rgba(31, 42, 68, 0.92);
+  backdrop-filter: blur(8px);
+  color: #FAF7F2;
+  padding: 16px 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(184, 137, 59, 0.35);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+  z-index: 2;
+}
+
+.map-badge b {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 16px;
+  letter-spacing: 0.08em;
+  display: block;
+  color: #fff;
+}
+
+.map-badge span {
+  font-size: 11.5px;
+  color: var(--accent-light);
+  display: block;
+  margin-top: 3px;
+}
+
+.landmark-pills {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.landmark-pills span {
+  font-size: 10px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+@media (max-width: 900px) {
+  .local-store-card {
+    grid-template-columns: 1fr;
+  }
+  .local-store-info {
+    padding: 28px 20px;
+  }
+  .local-proximity-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .local-store-map-preview {
+    min-height: 260px;
+  }
+}

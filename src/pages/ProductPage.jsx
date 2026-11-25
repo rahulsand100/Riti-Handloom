@@ -4,6 +4,7 @@ import {
   Heart, ShieldCheck, RefreshCcw, Truck, MessageCircle as WhatsApp, BadgeCheck
 } from 'lucide-react'
 import { ProductCard } from '../components/product/ProductCard.jsx'
+import { SEO } from '../components/common/SEO.jsx'
 import { useSanityCatalog } from '../context/useSanityCatalog.js'
 import { categoryPath, categorySizes, defaultSizes } from '../data/mockData.js'
 import { buildSingleProductEnquiryUrl } from '../lib/whatsapp.js'
@@ -45,6 +46,17 @@ export function ProductPage({ onAdd, wishlist, setWishlist }) {
 
   return (
     <main className="product-page">
+      <SEO
+        title={`${product.title} | Handloom Store Jagat Farm Greater Noida`}
+        description={`${product.title} in ${product.category}. Handcrafted by master weavers at Riti Handlooms, Jagat Farm, Greater Noida (near Knowledge Park 2). WhatsApp enquiry available.`}
+        image={product.image}
+        product={product}
+        breadcrumbs={[
+          { name: 'Home', url: 'https://ritihandloom.in/' },
+          { name: product.category, url: `https://ritihandloom.in/category/${product.categorySlug || 'bedsheets'}` },
+          { name: product.title, url: `https://ritihandloom.in/product/${product.id}` }
+        ]}
+      />
       <div className="container">
         <div className="breadcrumb">
           <Link to="/">Home</Link> / <Link to={categoryPath(product.category)}>{product.category}</Link> / <b>{product.title}</b>

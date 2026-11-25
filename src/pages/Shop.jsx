@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { SlidersHorizontal, Grid2X2, Grid3X3, ChevronDown, X, RotateCcw } from 'lucide-react'
 import { ProductCard } from '../components/product/ProductCard.jsx'
+import { SEO } from '../components/common/SEO.jsx'
 import { useSanityCatalog } from '../context/useSanityCatalog.js'
 import { categorySizes } from '../data/mockData.js'
 
@@ -97,6 +98,14 @@ export function Shop({ onAdd, wishlist, setWishlist, categorySlug }) {
 
   return (
     <main className="shop-page">
+      <SEO
+        title={category ? `${category.name} Collection | Riti Handlooms Jagat Farm Greater Noida` : 'Our Handloom Collection | Riti Handlooms Jagat Farm Greater Noida'}
+        description={category ? `Browse handcrafted ${category.name.toLowerCase()} at Riti Handlooms, Jagat Farm, Greater Noida. Near Knowledge Park 2 & Pari Chowk. WhatsApp enquiry available.` : 'Explore handcrafted bedsheets, dohars, blankets, and towels at Riti Handlooms in Jagat Farm, Greater Noida (near Knowledge Park 2).'}
+        breadcrumbs={[
+          { name: 'Home', url: 'https://ritihandloom.in/' },
+          { name: category ? category.name : 'Our Collection', url: category ? `https://ritihandloom.in/category/${category.slug}` : 'https://ritihandloom.in/shop' }
+        ]}
+      />
       <div className="container">
         <div className="breadcrumb">
           <Link to="/">Home</Link> / {category ? (
