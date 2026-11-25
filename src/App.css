@@ -963,95 +963,89 @@
   line-height: 1.5;
 }
 
-/* --- Reviews Section --- */
-.review-layout {
-  display: grid;
-  grid-template-columns: 240px 1fr;
-  align-items: center;
-  gap: 40px;
-}
-.rating-summary {
-  text-align: center;
-  border: 1px solid var(--border);
-  background: white;
-  border-radius: 4px;
-  padding: 28px 20px;
-  box-shadow: var(--shadow-sm);
-}
-.rating-summary h3 {
-  margin: 0 0 8px;
-  font-size: 20px;
-  color: var(--primary);
-}
-.rating-summary > b {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 46px;
-  font-weight: 700;
-  color: var(--primary);
-  display: block;
-}
-.rating-summary div {
-  color: var(--accent);
-  display: flex;
-  justify-content: center;
-  gap: 3px;
-  margin: 6px 0 8px;
-}
-.rating-summary svg {
-  width: 18px;
-  height: 18px;
-}
-.rating-summary p {
-  color: var(--text-muted);
-  font-size: 12px;
-  margin: 0;
-}
-.review-cards {
+/* --- Handloom Craft & Bespoke Service --- */
+.craft-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  gap: 20px;
+  margin-bottom: 28px;
 }
-.review-cards article {
+.craft-card {
+  background: white;
   border: 1px solid var(--border);
   border-radius: 4px;
-  background: white;
-  padding: 24px;
-  min-height: 190px;
+  padding: 32px 26px;
   box-shadow: var(--shadow-sm);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  transition: transform 0.25s, box-shadow 0.25s;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
 }
-.review-cards article:hover {
-  transform: translateY(-2px);
+.craft-card:hover {
+  border-color: var(--accent);
   box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
 }
-.stars {
+.craft-num {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 26px;
+  font-weight: 700;
   color: var(--accent);
-  display: flex;
-  gap: 3px;
+  display: block;
+  margin-bottom: 12px;
+  opacity: 0.85;
 }
-.stars svg {
-  width: 14px;
-  height: 14px;
-}
-.review-cards p {
-  font-size: 13.5px;
-  line-height: 1.65;
-  color: var(--text);
-  margin: 12px 0 16px;
-  font-style: italic;
-}
-.review-cards b {
-  font-size: 13px;
-  font-weight: 600;
+.craft-card h3 {
+  margin: 0 0 10px;
+  font-size: 19px;
   color: var(--primary);
 }
-.review-cards small {
+.craft-card p {
+  margin: 0;
   color: var(--text-muted);
-  font-size: 11px;
-  margin-top: 3px;
+  font-size: 13.5px;
+  line-height: 1.7;
+}
+
+.craft-banner {
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 32px 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  box-shadow: var(--shadow-sm);
+}
+.craft-banner h3 {
+  margin: 0 0 8px;
+  font-size: 22px;
+  color: var(--primary);
+}
+.craft-banner p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 14px;
+  max-width: 600px;
+  line-height: 1.6;
+}
+
+/* --- PDP Provenance Tag --- */
+.detail-craft-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0 14px;
+  padding: 6px 12px;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--primary);
+  letter-spacing: 0.03em;
+}
+.detail-craft-tag svg {
+  color: var(--accent);
 }
 
 /* --- Instagram & Community --- */
@@ -1983,7 +1977,7 @@
   .product-grid { grid-template-columns: repeat(3, 1fr); }
   .shop-layout { grid-template-columns: 190px 1fr; }
   .shop-grid.cols-4 { grid-template-columns: repeat(3, 1fr); }
-  .review-layout { grid-template-columns: 190px 1fr; }
+  .craft-grid { gap: 14px; }
   .footer-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
@@ -2026,9 +2020,8 @@
   .trust-grid > div { padding: 22px 14px; }
   .trust-grid h3 { font-size: 14px; }
   
-  .review-layout { grid-template-columns: 1fr; }
-  .rating-summary { border-right: 1px solid var(--border); }
-  .review-cards { grid-template-columns: 1fr; }
+  .craft-grid { grid-template-columns: 1fr; gap: 14px; }
+  .craft-banner { flex-direction: column; align-items: flex-start; padding: 24px 20px; gap: 18px; }
   
   .insta-grid { grid-template-columns: repeat(3, 1fr); }
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 26px; padding-top: 40px; }

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import {
-  Star, Heart, ShieldCheck, RefreshCcw, Truck, MessageCircle as WhatsApp
+  Heart, ShieldCheck, RefreshCcw, Truck, MessageCircle as WhatsApp, BadgeCheck
 } from 'lucide-react'
 import { products, categoryPath } from '../data/mockData.js'
 
@@ -47,9 +47,9 @@ export function ProductPage({ onAdd, wishlist, setWishlist }) {
           </div>
           <div className="detail-info">
             <h1>{product.title}</h1>
-            <div className="detail-rating">
-              <span>{[1, 2, 3, 4, 5].map(n => <Star key={n} fill="currentColor" />)}</span>
-              <small>Artisan Crafted Handloom</small>
+            <div className="detail-craft-tag">
+              <BadgeCheck size={16} />
+              <span>Direct Handloom Weave · Natural Fibres · Custom Size on Request</span>
             </div>
 
             <p>

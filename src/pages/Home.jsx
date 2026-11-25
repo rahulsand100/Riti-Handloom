@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
-  ArrowRight, ArrowLeft, Star, Camera as Instagram,
-  BadgeCheck, ShieldCheck, Truck, RefreshCcw
+  ArrowRight, ArrowLeft, Camera as Instagram,
+  BadgeCheck, ShieldCheck, Truck, RefreshCcw, MessageCircle as WhatsApp
 } from 'lucide-react'
 import { SectionTitle } from '../components/common/SectionTitle.jsx'
 import { ProductCard } from '../components/product/ProductCard.jsx'
@@ -171,34 +171,40 @@ export function Home({ onAdd, wishlist, setWishlist }) {
         </div>
       </section>
 
-      <section className="section reviews">
+      <section className="section bespoke-service">
         <div className="container">
-          <SectionTitle>CUSTOMER EXPERIENCES</SectionTitle>
-          <div className="review-layout">
-            <div className="rating-summary">
-              <h3>Riti Handloom</h3>
-              <b>4.8</b>
-              <div>
-                {[1, 2, 3, 4, 5].map(n => <Star key={n} fill="currentColor" />)}
-              </div>
-              <p>Out of 5 stars · Google reviews</p>
+          <SectionTitle>HANDLOOM CRAFT & BESPOKE SERVICE</SectionTitle>
+          <div className="craft-grid">
+            <div className="craft-card">
+              <span className="craft-num">01</span>
+              <h3>Direct Artisan Weaving</h3>
+              <p>Every piece is crafted by skilled weavers in Greater Noida. Direct handloom provenance ensures pure textiles without retail markups.</p>
             </div>
-            <div className="review-cards">
-              {[
-                ['Ananya Mehta', '2 months ago', 'The cotton bedsheet weave is so soft and the finish feels wonderfully premium.'],
-                ['Rohan Kapoor', '5 months ago', 'Excellent cotton bed linen. The colours are exactly as described and it softened beautifully after washing.'],
-                ['Meera Sethi', '1 month ago', 'Lovely packaging and thoughtful support from the Riti team on WhatsApp. Prompt service!']
-              ].map(([name, time, text]) => (
-                <article key={name}>
-                  <div className="stars">
-                    {[1, 2, 3, 4, 5].map(n => <Star key={n} fill="currentColor" />)}
-                  </div>
-                  <p>“{text}”</p>
-                  <b>{name}</b>
-                  <small>{time}</small>
-                </article>
-              ))}
+            <div className="craft-card">
+              <span className="craft-num">02</span>
+              <h3>Custom Sizing on Demand</h3>
+              <p>Special dimensions for custom mattresses, extra-deep pockets, or specific drop lengths? Message us on WhatsApp with your exact dimensions.</p>
             </div>
+            <div className="craft-card">
+              <span className="craft-num">03</span>
+              <h3>Wholesale & Gifting Orders</h3>
+              <p>Curated textile packages and wholesale rates for guest houses, boutique stays, and festive corporate gifting with direct personal dispatch.</p>
+            </div>
+          </div>
+          <div className="craft-banner">
+            <div>
+              <h3>Looking for custom home furnishings or wholesale pricing?</h3>
+              <p>Connect directly with our master craftsmen on WhatsApp for fabric guidance, custom dimensions, and immediate quotations.</p>
+            </div>
+            <a
+              className="btn primary"
+              href="https://wa.me/919555790429?text=Namaste%20Riti%20Handlooms!%20I%20would%20like%20to%20discuss%20custom%20sizing%20or%20wholesale%20enquiry."
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#25D366', color: '#fff', border: 'none' }}
+            >
+              <WhatsApp size={18} /> Chat with Our Team
+            </a>
           </div>
         </div>
       </section>
