@@ -6,12 +6,14 @@ import {
 } from 'lucide-react'
 import { SectionTitle } from '../components/common/SectionTitle.jsx'
 import { ProductCard } from '../components/product/ProductCard.jsx'
-import { categories, categoryPath, products, bedsheetImages, image } from '../data/mockData.js'
+import { useSanityCatalog } from '../context/useSanityCatalog.js'
+import { categoryPath, bedsheetImages, image } from '../data/mockData.js'
 
 export function Home({ onAdd, wishlist, setWishlist }) {
+  const { categories, products, siteSettings } = useSanityCatalog()
   const [slide, setSlide] = useState(0)
 
-  const heroSlides = [
+  const defaultHeroSlides = [
     {
       title: 'A softer kind of everyday.',
       label: 'RITI HANDLOOM · THE HOME EDIT',
@@ -37,6 +39,10 @@ export function Home({ onAdd, wishlist, setWishlist }) {
       linkText: 'Explore bedsheets'
     }
   ]
+
+  const heroSlides = (siteSettings?.heroSlides && siteSettings.heroSlides.length > 0)
+    ? siteSettings.heroSlides
+    : defaultHeroSlides
 
   useEffect(() => {
     const timer = setInterval(() => setSlide(s => (s + 1) % heroSlides.length), 5000)

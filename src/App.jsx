@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './App.css'
 
+import { SanityCatalogProvider } from './context/SanityCatalogContext.jsx'
 import { EnquiryBagProvider } from './context/EnquiryBagContext.jsx'
 import { useEnquiryBag } from './context/useEnquiryBag.js'
 import { Header } from './components/layout/Header.jsx'
@@ -120,9 +121,11 @@ function AppContent() {
 export function App() {
   return (
     <BrowserRouter>
-      <EnquiryBagProvider>
-        <AppContent />
-      </EnquiryBagProvider>
+      <SanityCatalogProvider>
+        <EnquiryBagProvider>
+          <AppContent />
+        </EnquiryBagProvider>
+      </SanityCatalogProvider>
     </BrowserRouter>
   )
 }

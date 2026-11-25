@@ -2,9 +2,11 @@ import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { SlidersHorizontal, Grid2X2, Grid3X3, ChevronDown, X, RotateCcw } from 'lucide-react'
 import { ProductCard } from '../components/product/ProductCard.jsx'
-import { categories, products, categorySizes } from '../data/mockData.js'
+import { useSanityCatalog } from '../context/useSanityCatalog.js'
+import { categorySizes } from '../data/mockData.js'
 
 export function Shop({ onAdd, wishlist, setWishlist, categorySlug }) {
+  const { products, getCategory } = useSanityCatalog()
   const [filtersOpen, setFiltersOpen] = useState(false)
   const [sort, setSort] = useState('latest')
   const [columns, setColumns] = useState(4)
@@ -13,9 +15,14 @@ export function Shop({ onAdd, wishlist, setWishlist, categorySlug }) {
   const [selectedSizes, setSelectedSizes] = useState([])
   const [inStockOnly, setInStockOnly] = useState(false)
 
-  const category = categories.find(item => item.slug === categorySlug)
+  const category = getCategory(categorySlug)
 
-  const availableFabrics = ['100% Cotton', 'Handloom Weave', 'Cotton Blend', 'Linen']
+  const availableFabrics = useMemo(() => {
+    const set = new Set(products.map(p => p.fabric).filter(Boolean))
+    if (set.size === 0) return ['100% Cotton', 'Handloom Weave', 'Cotton Blend', 'Linen']
+    return Array.from(set)
+  }, [products])
+
   const availableFilterSizes = ['Single', 'Double', 'King', 'Standard', 'Custom Size']
 
   const toggleFabric = (fabric) => {
@@ -42,7 +49,10 @@ export function Shop({ onAdd, wishlist, setWishlist, categorySlug }) {
     return products.filter(product => {
       // 1. Category filter
       if (categorySlug && category) {
-        if (product.category.toLowerCase() !== category.name.toLowerCase()) {
+        const matchesCategory =
+          (product.categorySlug && product.categorySlug.toLowerCase() === category.slug.toLowerCase()) ||
+          (product.category && product.category.toLowerCase() === category.name.toLowerCase())
+        if (!matchesCategory) {
           return false
         }
       }
@@ -72,7 +82,7 @@ export function Shop({ onAdd, wishlist, setWishlist, categorySlug }) {
 
       return true
     })
-  }, [categorySlug, category, selectedFabrics, selectedSizes, inStockOnly])
+  }, [products, categorySlug, category, selectedFabrics, selectedSizes, inStockOnly])
 
   const sortedProducts = useMemo(() => {
     const list = [...filteredProducts]

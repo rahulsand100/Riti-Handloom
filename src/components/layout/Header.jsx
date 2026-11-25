@@ -3,9 +3,11 @@ import { Link } from 'react-router-dom'
 import {
   ChevronDown, Heart, Search, ShoppingBag, Menu, X, Phone, Package
 } from 'lucide-react'
-import { categories, categoryPath, products } from '../../data/mockData.js'
+import { useSanityCatalog } from '../../context/useSanityCatalog.js'
+import { categoryPath } from '../../data/mockData.js'
 
 export function Header({ cartCount, onCart, wishlistCount, onSearchOpen, onOpenBulkModal }) {
+  const { categories: catalogCategories, products: catalogProducts, siteSettings } = useSanityCatalog()
   const [menuOpen, setMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [search, setSearch] = useState('')
@@ -18,7 +20,7 @@ export function Header({ cartCount, onCart, wishlistCount, onSearchOpen, onOpenB
     }
   }
 
-  const suggestions = products.filter(p =>
+  const suggestions = catalogProducts.filter(p =>
     p.title.toLowerCase().includes(search.toLowerCase())
   )
 
@@ -26,7 +28,7 @@ export function Header({ cartCount, onCart, wishlistCount, onSearchOpen, onOpenB
     <>
       <div className="topbar">
         <div className="container topbar-inner">
-          <span>Handcrafted Handloom & Home Linen · Greater Noida</span>
+          <span>{siteSettings?.announcementText || 'Handcrafted Handloom & Home Linen · Greater Noida'}</span>
           <div style={{ display: 'flex', alignItems: 'center' }}>
             {onOpenBulkModal && (
               <button
@@ -37,8 +39,8 @@ export function Header({ cartCount, onCart, wishlistCount, onSearchOpen, onOpenB
                 <Package size={12} /> Wholesale & Bulk Orders
               </button>
             )}
-            <a href="tel:+919555790429"><Phone size={13} /> +91 95557 90429</a>
-            <a href="https://wa.me/919555790429?text=Namaste%20Riti%20Handlooms!%20I%20have%20an%20enquiry.">WhatsApp</a>
+            <a href={`tel:${siteSettings?.secondaryPhoneNumber || '+919555790429'}`}><Phone size={13} /> {siteSettings?.secondaryPhoneNumber || '+91 95557 90429'}</a>
+            <a href={`https://wa.me/${siteSettings?.primaryWhatsAppNumber || '919555790429'}?text=Namaste%20Riti%20Handlooms!%20I%20have%20an%20enquiry.`}>WhatsApp</a>
           </div>
         </div>
       </div>
@@ -104,12 +106,9 @@ export function Header({ cartCount, onCart, wishlistCount, onSearchOpen, onOpenB
                 <X />
               </button>
             </div>
-            {[
-              'Bedsheets', 'Pillows', 'Pillow Covers', 'Blankets',
-              'Dohars', 'Carpets', 'Towels', 'Bed Sets'
-            ].map(item => (
-              <Link key={item} to={categoryPath(item)} onClick={() => setMenuOpen(false)}>
-                {item}
+            {catalogCategories.map(item => (
+              <Link key={item.slug} to={`/category/${item.slug}`} onClick={() => setMenuOpen(false)}>
+                {item.name}
                 <ChevronDown size={16} />
               </Link>
             ))}
@@ -154,7 +153,7 @@ export function Header({ cartCount, onCart, wishlistCount, onSearchOpen, onOpenB
             <div className="search-row">
               <select aria-label="Category">
                 <option>All categories</option>
-                {categories.map(category => (
+                {catalogCategories.map(category => (
                   <option key={category.slug}>{category.name}</option>
                 ))}
               </select>

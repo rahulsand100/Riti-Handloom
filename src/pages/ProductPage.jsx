@@ -3,21 +3,26 @@ import { useParams, Link } from 'react-router-dom'
 import {
   Heart, ShieldCheck, RefreshCcw, Truck, MessageCircle as WhatsApp, BadgeCheck
 } from 'lucide-react'
-import { products, categoryPath, categorySizes, defaultSizes } from '../data/mockData.js'
+import { ProductCard } from '../components/product/ProductCard.jsx'
+import { useSanityCatalog } from '../context/useSanityCatalog.js'
+import { categoryPath, categorySizes, defaultSizes } from '../data/mockData.js'
 import { buildSingleProductEnquiryUrl } from '../lib/whatsapp.js'
 
 export function ProductPage({ onAdd, wishlist, setWishlist }) {
   const { id } = useParams()
-  const product = products.find(p => p.id === Number(id)) || products[0]
+  const { getProduct, products } = useSanityCatalog()
+  const product = getProduct(id) || products[0]
   const [activeImageIndex, setActiveImageIndex] = useState(0)
 
   const availableSizes = categorySizes[product.category] || defaultSizes
   const [selectedSize, setSelectedSize] = useState(availableSizes[0]?.label || 'Standard / ALL SIZE')
 
-  const galleryImages = product.gallery || [
-    { src: product.image, alt: product.title },
-    { src: product.hover, alt: `${product.title} detail` },
-  ]
+  const galleryImages = (product.gallery && product.gallery.length > 0)
+    ? product.gallery
+    : [
+        { src: product.image, alt: product.title },
+        { src: product.hover, alt: `${product.title} detail` },
+      ]
   const liked = wishlist.includes(product.id)
   
   const waMessageUrl = buildSingleProductEnquiryUrl({
@@ -33,6 +38,10 @@ export function ProductPage({ onAdd, wishlist, setWishlist }) {
       selectedSize: selectedSize
     })
   }
+
+  const relatedProducts = products
+    .filter(p => (p.category === product.category || p.categorySlug === product.categorySlug) && p.id !== product.id)
+    .slice(0, 4)
 
   return (
     <main className="product-page">
@@ -149,7 +158,7 @@ export function ProductPage({ onAdd, wishlist, setWishlist }) {
           <details open>
             <summary>Description & Handloom Weave</summary>
             <p>
-              Handwoven textiles designed for lasting comfort, crafted using natural fibres, artisan detailing, and easy-care finishes.
+              {product.description || 'Handwoven textiles designed for lasting comfort, crafted using natural fibres, artisan detailing, and easy-care finishes.'}
             </p>
           </details>
           <details>
@@ -168,6 +177,26 @@ export function ProductPage({ onAdd, wishlist, setWishlist }) {
             </p>
           </details>
         </div>
+
+        {relatedProducts.length > 0 && (
+          <section className="section product-section" style={{ marginTop: '48px', paddingTop: '32px', borderTop: '1px solid var(--border)' }}>
+            <div className="carousel-head">
+              <h3>More from {product.category}</h3>
+              <Link to={categoryPath(product.category)}>View Collection</Link>
+            </div>
+            <div className="product-grid">
+              {relatedProducts.map(p => (
+                <ProductCard
+                  key={p.id}
+                  product={p}
+                  onAdd={onAdd}
+                  wishlist={wishlist}
+                  setWishlist={setWishlist}
+                />
+              ))}
+            </div>
+          </section>
+        )}
       </div>
     </main>
   )
