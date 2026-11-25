@@ -26,5 +26,6 @@ dist-ssr
 .env
 .sanity
 PROJECT_STATUS.md
+CLIENT_SETUP_GUIDE.md
 audit.json
 *.log
