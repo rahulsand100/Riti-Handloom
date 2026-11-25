@@ -11,9 +11,33 @@ import { buildSingleProductEnquiryUrl } from '../lib/whatsapp.js'
 
 export function ProductPage({ onAdd, wishlist, setWishlist }) {
   const { id } = useParams()
-  const { getProduct, products } = useSanityCatalog()
-  const product = getProduct(id) || products[0]
+  const { getProduct, products, loading } = useSanityCatalog()
+  const product = getProduct(id)
   const [activeImageIndex, setActiveImageIndex] = useState(0)
+
+  if (loading && !product) {
+    return (
+      <main className="product-page">
+        <div className="container" style={{ padding: '90px 20px', textAlign: 'center' }}>
+          <p style={{ color: 'var(--text-muted)' }}>Loading handcrafted details...</p>
+        </div>
+      </main>
+    )
+  }
+
+  if (!product) {
+    return (
+      <main className="product-page">
+        <div className="container" style={{ padding: '90px 20px', textAlign: 'center' }}>
+          <h1>Product Not Found</h1>
+          <p style={{ color: 'var(--text-muted)', marginBottom: '24px' }}>
+            This handloom item may have been updated or moved. Browse our current collection below.
+          </p>
+          <Link className="btn primary" to="/shop">Explore Collection</Link>
+        </div>
+      </main>
+    )
+  }
 
   const galleryImages = (product.gallery && product.gallery.length > 0)
     ? product.gallery

@@ -1,9 +1,15 @@
 import { Link } from 'react-router-dom'
 import { ArrowRight, Phone, Mail, MapPin } from 'lucide-react'
+import { SEO } from '../components/common/SEO.jsx'
 
 export function StaticPage({ title }) {
   return (
     <main className="static-page">
+      <SEO
+        title={`${title} | Riti Handlooms Jagat Farm Greater Noida`}
+        description="Discover the Riti Handlooms story — handcrafted bedsheets, dohars, blankets, and home furnishings in Jagat Farm, Greater Noida."
+        url={title === 'About the Brand' ? 'https://ritihandloom.in/about' : 'https://ritihandloom.in/'}
+      />
       <div className="container">
         <div className="breadcrumb">
           <Link to="/">Home</Link> / <b>{title}</b>

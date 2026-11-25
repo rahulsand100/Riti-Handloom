@@ -6,7 +6,7 @@ import { SEO } from '../components/common/SEO.jsx'
 import { useSanityCatalog } from '../context/useSanityCatalog.js'
 
 export function Shop({ onAdd, wishlist, setWishlist, categorySlug }) {
-  const { products, categories, getCategory } = useSanityCatalog()
+  const { products, categories, getCategory, loading } = useSanityCatalog()
   const [filtersOpen, setFiltersOpen] = useState(false)
   const [sort, setSort] = useState('latest')
   const [columns, setColumns] = useState(4)
@@ -15,6 +15,13 @@ export function Shop({ onAdd, wishlist, setWishlist, categorySlug }) {
   const [inStockOnly, setInStockOnly] = useState(false)
 
   const category = getCategory(categorySlug)
+  const fallbackCategoryName = categorySlug
+    ? categorySlug
+        .split('-')
+        .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+        .join(' ')
+    : null
+  const activeCategoryName = category?.name || fallbackCategoryName
 
   const availableFabrics = useMemo(() => {
     const set = new Set(products.map(p => p.fabric).filter(Boolean))
@@ -38,10 +45,12 @@ export function Shop({ onAdd, wishlist, setWishlist, categorySlug }) {
   const filteredProducts = useMemo(() => {
     return products.filter(product => {
       // 1. Category filter
-      if (categorySlug && category) {
+      if (categorySlug) {
+        const targetSlug = (category?.slug || categorySlug).toLowerCase()
+        const targetName = activeCategoryName?.toLowerCase()
         const matchesCategory =
-          (product.categorySlug && product.categorySlug.toLowerCase() === category.slug.toLowerCase()) ||
-          (product.category && product.category.toLowerCase() === category.name.toLowerCase())
+          (product.categorySlug && product.categorySlug.toLowerCase() === targetSlug) ||
+          (targetName && product.category && product.category.toLowerCase() === targetName)
         if (!matchesCategory) {
           return false
         }
@@ -61,7 +70,7 @@ export function Shop({ onAdd, wishlist, setWishlist, categorySlug }) {
 
       return true
     })
-  }, [products, categorySlug, category, selectedFabrics, inStockOnly])
+  }, [products, categorySlug, category, activeCategoryName, selectedFabrics, inStockOnly])
 
   const sortedProducts = useMemo(() => {
     const list = [...filteredProducts]
@@ -77,17 +86,17 @@ export function Shop({ onAdd, wishlist, setWishlist, categorySlug }) {
   return (
     <main className="shop-page">
       <SEO
-        title={category ? `${category.name} Collection | Riti Handlooms Jagat Farm Greater Noida` : 'Our Handloom Collection | Riti Handlooms Jagat Farm Greater Noida'}
-        description={category ? `Browse handcrafted ${category.name.toLowerCase()} at Riti Handlooms, Jagat Farm, Greater Noida. Near Knowledge Park 2 & Pari Chowk. WhatsApp enquiry available.` : 'Explore handcrafted bedsheets, dohars, blankets, and towels at Riti Handlooms in Jagat Farm, Greater Noida (near Knowledge Park 2).'}
+        title={activeCategoryName ? `${activeCategoryName} Collection | Riti Handlooms Jagat Farm Greater Noida` : 'Our Handloom Collection | Riti Handlooms Jagat Farm Greater Noida'}
+        description={activeCategoryName ? `Browse handcrafted ${activeCategoryName.toLowerCase()} at Riti Handlooms, Jagat Farm, Greater Noida. Near Knowledge Park 2 & Pari Chowk. WhatsApp enquiry available.` : 'Explore handcrafted bedsheets, dohars, blankets, and towels at Riti Handlooms in Jagat Farm, Greater Noida (near Knowledge Park 2).'}
         breadcrumbs={[
           { name: 'Home', url: 'https://ritihandloom.in/' },
-          { name: category ? category.name : 'Our Collection', url: category ? `https://ritihandloom.in/category/${category.slug}` : 'https://ritihandloom.in/shop' }
+          { name: activeCategoryName || 'Our Collection', url: categorySlug ? `https://ritihandloom.in/category/${categorySlug}` : 'https://ritihandloom.in/shop' }
         ]}
       />
       <div className="container">
         <div className="breadcrumb">
-          <Link to="/">Home</Link> / {category ? (
-            <><Link to="/shop">Our Collection</Link> / <b>{category.name}</b></>
+          <Link to="/">Home</Link> / {activeCategoryName ? (
+            <><Link to="/shop">Our Collection</Link> / <b>{activeCategoryName}</b></>
           ) : (
             <b>Our Collection</b>
           )}
@@ -104,13 +113,13 @@ export function Shop({ onAdd, wishlist, setWishlist, categorySlug }) {
           </section>
         )}
 
-        {!category && <h1>Our Collection</h1>}
+        {!category && <h1>{activeCategoryName || 'Our Collection'}</h1>}
 
         <div className="shop-toolbar">
           <button className="filter-btn" onClick={() => setFiltersOpen(true)}>
             <SlidersHorizontal /> Filter {hasActiveFilters && <em>•</em>}
           </button>
-          <span>Showing {sortedProducts.length} handcrafted items</span>
+          <span>Showing {sortedProducts.length} handcrafted {sortedProducts.length === 1 ? 'item' : 'items'}</span>
           <div>
             <select value={sort} onChange={e => setSort(e.target.value)} aria-label="Sort products">
               <option value="latest">Latest Arrivals</option>
@@ -118,14 +127,14 @@ export function Shop({ onAdd, wishlist, setWishlist, categorySlug }) {
               <option value="za">Name: Z to A</option>
             </select>
             <button
-              className={columns === 3 ? 'active' : ''}
+              className={columns === 3 ? 'active desktop-only' : 'desktop-only'}
               onClick={() => setColumns(3)}
               aria-label="3 column layout"
             >
               <Grid3X3 />
             </button>
             <button
-              className={columns === 4 ? 'active' : ''}
+              className={columns === 4 ? 'active desktop-only' : 'desktop-only'}
               onClick={() => setColumns(4)}
               aria-label="4 column layout"
             >
@@ -221,7 +230,12 @@ export function Shop({ onAdd, wishlist, setWishlist, categorySlug }) {
             <div className="filter-backdrop" onClick={() => setFiltersOpen(false)} />
           )}
 
-          {sortedProducts.length ? (
+          {loading && products.length === 0 ? (
+            <div className="category-empty">
+              <h2>Loading collection...</h2>
+              <p>Fetching handcrafted weaves from Riti Handlooms catalogue.</p>
+            </div>
+          ) : sortedProducts.length ? (
             <div className={`shop-grid cols-${columns}`}>
               {sortedProducts.map(p => (
                 <ProductCard
@@ -235,11 +249,21 @@ export function Shop({ onAdd, wishlist, setWishlist, categorySlug }) {
             </div>
           ) : (
             <div className="category-empty">
-              <h2>No products match your filters</h2>
-              <p>Try clearing some filters or browse our other handcrafted collections.</p>
-              <button className="btn primary" onClick={clearAllFilters}>
-                Clear All Filters
-              </button>
+              <h2>{hasActiveFilters ? 'No products match your filters' : 'Collection arriving soon'}</h2>
+              <p>
+                {hasActiveFilters
+                  ? 'Try clearing some filters or browse our other handcrafted collections.'
+                  : 'This collection is currently being updated. Explore all products or message us on WhatsApp for availability.'}
+              </p>
+              {hasActiveFilters ? (
+                <button className="btn primary" onClick={clearAllFilters}>
+                  Clear All Filters
+                </button>
+              ) : (
+                <Link className="btn primary" to="/shop">
+                  View All Products
+                </Link>
+              )}
             </div>
           )}
         </div>

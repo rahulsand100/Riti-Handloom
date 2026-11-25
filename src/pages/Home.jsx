@@ -159,7 +159,9 @@ export function Home({ onAdd, wishlist, setWishlist }) {
         ['BED LINEN', 'bedsheets', products.slice(0, 4)],
         ['PILLOW COVER SETS & PILLOW PAIRS', 'pillow-covers', products.filter(product => ['Pillow Covers', 'Pillows'].includes(product.category))],
         ['BLANKETS & FLOOR', 'blankets', products.filter(product => ['Blankets', 'Dohars', 'Carpets'].includes(product.category))],
-      ].map(([title, slug, collection]) => (
+      ]
+        .filter(([, , collection]) => collection.length > 0)
+        .map(([title, slug, collection]) => (
         <section className="section product-section" key={title}>
           <div className="container">
             <div className="carousel-head">
@@ -212,8 +214,8 @@ export function Home({ onAdd, wishlist, setWishlist }) {
             </div>
             <div className="craft-card">
               <span className="craft-num">02</span>
-              <h3>Custom Sizing on Demand</h3>
-              <p>Special dimensions for custom mattresses, extra-deep pockets, or specific drop lengths? Message us on WhatsApp with your exact dimensions.</p>
+              <h3>All-Size Versatility</h3>
+              <p>Thoughtfully crafted in versatile ALL SIZE fits designed to bring effortless comfort and graceful drape to every home.</p>
             </div>
             <div className="craft-card">
               <span className="craft-num">03</span>
@@ -223,12 +225,12 @@ export function Home({ onAdd, wishlist, setWishlist }) {
           </div>
           <div className="craft-banner">
             <div>
-              <h3>Looking for custom home furnishings or wholesale pricing?</h3>
-              <p>Connect directly with our master craftsmen on WhatsApp for fabric guidance, custom dimensions, and immediate quotations.</p>
+              <h3>Looking for handloom home furnishings or wholesale pricing?</h3>
+              <p>Connect directly with our master craftsmen on WhatsApp for fabric guidance, availability, and immediate quotations.</p>
             </div>
             <a
               className="btn primary"
-              href="https://wa.me/919555790429?text=Namaste%20Riti%20Handlooms!%20I%20would%20like%20to%20discuss%20custom%20sizing%20or%20wholesale%20enquiry."
+              href="https://wa.me/919555790429?text=Namaste%20Riti%20Handlooms!%20I%20would%20like%20to%20discuss%20home%20furnishings%20or%20a%20wholesale%20enquiry."
               target="_blank"
               rel="noopener noreferrer"
               style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#25D366', color: '#fff', border: 'none' }}
@@ -248,7 +250,7 @@ export function Home({ onAdd, wishlist, setWishlist }) {
               <span className="local-tag">JAGAT FARM · GREATER NOIDA</span>
               <h2>Your Nearest Handloom Store in Greater Noida</h2>
               <p className="local-lead">
-                Conveniently located at <b>Jagat Farm Commercial Market</b>, just minutes from <b>Knowledge Park 2</b>, <b>Pari Chowk</b>, and the Alpha/Beta commercial hub. Walk in to explore our tactile fabric swatches, pure cotton weaves, or discuss bespoke sizes with our artisan team.
+                Conveniently located at <b>Jagat Farm Commercial Market</b>, just minutes from <b>Knowledge Park 2</b>, <b>Pari Chowk</b>, and the Alpha/Beta commercial hub. Walk in to explore our tactile fabric swatches, pure cotton weaves, or consult with our artisan team.
               </p>
 
               <div className="local-proximity-grid">
@@ -354,7 +356,10 @@ export function Home({ onAdd, wishlist, setWishlist }) {
           ) : (
             <form onSubmit={handleNewsletterSubmit}>
               <input
+                id="newsletter-email"
+                name="email"
                 type="email"
+                autoComplete="email"
                 placeholder="Your email address"
                 value={newsletterEmail}
                 onChange={e => setNewsletterEmail(e.target.value)}

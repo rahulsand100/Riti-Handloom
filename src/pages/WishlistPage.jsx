@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { ProductCard } from '../components/product/ProductCard.jsx'
+import { SEO } from '../components/common/SEO.jsx'
 import { useSanityCatalog } from '../context/useSanityCatalog.js'
 import { MessageCircle as WhatsApp, ShoppingBag } from 'lucide-react'
 
@@ -10,7 +11,7 @@ export function WishlistPage({ wishlist, setWishlist, onAdd }) {
   const waWishlistEnquiry = encodeURIComponent(
     `Namaste Riti Handlooms! Here are the items from my wishlist that I would like to enquire about:\n\n` +
     wishlistProducts.map((p, i) => `${i + 1}. ${p.title} (${p.category} · ALL SIZE)`).join('\n') +
-    `\n\nPlease share price, bulk rates, and estimated delivery dates.`
+    `\n\nPlease share availability and estimated delivery dates.`
   )
 
   const handleAddAllToCart = () => {
@@ -19,6 +20,11 @@ export function WishlistPage({ wishlist, setWishlist, onAdd }) {
 
   return (
     <main className="shop-page">
+      <SEO
+        title="My Wishlist | Riti Handlooms Jagat Farm Greater Noida"
+        description="Your saved handloom favourites at Riti Handlooms, Greater Noida. Move items to your enquiry bag or enquire directly on WhatsApp."
+        url="https://ritihandloom.in/wishlist"
+      />
       <div className="container">
         <div className="breadcrumb">
           <Link to="/">Home</Link> / <b>My Wishlist</b>

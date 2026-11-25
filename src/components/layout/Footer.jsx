@@ -34,12 +34,21 @@ export function Footer() {
           ))}
         </div>
         <div>
-          <h3>HOME COLLECTIONS</h3>
-          {displayCategories.slice(4).map(category => (
-            <Link key={category.slug} to={`/category/${category.slug}`}>
-              {category.name}
-            </Link>
-          ))}
+          <h3>{displayCategories.length > 4 ? 'HOME COLLECTIONS' : 'QUICK LINKS'}</h3>
+          {displayCategories.length > 4 ? (
+            displayCategories.slice(4).map(category => (
+              <Link key={category.slug} to={`/category/${category.slug}`}>
+                {category.name}
+              </Link>
+            ))
+          ) : (
+            <>
+              <Link to="/shop">All Collections</Link>
+              <Link to="/about">About the Brand</Link>
+              <Link to="/cart">Enquiry Bag</Link>
+              <Link to="/wishlist">My Wishlist</Link>
+            </>
+          )}
         </div>
         <div>
           <h3>GET IN TOUCH</h3>

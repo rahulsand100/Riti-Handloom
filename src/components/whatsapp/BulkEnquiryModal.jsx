@@ -23,7 +23,7 @@ export function BulkEnquiryModal({ open, onClose }) {
   }
 
   return (
-    <div className="overlay" onMouseDown={onClose}>
+    <div className="overlay overlay-center" onMouseDown={onClose}>
       <div className="bulk-modal" onMouseDown={e => e.stopPropagation()}>
         <div className="bulk-modal-header">
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>

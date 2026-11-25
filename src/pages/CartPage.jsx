@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { ShoppingBag, Trash2, Plus, Minus, MessageCircle as WhatsApp, MapPin } from 'lucide-react'
+import { SEO } from '../components/common/SEO.jsx'
 import { buildMultiItemEnquiryUrl } from '../lib/whatsapp.js'
 
 export function CartPage({ cart, updateQuantity, removeFromCart, getItemKey, clearCart }) {
@@ -13,6 +14,11 @@ export function CartPage({ cart, updateQuantity, removeFromCart, getItemKey, cle
 
   return (
     <main className="cart-page">
+      <SEO
+        title="Enquiry Bag | Riti Handlooms Jagat Farm Greater Noida"
+        description="Review your selected handcrafted textiles and send a direct WhatsApp quote enquiry to Riti Handlooms, Greater Noida."
+        url="https://ritihandloom.in/cart"
+      />
       <div className="container">
         <div className="breadcrumb">
           <Link to="/">Home</Link> / <b>Enquiry Bag</b>

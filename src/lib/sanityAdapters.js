@@ -15,10 +15,10 @@ import {
 export function normalizeProduct(doc, index = 0) {
   if (!doc) return null
 
-  const slug = doc.slug || doc._id || `product-${index}`
-  const title = doc.title || 'Handloom Textile'
-  const categoryName = doc.category?.name || 'Bedsheets'
-  const categorySlug = doc.category?.slug || 'bedsheets'
+  const slug = String(doc.slug || doc._id || `product-${index}`).trim()
+  const title = String(doc.title || 'Handloom Textile').trim()
+  const categoryName = String(doc.category?.name || 'Bedsheets').trim()
+  const categorySlug = String(doc.category?.slug || 'bedsheets').trim()
 
   // Extract primary image
   const primarySanityImg = doc.images?.[0]
@@ -50,11 +50,11 @@ export function normalizeProduct(doc, index = 0) {
     title: title,
     category: categoryName,
     categorySlug: categorySlug,
-    fabric: doc.fabric || '100% Cotton Handloom',
+    fabric: String(doc.fabric || '100% Cotton Handloom').trim(),
     image: image,
     hover: hover,
     gallery: gallery,
-    description: doc.description || 'Crafted in small batches by skilled artisans, this timeless piece brings natural comfort and considered design to your everyday living.',
+    description: String(doc.description || 'Crafted in small batches by skilled artisans, this timeless piece brings natural comfort and considered design to your everyday living.').trim(),
     inStock: doc.inStock !== false,
     isFeatured: Boolean(doc.isFeatured),
     isNewArrival: Boolean(doc.isNewArrival),
@@ -72,8 +72,8 @@ export function normalizeProduct(doc, index = 0) {
 export function normalizeCategory(doc) {
   if (!doc) return null
 
-  const slug = doc.slug || doc._id
-  const name = doc.name || 'Handloom'
+  const slug = String(doc.slug || doc._id).trim()
+  const name = String(doc.name || 'Handloom').trim()
 
   const image = doc.image
     ? categoryCardImageUrl(doc.image)
@@ -83,7 +83,7 @@ export function normalizeCategory(doc) {
     _id: doc._id,
     name: name,
     slug: slug,
-    description: doc.description || `Handcrafted ${name.toLowerCase()} in fine traditional weaves.`,
+    description: String(doc.description || `Handcrafted ${name.toLowerCase()} in fine traditional weaves.`).trim(),
     image: image,
     displayOrder: doc.displayOrder || 0,
     isFeatured: doc.isFeatured !== false,

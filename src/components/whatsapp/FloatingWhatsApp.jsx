@@ -81,7 +81,7 @@ export function FloatingWhatsApp({ onOpenBulkModal }) {
               </div>
               <div>
                 <b>Call Workshop Direct</b>
-                <small>+91 95557 90429 (10 AM – 8 PM)</small>
+                <small>+91 95557 90429 (10 AM – 9 PM)</small>
               </div>
             </a>
           </div>
