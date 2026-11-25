@@ -1,30 +1,52 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@500;600;700&display=swap');
-
 :root {
-  --bg: #fff;
-  --bg-soft: #faf7f2;
-  --primary: #1f2a44;
-  --accent: #b8893b;
-  --text: #222;
-  --text-muted: #6b6b6b;
-  --border: #e8e3da;
-  --sale: #c0392b;
-  --new: #2e7d5b;
-  --soldout: #777;
-  font-family: 'DM Sans', sans-serif;
+  --bg: #FFFFFF;
+  --bg-soft: #FAF7F2;
+  --bg-card: #FFFFFF;
+  --bg-muted: #F3EEE7;
+  
+  --primary: #1F2A44;
+  --primary-light: #2A395C;
+  --accent: #B8893B;
+  --accent-light: #D4A95B;
+  --accent-soft: #F7F1E5;
+  
+  --text: #1C2331;
+  --text-muted: #6B7280;
+  --border: #E8E3DA;
+  --border-subtle: #F0ECE4;
+  
+  --new: #2D5A46;
+  --sale: #C0392B;
+  --soldout: #71717A;
+  --whatsapp: #25D366;
+  --whatsapp-hover: #1EBE5D;
+  
+  --shadow-sm: 0 2px 8px rgba(31, 42, 68, 0.04);
+  --shadow-md: 0 8px 24px rgba(31, 42, 68, 0.08);
+  --shadow-lg: 0 16px 40px rgba(31, 42, 68, 0.12);
+  --shadow-card: 0 4px 16px rgba(31, 42, 68, 0.05);
+
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   color: var(--text);
   background: var(--bg);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: var(--accent-soft);
+  color: var(--primary);
 }
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body { margin: 0; min-width: 320px; }
+body { margin: 0; min-width: 320px; background: var(--bg); color: var(--text); }
 button, input, select { font: inherit; }
 button, a { -webkit-tap-highlight-color: transparent; }
 button { cursor: pointer; }
 a { color: inherit; text-decoration: none; }
 img { display: block; max-width: 100%; }
-h1, h2, h3 { font-family: 'Playfair Display', serif; }
+h1, h2, h3, h4 { font-family: 'Playfair Display', Georgia, serif; font-weight: 600; letter-spacing: -0.01em; }
+p { line-height: 1.7; }
