@@ -10,15 +10,146 @@ export const bedsheetImages = [
   { src: '/products/bedsheet-zoom.jpg', alt: 'Floral bedsheet print detail' },
 ]
 
+export const categorySizes = {
+  Bedsheets: [
+    { id: 'single', label: 'Single', dimensions: '60×90 in' },
+    { id: 'double', label: 'Double', dimensions: '90×100 in' },
+    { id: 'king', label: 'King', dimensions: '108×108 in' },
+    { id: 'super-king', label: 'Super King', dimensions: '108×120 in' },
+    { id: 'custom', label: 'Custom Size', dimensions: 'Bespoke' },
+  ],
+  'Bed Sets': [
+    { id: 'single', label: 'Single', dimensions: '60×90 in' },
+    { id: 'double', label: 'Double', dimensions: '90×100 in' },
+    { id: 'king', label: 'King', dimensions: '108×108 in' },
+    { id: 'super-king', label: 'Super King', dimensions: '108×120 in' },
+    { id: 'custom', label: 'Custom Size', dimensions: 'Bespoke' },
+  ],
+  Pillows: [
+    { id: 'standard', label: 'Standard', dimensions: '18×27 in' },
+    { id: 'king', label: 'King', dimensions: '20×36 in' },
+    { id: 'cushion', label: 'Cushion', dimensions: '16×16 in' },
+    { id: 'custom', label: 'Custom Size', dimensions: 'Bespoke' },
+  ],
+  'Pillow Covers': [
+    { id: 'standard', label: 'Standard Pair', dimensions: '18×27 in' },
+    { id: 'king', label: 'King Pair', dimensions: '20×36 in' },
+    { id: 'cushion-16', label: 'Cushion', dimensions: '16×16 in' },
+    { id: 'cushion-20', label: 'Cushion Large', dimensions: '20×20 in' },
+    { id: 'custom', label: 'Custom Size', dimensions: 'Bespoke' },
+  ],
+  Blankets: [
+    { id: 'single', label: 'Single', dimensions: '60×90 in' },
+    { id: 'double', label: 'Double', dimensions: '90×100 in' },
+    { id: 'king', label: 'King Size', dimensions: '108×108 in' },
+    { id: 'custom', label: 'Custom Size', dimensions: 'Bespoke' },
+  ],
+  Dohars: [
+    { id: 'single', label: 'Single', dimensions: '60×90 in' },
+    { id: 'double', label: 'Double', dimensions: '90×100 in' },
+    { id: 'king', label: 'King Size', dimensions: '108×108 in' },
+    { id: 'custom', label: 'Custom Size', dimensions: 'Bespoke' },
+  ],
+  Towels: [
+    { id: 'hand', label: 'Hand Towel', dimensions: '16×28 in' },
+    { id: 'bath', label: 'Bath Towel', dimensions: '30×58 in' },
+    { id: 'bath-sheet', label: 'Bath Sheet', dimensions: '35×70 in' },
+    { id: 'set-2', label: 'Set of 2', dimensions: 'Standard' },
+  ],
+  Carpets: [
+    { id: 'carpet-3x5', label: 'Small', dimensions: '3×5 ft' },
+    { id: 'carpet-4x6', label: 'Medium', dimensions: '4×6 ft' },
+    { id: 'carpet-5x7', label: 'Large', dimensions: '5×7 ft' },
+    { id: 'carpet-6x9', label: 'Area Rug', dimensions: '6×9 ft' },
+    { id: 'custom', label: 'Custom Size', dimensions: 'Bespoke' },
+  ],
+}
+
+export const defaultSizes = [
+  { id: 'standard', label: 'Standard / ALL SIZE', dimensions: 'Universal' },
+  { id: 'custom', label: 'Custom Size', dimensions: 'Bespoke' },
+]
+
 export const products = [
-  { id: 1, title: 'Floral Print Cotton Bedsheet Set', image: bedsheetImages[0].src, hover: bedsheetImages[1].src, gallery: bedsheetImages, badge: 'New Arrival', category: 'Bedsheets' },
-  { id: 2, title: 'King Size Blanket', image: '/products/king-blanket-color-6.webp', hover: '/products/king-blanket-color-1.webp', badge: 'Featured', category: 'Blankets' },
-  { id: 3, title: 'Ivory Woven Cotton Dohar', image: image('photo-1615874694520-474822394e73'), hover: image('photo-1522771753035-1a64ed6f5d4d'), category: 'Dohars' },
-  { id: 4, title: 'Saffron Cotton Bed Linen Set', image: image('photo-1505693416388-ac5ce068fe85'), hover: image('photo-1631049307264-da0ec9d70304'), badge: 'New Arrival', category: 'Bed Sets' },
-  { id: 5, title: 'Forest Green Bath Towel', image: image('photo-1584622650111-993a426fbf0a'), hover: image('photo-1585411498137-20a1e7ca2e5a'), category: 'Towels' },
-  { id: 6, title: 'Decorative Pillow Cover Set', image: '/products/pillow-cover-set.jpg', hover: '/products/pillow-cover-set.jpg', gallery: [{ src: '/products/pillow-cover-set.jpg', alt: 'Decorative pillow cover set' }], category: 'Pillow Covers' },
-  { id: 7, title: 'Soft Cotton Pillow Pair', image: '/products/pillow-pair.jpg', hover: '/products/pillow-pair.jpg', gallery: [{ src: '/products/pillow-pair.jpg', alt: 'Pair of soft cotton pillows' }], category: 'Pillows' },
-  { id: 8, title: 'Terracotta Handwoven Area Carpet', image: image('photo-1600166898405-da9535204843'), hover: image('photo-1575414003591-ece8d0416c7a'), badge: 'Handcrafted', category: 'Carpets' },
+  {
+    id: 1,
+    title: 'Floral Print Cotton Bedsheet Set',
+    image: bedsheetImages[0].src,
+    hover: bedsheetImages[1].src,
+    gallery: bedsheetImages,
+    badge: 'New Arrival',
+    category: 'Bedsheets',
+    fabric: '100% Cotton',
+    inStock: true
+  },
+  {
+    id: 2,
+    title: 'King Size Blanket',
+    image: '/products/king-blanket-color-6.webp',
+    hover: '/products/king-blanket-color-1.webp',
+    badge: 'Featured',
+    category: 'Blankets',
+    fabric: 'Handloom Weave',
+    inStock: true
+  },
+  {
+    id: 3,
+    title: 'Ivory Woven Cotton Dohar',
+    image: image('photo-1615874694520-474822394e73'),
+    hover: image('photo-1522771753035-1a64ed6f5d4d'),
+    category: 'Dohars',
+    fabric: '100% Cotton',
+    inStock: true
+  },
+  {
+    id: 4,
+    title: 'Saffron Cotton Bed Linen Set',
+    image: image('photo-1505693416388-ac5ce068fe85'),
+    hover: image('photo-1631049307264-da0ec9d70304'),
+    badge: 'New Arrival',
+    category: 'Bed Sets',
+    fabric: 'Cotton Blend',
+    inStock: true
+  },
+  {
+    id: 5,
+    title: 'Forest Green Bath Towel',
+    image: image('photo-1584622650111-993a426fbf0a'),
+    hover: image('photo-1585411498137-20a1e7ca2e5a'),
+    category: 'Towels',
+    fabric: '100% Cotton',
+    inStock: true
+  },
+  {
+    id: 6,
+    title: 'Decorative Pillow Cover Set',
+    image: '/products/pillow-cover-set.jpg',
+    hover: '/products/pillow-cover-set.jpg',
+    gallery: [{ src: '/products/pillow-cover-set.jpg', alt: 'Decorative pillow cover set' }],
+    category: 'Pillow Covers',
+    fabric: 'Linen',
+    inStock: true
+  },
+  {
+    id: 7,
+    title: 'Soft Cotton Pillow Pair',
+    image: '/products/pillow-pair.jpg',
+    hover: '/products/pillow-pair.jpg',
+    gallery: [{ src: '/products/pillow-pair.jpg', alt: 'Pair of soft cotton pillows' }],
+    category: 'Pillows',
+    fabric: '100% Cotton',
+    inStock: true
+  },
+  {
+    id: 8,
+    title: 'Terracotta Handwoven Area Carpet',
+    image: image('photo-1600166898405-da9535204843'),
+    hover: image('photo-1575414003591-ece8d0416c7a'),
+    badge: 'Handcrafted',
+    category: 'Carpets',
+    fabric: 'Handloom Weave',
+    inStock: true
+  },
 ]
 
 export const categories = [

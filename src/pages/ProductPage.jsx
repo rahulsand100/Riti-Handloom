@@ -3,21 +3,37 @@ import { useParams, Link } from 'react-router-dom'
 import {
   Heart, ShieldCheck, RefreshCcw, Truck, MessageCircle as WhatsApp, BadgeCheck
 } from 'lucide-react'
-import { products, categoryPath } from '../data/mockData.js'
+import { products, categoryPath, categorySizes, defaultSizes } from '../data/mockData.js'
 
 export function ProductPage({ onAdd, wishlist, setWishlist }) {
   const { id } = useParams()
   const product = products.find(p => p.id === Number(id)) || products[0]
   const [activeImageIndex, setActiveImageIndex] = useState(0)
 
+  const availableSizes = categorySizes[product.category] || defaultSizes
+  const [selectedSize, setSelectedSize] = useState(availableSizes[0]?.label || 'Standard / ALL SIZE')
+
   const galleryImages = product.gallery || [
     { src: product.image, alt: product.title },
     { src: product.hover, alt: `${product.title} detail` },
   ]
   const liked = wishlist.includes(product.id)
+  
   const waMessage = encodeURIComponent(
-    `Namaste Riti Handlooms! I would like to enquire about this product:\n\n*Product:* ${product.title}\n*Category:* ${product.category}\n*Size:* ALL SIZE\n*Product Link:* ${typeof window !== 'undefined' ? window.location.href : `/product/${product.id}`}\n\nPlease share price and availability.`
+    `Namaste Riti Handlooms! I would like to enquire about this product:\n\n` +
+    `*Product:* ${product.title}\n` +
+    `*Category:* ${product.category}\n` +
+    `*Selected Size:* ${selectedSize}\n` +
+    `*Product Link:* ${typeof window !== 'undefined' ? window.location.href : `/product/${product.id}`}\n\n` +
+    `Please share price and availability.`
   )
+
+  const handleAdd = () => {
+    onAdd({
+      ...product,
+      selectedSize: selectedSize
+    })
+  }
 
   return (
     <main className="product-page">
@@ -56,18 +72,38 @@ export function ProductPage({ onAdd, wishlist, setWishlist }) {
               Crafted in small batches by skilled artisans, this timeless piece brings natural comfort and considered design to your everyday living.
             </p>
 
-            <div className="fixed-size-display">
-              <label>Available Size:</label>
-              <span>ALL SIZE</span>
+            <div className="size-selector-section">
+              <div className="size-selector-header">
+                <label>Select Size / Dimensions:</label>
+                <span className="selected-size-label">{selectedSize}</span>
+              </div>
+              <div className="size-pill-group">
+                {availableSizes.map(size => (
+                  <button
+                    key={size.id}
+                    type="button"
+                    className={`size-pill ${selectedSize === size.label ? 'active' : ''}`}
+                    onClick={() => setSelectedSize(size.label)}
+                  >
+                    <b>{size.label}</b>
+                    {size.dimensions && <small>{size.dimensions}</small>}
+                  </button>
+                ))}
+              </div>
+              {selectedSize.toLowerCase().includes('custom') && (
+                <div className="custom-size-note">
+                  <small>Need specific dimensions or extra mattress depth? Mention your measurements on WhatsApp for a custom weave.</small>
+                </div>
+              )}
             </div>
 
-            <div className="stock"><span />Available for Order</div>
+            <div className="stock"><span />Available for Handloom Order</div>
 
             <div style={{ display: 'flex', gap: '10px', margin: '20px 0' }}>
               <button
                 className="btn primary"
                 style={{ flex: 1 }}
-                onClick={() => onAdd(product)}
+                onClick={handleAdd}
               >
                 Add to Enquiry Bag
               </button>
@@ -112,23 +148,24 @@ export function ProductPage({ onAdd, wishlist, setWishlist }) {
 
         <div className="product-tabs">
           <details open>
-            <summary>Description</summary>
+            <summary>Description & Handloom Weave</summary>
             <p>
               Handwoven textiles designed for lasting comfort, crafted using natural fibres, artisan detailing, and easy-care finishes.
             </p>
           </details>
           <details>
-            <summary>Specifications & Size</summary>
+            <summary>Specifications & Available Sizing</summary>
             <p>
-              <b>Size:</b> ALL SIZE<br />
               <b>Category:</b> {product.category}<br />
+              <b>Fabric:</b> {product.fabric || '100% Pure Natural Handloom Cotton'}<br />
+              <b>Chosen Size:</b> {selectedSize}<br />
               <b>Care:</b> Gentle cold machine or hand wash. Dry in shade.
             </p>
           </details>
           <details>
-            <summary>Enquiry & Delivery</summary>
+            <summary>Enquiry & Delivery Schedule</summary>
             <p>
-              All enquiries and orders are fulfilled directly via WhatsApp for personal assistance and confirmed dispatch schedules.
+              All enquiries and orders are fulfilled directly via WhatsApp for personal assistance and confirmed dispatch schedules from Greater Noida.
             </p>
           </details>
         </div>

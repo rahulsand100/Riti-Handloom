@@ -6,7 +6,7 @@ export function MiniCart({ open, onClose, cart, setCart }) {
 
   const waEnquiry = encodeURIComponent(
     `Namaste Riti Handlooms! Please quote price and availability for these items from my enquiry bag:\n\n` +
-    cart.map((item, i) => `${i + 1}. ${item.title} (Size: ALL SIZE)`).join('\n') +
+    cart.map((item, i) => `${i + 1}. ${item.title} (Size: ${item.selectedSize || 'ALL SIZE'})`).join('\n') +
     `\n\nPlease share details and availability.`
   )
 
@@ -31,15 +31,15 @@ export function MiniCart({ open, onClose, cart, setCart }) {
           <>
             <div className="cart-lines">
               {cart.map(item => (
-                <div className="cart-line" key={item.id}>
+                <div className="cart-line" key={item.id + (item.selectedSize || '')}>
                   <img src={item.image} alt={item.title} />
                   <div>
                     <b>{item.title}</b>
-                    <small>{item.category} · ALL SIZE</small>
+                    <small>{item.category} · {item.selectedSize || 'ALL SIZE'}</small>
                   </div>
                   <button
                     className="remove"
-                    onClick={() => setCart(cart.filter(x => x.id !== item.id))}
+                    onClick={() => setCart(cart.filter(x => x !== item))}
                     aria-label="Remove item"
                   >
                     <Trash2 />

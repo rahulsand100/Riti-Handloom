@@ -5,7 +5,7 @@ export function CartPage({ cart, setCart }) {
   const navigate = useNavigate()
   const waEnquiry = encodeURIComponent(
     `Namaste Riti Handlooms! Please quote price and availability for these items from my enquiry bag:\n\n` +
-    cart.map((item, i) => `${i + 1}. ${item.title} (Size: ALL SIZE)`).join('\n') +
+    cart.map((item, i) => `${i + 1}. ${item.title} (Size: ${item.selectedSize || 'ALL SIZE'})`).join('\n') +
     `\n\nPlease share details and availability.`
   )
 
@@ -28,12 +28,12 @@ export function CartPage({ cart, setCart }) {
               {cart.map(item => (
                 <div
                   className="cart-table-row"
-                  key={item.id}
+                  key={item.id + (item.selectedSize || '')}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    padding: '16px 0',
+                    padding: '18px 0',
                     borderBottom: '1px solid var(--border)'
                   }}
                 >
@@ -41,19 +41,21 @@ export function CartPage({ cart, setCart }) {
                     <img
                       src={item.image}
                       alt={item.title}
-                      style={{ width: '70px', height: '88px', objectFit: 'cover' }}
+                      style={{ width: '74px', height: '94px', objectFit: 'cover', borderRadius: '3px' }}
                     />
                     <div>
-                      <b>{item.title}</b>
-                      <small style={{ display: 'block', color: 'var(--text-muted)' }}>
-                        {item.category} · ALL SIZE
+                      <b style={{ fontFamily: 'Playfair Display, Georgia, serif', fontSize: '15px', color: 'var(--primary)' }}>
+                        {item.title}
+                      </b>
+                      <small style={{ display: 'block', color: 'var(--text-muted)', marginTop: '4px' }}>
+                        {item.category} · <span className="all-size-tag" style={{ margin: '0 0 0 6px', fontSize: '10px' }}>{item.selectedSize || 'ALL SIZE'}</span>
                       </small>
                     </div>
                   </div>
                   <button
-                    onClick={() => setCart(cart.filter(x => x.id !== item.id))}
+                    onClick={() => setCart(cart.filter(x => x !== item))}
                     aria-label="Remove item"
-                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#888' }}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#9CA3AF' }}
                   >
                     <Trash2 size={18} />
                   </button>
@@ -62,11 +64,11 @@ export function CartPage({ cart, setCart }) {
             </div>
             <aside
               className="order-summary"
-              style={{ padding: '24px', background: 'var(--bg-soft)', borderRadius: '4px' }}
+              style={{ padding: '26px', background: 'var(--bg-soft)', borderRadius: '4px', border: '1px solid var(--border)' }}
             >
               <h3>Enquiry Summary</h3>
               <p style={{ fontSize: '13px', color: 'var(--text-muted)', lineHeight: '1.6' }}>
-                You have selected <b>{cart.length}</b> {cart.length === 1 ? 'item' : 'items'} (ALL SIZE). Tap below to send your complete quotation request directly to our team on WhatsApp.
+                You have selected <b>{cart.length}</b> {cart.length === 1 ? 'item' : 'items'} with custom/standard dimensions. Tap below to send your complete quotation request directly to our workshop on WhatsApp.
               </p>
               <hr style={{ margin: '16px 0', borderColor: 'var(--border)' }} />
               <a
