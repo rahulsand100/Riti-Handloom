@@ -31,6 +31,7 @@ export function CartPage({ cart, updateQuantity, removeFromCart, getItemKey, cle
             <ShoppingBag />
             <p>Your enquiry bag is currently empty.</p>
             <Link className="btn primary" to="/shop">Explore Collection</Link>
+            <Link className="cart-support-link" to="/support">Need help? Contact Customer Support</Link>
           </div>
         ) : (
           <div className="cart-layout">
@@ -163,6 +164,9 @@ export function CartPage({ cart, updateQuantity, removeFromCart, getItemKey, cle
               >
                 Continue Browsing
               </button>
+              <Link className="cart-support-link" to="/support">
+                Need help after a purchase? Contact Customer Support
+              </Link>
             </aside>
           </div>
         )}

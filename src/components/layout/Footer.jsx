@@ -50,6 +50,7 @@ export function Footer() {
               <Link to="/wishlist">My Wishlist</Link>
             </>
           )}
+          <Link to="/support">Help &amp; Support</Link>
         </div>
         <div>
           <h3>GET IN TOUCH</h3>

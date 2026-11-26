@@ -58,6 +58,8 @@ export function Header({ cartCount, onCart, wishlistCount, onSearchOpen, onOpenB
           <nav className="main-nav" aria-label="Main navigation">
             <Link to="/">Home</Link>
             <Link to="/about">About</Link>
+            <Link to="/support">Help &amp; Support</Link>
+            <Link to="/shop">Shop</Link>
             <div className="nav-drop">
               <button>Our Collection <ChevronDown size={13} /></button>
               <div className="mega-menu">
@@ -75,10 +77,6 @@ export function Header({ cartCount, onCart, wishlistCount, onSearchOpen, onOpenB
                 ))}
               </div>
             </div>
-            <Link to="/shop">New Arrivals</Link>
-            <Link to={categoryPath('Bedsheets')}>Bed Linen</Link>
-            <Link to={categoryPath('Pillow Covers')}>Soft Furnishing</Link>
-            <Link to="/shop">Collection</Link>
           </nav>
           <div className="header-actions">
             <button className="icon-btn" onClick={handleOpenSearch} aria-label="Search">
@@ -115,6 +113,7 @@ export function Header({ cartCount, onCart, wishlistCount, onSearchOpen, onOpenB
               </Link>
             ))}
             <Link to="/about" onClick={() => setMenuOpen(false)}>About the Brand</Link>
+            <Link to="/support" onClick={() => setMenuOpen(false)}>Help &amp; Support</Link>
             {onOpenBulkModal && (
               <button
                 type="button"

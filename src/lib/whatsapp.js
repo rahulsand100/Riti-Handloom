@@ -18,6 +18,90 @@ export function getWhatsAppUrl(text, phone = RITI_WHATSAPP_PHONE) {
   return `https://wa.me/${cleanPhone}?text=${encodeURIComponent(text.trim())}`
 }
 
+export function isValidIndianMobileNumber(value) {
+  let digits = String(value || '').replace(/\D/g, '')
+  if (digits.length === 12 && digits.startsWith('91')) digits = digits.slice(2)
+  if (digits.length === 11 && digits.startsWith('0')) digits = digits.slice(1)
+  return /^[6-9]\d{9}$/.test(digits)
+}
+
+export function generateProductEnquiryMessage({
+  title,
+  category = 'Handloom',
+  url = typeof window !== 'undefined' ? window.location.href : getCanonicalUrl('/')
+}) {
+  return [
+    'Namaste Riti Handlooms!',
+    '',
+    'I am interested in this product and would like to know the price and availability:',
+    '',
+    `*Product:* ${title}`,
+    `*Category:* ${category}`,
+    '*Size:* ALL SIZE',
+    `*Product Link:* ${url}`,
+    '',
+    'Please share the pricing and delivery details.'
+  ].join('\n')
+}
+
+export function generateWholesaleEnquiryMessage({ items = [], customer = {} } = {}) {
+  const productLines = items.map((item, index) => [
+    `${index + 1}. ${item.title}`,
+    `   Category: ${item.category}`,
+    `   Quantity: ${item.quantity}`
+  ].join('\n'))
+
+  return [
+    'RITI HANDLOOMS — WHOLESALE ENQUIRY',
+    '',
+    'Selected Products:',
+    ...productLines,
+    '',
+    'Customer Details:',
+    `Customer Name: ${customer.name || ''}`,
+    `Mobile Number: ${customer.mobile || ''}`,
+    `Pincode: ${customer.pincode || ''}`,
+    `City: ${customer.city || ''}`,
+    `State: ${customer.state || ''}`,
+    `Full Delivery Address: ${customer.address || ''}`,
+    '',
+    'Please share the applicable wholesale details.'
+  ].join('\n')
+}
+
+export function generateCustomerSupportMessage({
+  customerName = '',
+  mobileNumber = '',
+  requestType = '',
+  productName = '',
+  purchaseDate = '',
+  orderNumber = '',
+  additionalDetails = ''
+} = {}) {
+  const message = [
+    'RITI HANDLOOMS — CUSTOMER SUPPORT REQUEST',
+    '',
+    `Customer Name: ${customerName}`,
+    `Mobile Number: ${mobileNumber}`,
+    '',
+    `Request Type: ${requestType}`,
+    `Product Name: ${productName}`,
+    '',
+    `Purchase Date: ${purchaseDate || 'Not provided'}`,
+    `Order / Bill Number: ${orderNumber || 'Not provided'}`,
+    '',
+    `Issue Description: ${additionalDetails}`,
+    '',
+    'Please assist me with this request.'
+  ]
+
+  if (requestType === 'Return Request' || requestType === 'Replacement Request') {
+    message.push('', 'Please guide me regarding the applicable process and next steps.')
+  }
+
+  return message.join('\n')
+}
+
 /**
  * 1. Single Product Enquiry (From PDP)
  *
@@ -34,20 +118,7 @@ export function buildSingleProductEnquiryUrl({
   url = typeof window !== 'undefined' ? window.location.href : getCanonicalUrl('/'),
   phone
 }) {
-  const message = [
-    'Namaste Riti Handlooms!',
-    '',
-    'I am interested in this product and would like to know the price and availability:',
-    '',
-    `*Product:* ${title}`,
-    `*Category:* ${category}`,
-    `*Size:* ALL SIZE`,
-    `*Product Link:* ${url}`,
-    '',
-    'Please share the pricing and delivery details.'
-  ].join('\n')
-
-  return getWhatsAppUrl(message, phone)
+  return getWhatsAppUrl(generateProductEnquiryMessage({ title, category, url }), phone)
 }
 
 /**
@@ -98,20 +169,14 @@ export function buildBulkWholesaleEnquiryUrl({
   businessName = '',
   location = ''
 } = {}) {
-  const message = [
-    'Namaste Riti Handlooms!',
-    '',
-    'I would like to enquire about a Bulk / Wholesale Order:',
-    '',
-    `*Category / Products:* ${category}`,
-    `*Estimated Quantity:* ${quantity}`,
-    `*Business Name:* ${businessName}`,
-    `*Delivery Location:* ${location}`,
-    '',
-    'Please provide your wholesale catalogue and quotation.'
-  ].join('\n')
+  return getWhatsAppUrl(generateWholesaleEnquiryMessage({
+    items: [{ title: category, category, quantity }],
+    customer: { name: businessName, address: location }
+  }))
+}
 
-  return getWhatsAppUrl(message)
+export function buildWholesaleEnquiryUrl({ items = [], customer = {}, phone } = {}) {
+  return getWhatsAppUrl(generateWholesaleEnquiryMessage({ items, customer }), phone)
 }
 
 /**
@@ -130,20 +195,11 @@ export function buildCustomerSupportEnquiryUrl({
   details = '',
   reason = ''
 } = {}) {
-  const message = [
-    'Namaste Riti Handlooms Support,',
-    '',
-    `*Request:* ${request}`,
-    productName ? `*Product Name:* ${productName}` : '',
-    details ? `*Details:* ${details}` : '',
-    reason ? `*Reason:* ${reason}` : '',
-    '',
-    'Please guide me on how to proceed.'
-  ]
-    .filter(Boolean)
-    .join('\n')
-
-  return getWhatsAppUrl(message)
+  return getWhatsAppUrl(generateCustomerSupportMessage({
+    requestType: request,
+    productName,
+    additionalDetails: details || reason
+  }))
 }
 
 /**

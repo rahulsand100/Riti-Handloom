@@ -19,6 +19,7 @@ import { CategoryPage } from './pages/CategoryPage.jsx'
 import { ProductPage } from './pages/ProductPage.jsx'
 import { CartPage } from './pages/CartPage.jsx'
 import { WishlistPage } from './pages/WishlistPage.jsx'
+import { SupportPage } from './pages/SupportPage.jsx'
 import { StaticPage } from './pages/StaticPage.jsx'
 
 function AppContent() {
@@ -74,6 +75,7 @@ function AppContent() {
           }
         />
         <Route path="/wishlist" element={<WishlistPage wishlist={wishlist} setWishlist={setWishlist} onAdd={handleAddToCartWithToast} />} />
+        <Route path="/support" element={<SupportPage />} />
         <Route path="/about" element={<StaticPage title="About the Brand" />} />
         <Route path="/page/:title" element={<StaticPage title="Shipping & Policies" />} />
       </Routes>
