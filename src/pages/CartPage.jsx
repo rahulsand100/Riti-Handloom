@@ -19,6 +19,7 @@ export function CartPage({ cart, updateQuantity, removeFromCart, getItemKey, cle
         title="Enquiry Bag | Riti Handlooms Jagat Farm Greater Noida"
         description="Review your selected handcrafted textiles and send a direct WhatsApp quote enquiry to Riti Handlooms, Greater Noida."
         url={getCanonicalUrl('/cart')}
+        noindex
       />
       <div className="container">
         <div className="breadcrumb">
@@ -65,7 +66,10 @@ export function CartPage({ cart, updateQuantity, removeFromCart, getItemKey, cle
                     <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                       <img
                         src={item.image}
+                        width="74"
+                        height="94"
                         alt={item.title}
+                        loading="lazy"
                         style={{ width: '74px', height: '94px', objectFit: 'cover', borderRadius: '3px' }}
                       />
                       <div>

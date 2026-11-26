@@ -206,6 +206,19 @@ export function heroBannerImageUrl(source, width = 1920, height = 1080, quality 
     .url()
 }
 
+export function socialImageUrl(source, width = 1200, height = 630, quality = 85) {
+  const imgBuilder = urlFor(source)
+  if (!imgBuilder) return ''
+
+  return imgBuilder
+    .width(width)
+    .height(height)
+    .fit('crop')
+    .format('jpg')
+    .quality(quality)
+    .url()
+}
+
 /**
  * Generates responsive srcset descriptor pairs for modern responsive <img> rendering.
  *

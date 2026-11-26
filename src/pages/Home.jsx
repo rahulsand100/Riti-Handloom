@@ -2,14 +2,15 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   ArrowRight, ArrowLeft, Camera as Instagram,
-  BadgeCheck, ShieldCheck, Truck, RefreshCcw, MessageCircle as WhatsApp,
-  MapPin, Navigation, Clock, Phone, CheckCircle2
+  BadgeCheck, ShieldCheck, RefreshCcw, MessageCircle as WhatsApp,
+  MapPin, Navigation, Phone, CheckCircle2
 } from 'lucide-react'
 import { SectionTitle } from '../components/common/SectionTitle.jsx'
 import { ProductCard } from '../components/product/ProductCard.jsx'
 import { SEO } from '../components/common/SEO.jsx'
 import { useSanityCatalog } from '../context/useSanityCatalog.js'
 import { siteConfig } from '../lib/config.js'
+import { HOME_SEO_METADATA } from '../lib/seo.js'
 import { getWhatsAppUrl } from '../lib/whatsapp.js'
 import { categoryPath, bedsheetImages, image } from '../data/mockData.js'
 
@@ -72,19 +73,24 @@ export function Home({ onAdd, wishlist, setWishlist }) {
 
   return (
     <>
-      <SEO
-        title="Riti Handlooms | Handloom & Home Linen Store in Jagat Farm, Greater Noida"
-        description="Visit Riti Handlooms at Jagat Farm Commercial Complex, Greater Noida — 5 mins from Knowledge Park 2 & Pari Chowk. Authentic artisan bedsheets, dohars, blankets, towels, and custom linen. WhatsApp enquiry & store walk-ins welcome."
-        keywords="handloom store jagat farm, nearest handloom store knowledge park 2, handloom shop near me greater noida, bedsheets store jagat farm, dohars quilts blankets greater noida, handloom store near pari chowk, home furnishings greater noida, wholesale linen noida"
-      />
+      <SEO {...HOME_SEO_METADATA} />
       <section className="hero-slider">
         {heroSlides.map((s, i) => (
           <div
             key={s.title}
             className={`hero-slide ${i === slide ? 'active' : ''}`}
-            style={{ backgroundImage: `url(${s.image})` }}
             aria-hidden={i !== slide}
           >
+            <img
+              src={s.image || siteConfig.socialImageUrl}
+              srcSet={s.imageSrcSet || undefined}
+              sizes="100vw"
+              width="1920"
+              height="1080"
+              alt=""
+              loading={i === 0 ? 'eager' : 'lazy'}
+              fetchPriority={i === 0 ? 'high' : 'auto'}
+            />
             <div className="hero-copy">
               <small><i />{s.label}</small>
               <h1>{s.title}</h1>
@@ -150,22 +156,38 @@ export function Home({ onAdd, wishlist, setWishlist }) {
             </div>
           ) : categories.length === 0 ? (
             <div className="category-empty">
-              <p>Collections are being updated. Visit our workshop or enquire directly on WhatsApp.</p>
+              <p>The online catalogue is currently being updated. Contact the store if you need help.</p>
             </div>
           ) : (
             <div className="arrival-grid category-grid">
               {categories.map(category => (
                 <Link className="arrival-card" to={`/category/${category.slug}`} key={category.slug}>
-                  <img src={category.image} alt={`${category.name} collection`} loading="lazy" />
+                  <img
+                    src={category.image}
+                    srcSet={category.imageSrcSet || undefined}
+                    sizes="(max-width: 640px) 50vw, 25vw"
+                    width="800"
+                    height="1000"
+                    alt={category.imageAlt}
+                    loading="lazy"
+                    decoding="async"
+                  />
                   <span>{category.name.toUpperCase()}<ArrowRight /></span>
                 </Link>
               ))}
             </div>
           )}
           <Link className="wide-banner" to={categoryPath('Bedsheets')}>
-            <img src={image('photo-1505693416388-ac5ce068fe85', 1300, 520)} alt="Premium bed linen collection" />
+            <img
+              src={image('photo-1505693416388-ac5ce068fe85', 1300, 520)}
+              width="1300"
+              height="520"
+              alt="Bedroom interior shown as home furnishing inspiration"
+              loading="lazy"
+              decoding="async"
+            />
             <div>
-              <small>THE BEDROOM EDIT</small>
+              <small>BEDROOM INSPIRATION</small>
               <h3>Comfort, colour and calm for every bedroom</h3>
               <b>Discover the collection <ArrowRight size={16} /></b>
             </div>
@@ -226,13 +248,13 @@ export function Home({ onAdd, wishlist, setWishlist }) {
 
       <section className="section soft">
         <div className="container">
-          <SectionTitle>WHY CHOOSE US</SectionTitle>
+          <SectionTitle>EXPLORE RITI HANDLOOMS</SectionTitle>
           <div className="trust-grid">
             {[
-              [BadgeCheck, 'Handloom Certified', 'Authentic artisan craft'],
-              [ShieldCheck, 'Natural Fabrics', 'Comfort you can feel'],
-              [Truck, 'Secure Delivery', 'Carefully packed and shipped'],
-              [RefreshCcw, 'Direct Enquiry', 'Personalized customer support']
+              [BadgeCheck, 'Browse the catalogue', 'Explore current product and category listings'],
+              [ShieldCheck, 'Review product details', 'See the information and photographs provided for each item'],
+              [RefreshCcw, 'Ask about a product', 'Contact the store directly through WhatsApp'],
+              [Phone, 'Get customer support', 'Send a purchase, return, replacement, or general question']
             ].map(([Icon, title, text]) => (
               <div key={title}>
                 <Icon />
@@ -246,28 +268,28 @@ export function Home({ onAdd, wishlist, setWishlist }) {
 
       <section className="section bespoke-service">
         <div className="container">
-          <SectionTitle>HANDLOOM CRAFT & BESPOKE SERVICE</SectionTitle>
+          <SectionTitle>WAYS TO ENQUIRE</SectionTitle>
           <div className="craft-grid">
             <div className="craft-card">
               <span className="craft-num">01</span>
-              <h3>Direct Artisan Weaving</h3>
-              <p>Every piece is crafted by skilled weavers in Greater Noida. Direct handloom provenance ensures pure textiles without retail markups.</p>
+              <h3>Browse the catalogue</h3>
+              <p>Explore the products and categories currently published on the Riti Handlooms website.</p>
             </div>
             <div className="craft-card">
               <span className="craft-num">02</span>
-              <h3>All-Size Versatility</h3>
-              <p>Thoughtfully crafted in versatile ALL SIZE fits designed to bring effortless comfort and graceful drape to every home.</p>
+              <h3>Ask about an item</h3>
+              <p>Open a product page and use its WhatsApp enquiry option to ask the store about that product.</p>
             </div>
             <div className="craft-card">
               <span className="craft-num">03</span>
-              <h3>Wholesale & Gifting Orders</h3>
-              <p>Curated textile packages and wholesale rates for guest houses, boutique stays, and festive corporate gifting with direct personal dispatch.</p>
+              <h3>Make a wholesale enquiry</h3>
+              <p>Select products and quantities, review the details, and prepare a wholesale message for WhatsApp.</p>
             </div>
           </div>
           <div className="craft-banner">
             <div>
-              <h3>Looking for handloom home furnishings or wholesale pricing?</h3>
-              <p>Connect directly with our master craftsmen on WhatsApp for fabric guidance, availability, and immediate quotations.</p>
+              <h3>Need help with an enquiry?</h3>
+              <p>Contact Riti Handlooms on WhatsApp or use the wholesale enquiry form to prepare a product list.</p>
             </div>
             <a
               className="btn primary"
@@ -279,64 +301,50 @@ export function Home({ onAdd, wishlist, setWishlist }) {
               rel="noopener noreferrer"
               style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#25D366', color: '#fff', border: 'none' }}
             >
-              <WhatsApp size={18} /> Chat with Our Team
+              <WhatsApp size={18} /> Contact on WhatsApp
             </a>
           </div>
         </div>
       </section>
 
-      {/* Hyper-Local Store Locator Section (Jagat Farm & Knowledge Park 2) */}
       <section className="section local-store-section">
         <div className="container">
-          <SectionTitle>VISIT OUR STORE & WORKSHOP</SectionTitle>
+          <SectionTitle>VISIT RITI HANDLOOMS</SectionTitle>
           <div className="local-store-card">
             <div className="local-store-info">
-              <span className="local-tag">JAGAT FARM · GREATER NOIDA</span>
-              <h2>Your Nearest Handloom Store in Greater Noida</h2>
+              <span className="local-tag">JAGAT FARM · GREATER NOIDA · UTTAR PRADESH</span>
+              <h2>A physical handloom and home furnishing store in Jagat Farm</h2>
               <p className="local-lead">
-                Conveniently located at <b>Jagat Farm Commercial Market</b>, just minutes from <b>Knowledge Park 2</b>, <b>Pari Chowk</b>, and the Alpha/Beta commercial hub. Walk in to explore our tactile fabric swatches, pure cotton weaves, or consult with our artisan team.
+                Riti Handlooms is located in Jagat Farm, Greater Noida, Uttar Pradesh, India.
+                Visit the store or contact the team if you need help with directions.
               </p>
 
               <div className="local-proximity-grid">
                 <div className="prox-item">
                   <MapPin size={18} />
                   <div>
-                    <b>Jagat Farm Complex</b>
-                    <small>Primary Greater Noida Shopping Market</small>
-                  </div>
-                </div>
-                <div className="prox-item">
-                  <Navigation size={18} />
-                  <div>
-                    <b>5 Mins from Knowledge Park 2</b>
-                    <small>Direct access via Pari Chowk corridor</small>
-                  </div>
-                </div>
-                <div className="prox-item">
-                  <Clock size={18} />
-                  <div>
-                    <b>Open All 7 Days</b>
-                    <small>10:00 AM – 9:00 PM</small>
+                    <b>Store location</b>
+                    <small>{siteSettings?.storeAddress || siteConfig.storeAddress}</small>
                   </div>
                 </div>
                 <div className="prox-item">
                   <Phone size={18} />
                   <div>
                     <b>{siteSettings?.secondaryPhoneNumber || siteConfig.contactPhone}</b>
-                    <small>Workshop & Customer Support</small>
+                    <small>Call the store</small>
                   </div>
                 </div>
               </div>
 
               <div className="local-store-actions">
                 <a
-                  href="https://maps.google.com/?q=Jagat+Farm+Greater+Noida"
+                  href={`https://maps.google.com/?q=${encodeURIComponent(`Riti Handlooms, ${siteSettings?.storeAddress || siteConfig.storeAddress}`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn primary"
                   style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
                 >
-                  <Navigation size={16} /> Get Directions on Google Maps
+                  <Navigation size={16} /> Search on Google Maps
                 </a>
                 <a
                   href={getWhatsAppUrl(
@@ -348,7 +356,7 @@ export function Home({ onAdd, wishlist, setWishlist }) {
                   className="btn secondary"
                   style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
                 >
-                  <WhatsApp size={16} /> WhatsApp Store Location
+                  <WhatsApp size={16} /> Ask for Directions
                 </a>
               </div>
             </div>
@@ -357,17 +365,62 @@ export function Home({ onAdd, wishlist, setWishlist }) {
               <div className="map-badge">
                 <b>RITI HANDLOOMS</b>
                 <span>Jagat Farm, Greater Noida</span>
-                <div className="landmark-pills">
-                  <span>Knowledge Park 2 (2.4 km)</span>
-                  <span>Pari Chowk (1.8 km)</span>
-                </div>
               </div>
               <img
-                src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&h=700&q=80"
-                alt="Riti Handlooms Workshop in Jagat Farm Greater Noida"
+                src="/riti-store-photo-placeholder.svg"
+                width="900"
+                height="700"
+                alt="Store photo placeholder. Replace with a verified Riti Handlooms store photograph."
                 loading="lazy"
+                decoding="async"
               />
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="section" id="frequently-asked-questions">
+        <div className="container">
+          <SectionTitle>FREQUENTLY ASKED QUESTIONS</SectionTitle>
+          <div className="seo-faq">
+            <details>
+              <summary>What products does Riti Handlooms offer?</summary>
+              <p>
+                The current online catalogue includes {categories.length
+                  ? categories.map(category => category.name).join(', ')
+                  : 'home furnishing categories'}. Browse the catalogue for published items.
+              </p>
+            </details>
+            <details>
+              <summary>Where is the store located?</summary>
+              <p>
+                Riti Handlooms is a physical handloom and home furnishing store in Jagat Farm,
+                Greater Noida, Uttar Pradesh, India. Use the store location details above or
+                contact the team for directions.
+              </p>
+            </details>
+            <details>
+              <summary>How can I enquire about a product?</summary>
+              <p>
+                Open the product page and choose its WhatsApp enquiry option, or contact the
+                store using the phone and WhatsApp links on this page.
+              </p>
+            </details>
+            <details>
+              <summary>How can I make a wholesale enquiry?</summary>
+              <p>
+                Choose Wholesale &amp; Bulk Orders from the website navigation, add products
+                and quantities, review the details, then prepare the enquiry for WhatsApp.
+              </p>
+            </details>
+            <details>
+              <summary>How can I request return or replacement assistance?</summary>
+              <p>
+                Use the <Link to="/support">Customer Support</Link> form to describe your
+                request. The store will discuss the applicable process with you through
+                WhatsApp; submitting a request does not automatically approve it.
+              </p>
+            </details>
           </div>
         </div>
       </section>
@@ -383,7 +436,16 @@ export function Home({ onAdd, wishlist, setWishlist }) {
           <div className="insta-grid">
             {[...products.slice(0, 6)].map(p => (
               <a href={siteConfig.instagramUrl} target="_blank" rel="noopener noreferrer" key={p.id}>
-                <img src={p.image} alt="Riti Handloom on Instagram" />
+                <img
+                  src={p.image}
+                  srcSet={p.imageSrcSet || undefined}
+                  sizes="(max-width: 640px) 33vw, 16vw"
+                  width="800"
+                  height="1000"
+                  alt={p.imageAlt}
+                  loading="lazy"
+                  decoding="async"
+                />
               </a>
             ))}
           </div>

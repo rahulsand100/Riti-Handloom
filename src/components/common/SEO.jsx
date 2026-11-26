@@ -1,181 +1,92 @@
 import { useEffect } from 'react'
 import { siteConfig, getCanonicalUrl } from '../../lib/config.js'
+import { buildPageStructuredData, createLocalBusinessSchema } from '../../lib/seo.js'
 
-/**
- * Hyper-Local SEO Component for Riti Handlooms
- * Injects dynamic Meta tags, Canonical URL, OpenGraph, and Schema.org JSON-LD.
- */
 export function SEO({
-  title = 'Riti Handlooms | Handloom & Home Linen Store in Jagat Farm, Greater Noida',
-  description = 'Visit Riti Handlooms at Jagat Farm, Greater Noida (near Knowledge Park 2 & Pari Chowk). Premium handcrafted bedsheets, dohars, blankets, towels, and custom handloom furnishings. Direct workshop rates & WhatsApp enquiry.',
-  keywords = 'handloom store jagat farm, nearest handloom store knowledge park 2, handloom shop near me greater noida, bedsheets store jagat farm, dohars quilts blankets greater noida, handloom store near pari chowk, wholesale home linen noida',
-  image = 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&h=630&q=85',
-  url = typeof window !== 'undefined' ? window.location.href : getCanonicalUrl('/'),
+  title = 'Riti Handlooms | Home Furnishings in Jagat Farm, Greater Noida',
+  description = 'Explore home furnishings at Riti Handlooms, a physical store in Jagat Farm, Greater Noida, Uttar Pradesh. Browse the catalogue or contact the store directly.',
+  image = siteConfig.socialImageUrl,
+  imageAlt = siteConfig.socialImageAlt,
+  url = getCanonicalUrl('/'),
   type = 'website',
   product = null,
-  breadcrumbs = null
+  breadcrumbs = null,
+  noindex = false
 }) {
   useEffect(() => {
-    // 1. Document Title
+    const canonicalPath = new URL(url, siteConfig.siteUrl).pathname
+    const canonicalUrl = getCanonicalUrl(canonicalPath)
+    const validSocialImage = typeof image === 'string' && /^https?:\/\//i.test(image)
+    const socialImage = validSocialImage ? image : siteConfig.socialImageUrl
+    const socialImageAlt = validSocialImage ? imageAlt : siteConfig.socialImageAlt
+
     document.title = title
 
-    // 1b. Dynamic Canonical Link
     let canonicalTag = document.querySelector('link[rel="canonical"]')
     if (!canonicalTag) {
       canonicalTag = document.createElement('link')
       canonicalTag.rel = 'canonical'
       document.head.appendChild(canonicalTag)
     }
-    canonicalTag.href = url
+    canonicalTag.href = canonicalUrl
 
-    // 2. Meta description
-    let metaDesc = document.querySelector('meta[name="description"]')
-    if (!metaDesc) {
-      metaDesc = document.createElement('meta')
-      metaDesc.name = 'description'
-      document.head.appendChild(metaDesc)
-    }
-    metaDesc.content = description
-
-    // 3. Meta keywords
-    let metaKeywords = document.querySelector('meta[name="keywords"]')
-    if (!metaKeywords) {
-      metaKeywords = document.createElement('meta')
-      metaKeywords.name = 'keywords'
-      document.head.appendChild(metaKeywords)
-    }
-    metaKeywords.content = keywords
-
-    // 4. OpenGraph Tags for WhatsApp & Social Unfurling
-    const setMeta = (property, content) => {
-      let tag = document.querySelector(`meta[property="${property}"]`)
+    const setMeta = (selector, attribute, key, content) => {
+      let tag = document.querySelector(selector)
       if (!tag) {
         tag = document.createElement('meta')
-        tag.setAttribute('property', property)
+        tag.setAttribute(attribute, key)
         document.head.appendChild(tag)
       }
       tag.content = content
     }
 
-    setMeta('og:title', title)
-    setMeta('og:description', description)
-    setMeta('og:image', image)
-    setMeta('og:url', url)
-    setMeta('og:type', type)
-    setMeta('og:site_name', 'Riti Handlooms Greater Noida')
-    setMeta('og:locale', 'en_IN')
+    setMeta('meta[name="description"]', 'name', 'description', description)
+    setMeta('meta[property="og:title"]', 'property', 'og:title', title)
+    setMeta('meta[property="og:description"]', 'property', 'og:description', description)
+    setMeta('meta[property="og:image"]', 'property', 'og:image', socialImage)
+    setMeta('meta[property="og:image:alt"]', 'property', 'og:image:alt', socialImageAlt)
+    setMeta('meta[property="og:image:width"]', 'property', 'og:image:width', '1200')
+    setMeta('meta[property="og:image:height"]', 'property', 'og:image:height', '630')
+    setMeta('meta[property="og:url"]', 'property', 'og:url', canonicalUrl)
+    setMeta('meta[property="og:type"]', 'property', 'og:type', type)
+    setMeta('meta[property="og:site_name"]', 'property', 'og:site_name', 'Riti Handlooms')
+    setMeta('meta[property="og:locale"]', 'property', 'og:locale', 'en_IN')
 
-    // 5. Geo Meta Tags for Hyper-Local Search (Jagat Farm, Greater Noida)
-    const setGeoMeta = (name, content) => {
-      let tag = document.querySelector(`meta[name="${name}"]`)
-      if (!tag) {
-        tag = document.createElement('meta')
-        tag.name = name
-        document.head.appendChild(tag)
+    setMeta('meta[name="twitter:card"]', 'name', 'twitter:card', 'summary_large_image')
+    setMeta('meta[name="twitter:title"]', 'name', 'twitter:title', title)
+    setMeta('meta[name="twitter:description"]', 'name', 'twitter:description', description)
+    setMeta('meta[name="twitter:image"]', 'name', 'twitter:image', socialImage)
+    setMeta('meta[name="twitter:image:alt"]', 'name', 'twitter:image:alt', socialImageAlt)
+
+    let robotsTag = document.querySelector('meta[name="robots"]')
+    if (noindex) {
+      if (!robotsTag) {
+        robotsTag = document.createElement('meta')
+        robotsTag.name = 'robots'
+        document.head.appendChild(robotsTag)
       }
-      tag.content = content
-    }
-    setGeoMeta('geo.region', 'IN-UP')
-    setGeoMeta('geo.placename', 'Jagat Farm, Greater Noida')
-    setGeoMeta('geo.position', '28.4744;77.5030')
-    setGeoMeta('ICBM', '28.4744, 77.5030')
-
-    // 6. Schema.org JSON-LD Structured Data
-    const localBusinessSchema = {
-      '@context': 'https://schema.org',
-      '@type': ['LocalBusiness', 'HomeGoodsStore'],
-      '@id': `${siteConfig.siteUrl}/#localbusiness`,
-      name: 'Riti Handlooms',
-      alternateName: 'Riti Handloom Jagat Farm Greater Noida',
-      url: siteConfig.siteUrl,
-      image: [
-        'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&h=800&q=85'
-      ],
-      description: 'Premier handloom and home furnishing store located in Jagat Farm, Greater Noida, near Knowledge Park 2 and Pari Chowk. Authentic bedsheets, dohars, blankets, towels, and home linen.',
-      telephone: siteConfig.contactPhone.replace(/\s+/g, ''),
-      address: {
-        '@type': 'PostalAddress',
-        streetAddress: siteConfig.storeAddress,
-        addressLocality: 'Greater Noida',
-        addressRegion: 'Uttar Pradesh',
-        postalCode: '201308',
-        addressCountry: 'IN'
-      },
-      geo: {
-        '@type': 'GeoCoordinates',
-        latitude: 28.4744,
-        longitude: 77.5030
-      },
-      areaServed: [
-        { '@type': 'AdministrativeArea', name: 'Jagat Farm' },
-        { '@type': 'AdministrativeArea', name: 'Knowledge Park 2' },
-        { '@type': 'AdministrativeArea', name: 'Knowledge Park 1' },
-        { '@type': 'AdministrativeArea', name: 'Knowledge Park 3' },
-        { '@type': 'AdministrativeArea', name: 'Pari Chowk' },
-        { '@type': 'AdministrativeArea', name: 'Alpha 1' },
-        { '@type': 'AdministrativeArea', name: 'Alpha 2' },
-        { '@type': 'AdministrativeArea', name: 'Beta 1' },
-        { '@type': 'AdministrativeArea', name: 'Beta 2' },
-        { '@type': 'AdministrativeArea', name: 'Greater Noida' },
-        { '@type': 'AdministrativeArea', name: 'Noida' },
-        { '@type': 'AdministrativeArea', name: 'Delhi NCR' }
-      ],
-      openingHoursSpecification: [
-        {
-          '@type': 'OpeningHoursSpecification',
-          dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-          opens: '10:00',
-          closes: '21:00'
-        }
-      ],
-      hasMap: 'https://maps.google.com/?q=Jagat+Farm+Greater+Noida',
-      sameAs: [
-        siteConfig.instagramUrl,
-        `https://wa.me/${siteConfig.whatsappNumber}`
-      ]
+      robotsTag.content = 'noindex,follow'
+    } else {
+      robotsTag?.remove()
     }
 
-    const schemas = [localBusinessSchema]
-
-    // If Product Page, add Product Schema (no price — enquiry-only model)
-    if (product) {
-      schemas.push({
-        '@context': 'https://schema.org',
-        '@type': 'Product',
-        name: product.title,
-        image: product.image,
-        description: product.description || `Handcrafted ${product.title} from Riti Handlooms Greater Noida.`,
-        category: product.category,
-        brand: {
-          '@type': 'Brand',
-          name: 'Riti Handlooms'
-        }
-      })
+    if (!document.getElementById('riti-local-business-schema')) {
+      const localBusinessTag = document.createElement('script')
+      localBusinessTag.id = 'riti-local-business-schema'
+      localBusinessTag.type = 'application/ld+json'
+      localBusinessTag.textContent = JSON.stringify(createLocalBusinessSchema())
+      document.head.appendChild(localBusinessTag)
     }
 
-    // If Breadcrumbs provided, add BreadcrumbList Schema
-    if (breadcrumbs && breadcrumbs.length > 0) {
-      schemas.push({
-        '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: breadcrumbs.map((crumb, idx) => ({
-          '@type': 'ListItem',
-          position: idx + 1,
-          name: crumb.name,
-          item: crumb.url
-        }))
-      })
+    let pageSchemaTag = document.getElementById('riti-page-jsonld-schema')
+    if (!pageSchemaTag) {
+      pageSchemaTag = document.createElement('script')
+      pageSchemaTag.id = 'riti-page-jsonld-schema'
+      pageSchemaTag.type = 'application/ld+json'
+      document.head.appendChild(pageSchemaTag)
     }
-
-    let scriptTag = document.getElementById('riti-jsonld-schema')
-    if (!scriptTag) {
-      scriptTag = document.createElement('script')
-      scriptTag.id = 'riti-jsonld-schema'
-      scriptTag.type = 'application/ld+json'
-      document.head.appendChild(scriptTag)
-    }
-    scriptTag.textContent = JSON.stringify(schemas)
-  }, [title, description, keywords, image, url, type, product, breadcrumbs])
+    pageSchemaTag.textContent = JSON.stringify(buildPageStructuredData({ product, breadcrumbs }))
+  }, [title, description, image, imageAlt, url, type, product, breadcrumbs, noindex])
 
   return null
 }

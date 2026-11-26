@@ -3,7 +3,9 @@ import {
   productDetailGalleryImageUrl,
   productThumbnailUrl,
   categoryCardImageUrl,
-  heroBannerImageUrl
+  heroBannerImageUrl,
+  socialImageUrl,
+  getImageSrcSet
 } from './sanity.js'
 import { siteConfig } from './config.js'
 
@@ -46,16 +48,23 @@ export function normalizeProduct(doc, index = 0) {
     ? productCardImageUrl(primarySanityImg)
     : NO_IMAGE_PLACEHOLDER
 
+  const imageSrcSet = primarySanityImg
+    ? getImageSrcSet(primarySanityImg, { widths: [400, 800, 1200], aspectRatio: 1.25 })
+    : ''
+
+  const socialImage = primarySanityImg ? socialImageUrl(primarySanityImg) : ''
+
   const hover = secondarySanityImg
     ? productCardImageUrl(secondarySanityImg)
     : ''
 
   // Extract gallery with optimized thumbnails
   const gallery = validImages.length > 0
-    ? validImages.map((img, i) => ({
+    ? validImages.map(img => ({
         src: productDetailGalleryImageUrl(img),
+        srcSet: getImageSrcSet(img, { widths: [600, 900, 1200], aspectRatio: 1.25, quality: 85 }),
         thumbSrc: productThumbnailUrl(img),
-        alt: img.alt || `${title} - Angle ${i + 1}`
+        alt: img.alt || title
       }))
     : [{ src: NO_IMAGE_PLACEHOLDER, thumbSrc: NO_IMAGE_PLACEHOLDER, alt: `${title} - image coming soon` }]
 
@@ -66,11 +75,17 @@ export function normalizeProduct(doc, index = 0) {
     title: title,
     category: categoryName,
     categorySlug: categorySlug,
-    fabric: String(doc.fabric || '100% Cotton Handloom').trim(),
+    fabric: String(doc.fabric || '').trim(),
     image: image,
+    imageAlt: primarySanityImg
+      ? (primarySanityImg.alt || title)
+      : `${title} - product image coming soon`,
+    imageSrcSet: imageSrcSet,
+    socialImage: socialImage,
+    socialImageAlt: primarySanityImg?.alt || title,
     hover: hover,
     gallery: gallery,
-    description: String(doc.description || 'Crafted in small batches by skilled artisans, this timeless piece brings natural comfort and considered design to your everyday living.').trim(),
+    description: String(doc.description || '').trim(),
     inStock: doc.inStock !== false,
     isFeatured: Boolean(doc.isFeatured),
     isNewArrival: Boolean(doc.isNewArrival),
@@ -99,8 +114,14 @@ export function normalizeCategory(doc) {
     _id: doc._id,
     name: name,
     slug: slug,
-    description: String(doc.description || `Handcrafted ${name.toLowerCase()} in fine traditional weaves.`).trim(),
+    description: String(doc.description || '').trim(),
     image: image,
+    imageAlt: doc.image && image !== NO_IMAGE_PLACEHOLDER
+      ? `${name} collection at Riti Handlooms`
+      : `${name} collection image coming soon`,
+    imageSrcSet: doc.image ? getImageSrcSet(doc.image, { widths: [400, 800, 1200], aspectRatio: 1.25 }) : '',
+    socialImage: doc.image ? socialImageUrl(doc.image) : '',
+    socialImageAlt: `${name} collection at Riti Handlooms`,
     displayOrder: doc.displayOrder || 0,
     isFeatured: doc.isFeatured !== false,
     _isFromSanity: true
@@ -123,6 +144,9 @@ export function normalizeSiteSettings(doc) {
         label: slide.label || 'RITI HANDLOOM · THE HOME EDIT',
         description: slide.description || 'Thoughtful textiles for the little moments that make a home.',
         image: slide.image ? heroBannerImageUrl(slide.image) : '',
+        imageSrcSet: slide.image
+          ? getImageSrcSet(slide.image, { widths: [900, 1200, 1600, 1920], aspectRatio: 0.5625, quality: 85 })
+          : '',
         link: slide.link || '/category/bedsheets',
         linkText: slide.linkText || 'Discover the collection'
       }))

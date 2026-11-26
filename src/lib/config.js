@@ -53,9 +53,10 @@ if (sanityConfigError) {
   console.error(`[Riti Handlooms Config] ${sanityConfigError}`)
 }
 
+const DEFAULT_SITE_URL = 'https://ritihandloom.in'
 const envSiteUrl = cleanEnv('VITE_SITE_URL')
-const runtimeOrigin = typeof window !== 'undefined' ? window.location.origin : ''
-const resolvedSiteUrl = (envSiteUrl || runtimeOrigin || 'https://ritihandloom.in').replace(/\/+$/, '')
+const resolvedSiteUrl = new URL(envSiteUrl || DEFAULT_SITE_URL).origin
+const socialImageUrl = cleanEnv('VITE_SOCIAL_IMAGE_URL', `${resolvedSiteUrl}/riti-social-placeholder.png`)
 
 export const siteConfig = {
   isProd,
@@ -67,13 +68,18 @@ export const siteConfig = {
     isConfigured: !sanityConfigError
   },
   siteUrl: resolvedSiteUrl,
+  socialImageUrl: new URL(socialImageUrl, resolvedSiteUrl).href,
+  socialImageAlt: cleanEnv(
+    'VITE_SOCIAL_IMAGE_ALT',
+    'Riti Handlooms brand preview. Replace with genuine brand photography when available.'
+  ),
   whatsappNumber: cleanEnv('VITE_WHATSAPP_NUMBER', '919555790429'),
   contactPhone: cleanEnv('VITE_CONTACT_PHONE', '+91 95557 90429'),
   contactEmail: cleanEnv('VITE_CONTACT_EMAIL', 'hello@ritihandloom.in'),
   instagramUrl: cleanEnv('VITE_INSTAGRAM_URL', 'https://instagram.com/ritihandloom'),
   storeAddress: cleanEnv(
     'VITE_STORE_ADDRESS',
-    'Jagat Farm, Greater Noida, Gautam Buddha Nagar, Uttar Pradesh 201308'
+    'Jagat Farm, Greater Noida, Uttar Pradesh, India'
   )
 }
 
@@ -85,5 +91,5 @@ export const siteConfig = {
  */
 export function getCanonicalUrl(path = '/') {
   const normalizedPath = path.startsWith('/') ? path : `/${path}`
-  return `${siteConfig.siteUrl}${normalizedPath}`
+  return new URL(normalizedPath, `${siteConfig.siteUrl}/`).href
 }

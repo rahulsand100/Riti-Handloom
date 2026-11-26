@@ -4,7 +4,7 @@ import { SlidersHorizontal, Grid2X2, Grid3X3, ChevronDown, X, RotateCcw } from '
 import { ProductCard } from '../components/product/ProductCard.jsx'
 import { SEO } from '../components/common/SEO.jsx'
 import { useSanityCatalog } from '../context/useSanityCatalog.js'
-import { getCanonicalUrl } from '../lib/config.js'
+import { getCategorySeoMetadata } from '../lib/seo.js'
 
 export function Shop({ onAdd, wishlist, setWishlist, categorySlug }) {
   const { products, categories, getCategory, loading, error, refetch } = useSanityCatalog()
@@ -26,7 +26,6 @@ export function Shop({ onAdd, wishlist, setWishlist, categorySlug }) {
 
   const availableFabrics = useMemo(() => {
     const set = new Set(products.map(p => p.fabric).filter(Boolean))
-    if (set.size === 0) return ['100% Cotton', 'Handloom Weave', 'Cotton Blend', 'Linen']
     return Array.from(set)
   }, [products])
 
@@ -42,6 +41,13 @@ export function Shop({ onAdd, wishlist, setWishlist, categorySlug }) {
   }
 
   const hasActiveFilters = selectedFabrics.length > 0 || inStockOnly
+  const seoMetadata = getCategorySeoMetadata({
+    name: activeCategoryName,
+    slug: categorySlug || '',
+    description: category?.description || '',
+    socialImage: category?.socialImage || '',
+    socialImageAlt: category?.socialImageAlt || ''
+  })
 
   const filteredProducts = useMemo(() => {
     return products.filter(product => {
@@ -87,12 +93,12 @@ export function Shop({ onAdd, wishlist, setWishlist, categorySlug }) {
   return (
     <main className="shop-page">
       <SEO
-        title={activeCategoryName ? `${activeCategoryName} Collection | Riti Handlooms Jagat Farm Greater Noida` : 'Our Handloom Collection | Riti Handlooms Jagat Farm Greater Noida'}
-        description={activeCategoryName ? `Browse handcrafted ${activeCategoryName.toLowerCase()} at Riti Handlooms, Jagat Farm, Greater Noida. Near Knowledge Park 2 & Pari Chowk. WhatsApp enquiry available.` : 'Explore handcrafted bedsheets, dohars, blankets, and towels at Riti Handlooms in Jagat Farm, Greater Noida (near Knowledge Park 2).'}
-        breadcrumbs={[
-          { name: 'Home', url: getCanonicalUrl('/') },
-          { name: activeCategoryName || 'Our Collection', url: categorySlug ? getCanonicalUrl(`/category/${categorySlug}`) : getCanonicalUrl('/shop') }
-        ]}
+        title={seoMetadata.title}
+        description={seoMetadata.description}
+        url={seoMetadata.url}
+        image={seoMetadata.image}
+        imageAlt={seoMetadata.imageAlt}
+        breadcrumbs={seoMetadata.breadcrumbs}
       />
       <div className="container">
         <div className="breadcrumb">
@@ -105,11 +111,19 @@ export function Shop({ onAdd, wishlist, setWishlist, categorySlug }) {
 
         {category && (
           <section className="category-hero">
-            <img src={category.image} alt={category.name} />
+            <img
+              src={category.image}
+              srcSet={category.imageSrcSet || undefined}
+              sizes="100vw"
+              width="800"
+              height="1000"
+              alt={category.imageAlt}
+              fetchPriority="high"
+            />
             <div>
               <small>RITI HANDLOOM COLLECTION</small>
               <h1>{category.name}</h1>
-              <p>{category.description}</p>
+              {category.description && <p>{category.description}</p>}
             </div>
           </section>
         )}

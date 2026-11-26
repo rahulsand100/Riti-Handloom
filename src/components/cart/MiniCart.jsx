@@ -32,7 +32,7 @@ export function MiniCart({ open, onClose, cart, updateQuantity, removeFromCart, 
                 const key = getItemKey ? getItemKey(item) : `${item.id}-ALL_SIZE`
                 return (
                   <div className="cart-line" key={key}>
-                    <img src={item.image} alt={item.title} />
+                    <img src={item.image} width="78" height="98" alt={item.title} loading="lazy" />
                     <div>
                       <b>{item.title}</b>
                       <small>{item.category} · ALL SIZE</small>

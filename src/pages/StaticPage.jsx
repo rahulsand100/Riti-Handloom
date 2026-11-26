@@ -1,15 +1,21 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { ArrowRight, Phone, Mail, MapPin } from 'lucide-react'
 import { SEO } from '../components/common/SEO.jsx'
 import { siteConfig, getCanonicalUrl } from '../lib/config.js'
 
 export function StaticPage({ title }) {
+  const location = useLocation()
+  const isAboutPage = title === 'About the Brand'
+
   return (
     <main className="static-page">
       <SEO
-        title={`${title} | Riti Handlooms Jagat Farm Greater Noida`}
-        description="Discover the Riti Handlooms story — handcrafted bedsheets, dohars, blankets, and home furnishings in Jagat Farm, Greater Noida."
-        url={title === 'About the Brand' ? getCanonicalUrl('/about') : getCanonicalUrl('/')}
+        title={`${title} | Riti Handlooms, Greater Noida`}
+        description={isAboutPage
+          ? 'Learn about Riti Handlooms, a home furnishing store in Jagat Farm, Greater Noida, Uttar Pradesh. Browse the catalogue and contact the store.'
+          : 'Contact Riti Handlooms in Jagat Farm, Greater Noida for information about the catalogue and customer support.'}
+        url={getCanonicalUrl(location.pathname)}
+        noindex={!isAboutPage}
       />
       <div className="container">
         <div className="breadcrumb">
@@ -31,9 +37,28 @@ export function StaticPage({ title }) {
                 <Link className="btn primary" to="/shop">Explore our collection</Link>
               </div>
               <div className="about-image-grid">
-                <img className="about-image-main" src="/products/blanket-category.jpg" alt="Riti Handloom floral blanket styled in a bedroom" />
-                <img src="/products/pillow-pair.jpg" alt="Soft cotton pillow pair" />
-                <img src="/products/pillow-cover-set.jpg" alt="Decorative pillow cover set" />
+                <img
+                  className="about-image-main"
+                  src="/products/blanket-category.jpg"
+                  width="600"
+                  height="900"
+                  alt="Floral blanket displayed in a bedroom"
+                  loading="eager"
+                />
+                <img
+                  src="/products/pillow-pair.jpg"
+                  width="500"
+                  height="400"
+                  alt="Pillow pair display"
+                  loading="lazy"
+                />
+                <img
+                  src="/products/pillow-cover-set.jpg"
+                  width="500"
+                  height="400"
+                  alt="Pillow cover set display"
+                  loading="lazy"
+                />
               </div>
             </section>
             <section className="about-values">

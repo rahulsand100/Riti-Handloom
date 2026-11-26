@@ -27,6 +27,7 @@ export function WishlistPage({ wishlist, setWishlist, onAdd }) {
         title="My Wishlist | Riti Handlooms Jagat Farm Greater Noida"
         description="Your saved handloom favourites at Riti Handlooms, Greater Noida. Move items to your enquiry bag or enquire directly on WhatsApp."
         url={getCanonicalUrl('/wishlist')}
+        noindex
       />
       <div className="container">
         <div className="breadcrumb">

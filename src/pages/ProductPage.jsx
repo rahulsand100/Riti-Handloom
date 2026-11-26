@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import {
-  Heart, ShieldCheck, RefreshCcw, Truck, MessageCircle as WhatsApp, BadgeCheck
+  Heart, ShieldCheck, RefreshCcw, MessageCircle as WhatsApp, Tag
 } from 'lucide-react'
 import { ProductCard } from '../components/product/ProductCard.jsx'
 import { SEO } from '../components/common/SEO.jsx'
 import { useSanityCatalog } from '../context/useSanityCatalog.js'
 import { categoryPath } from '../data/mockData.js'
-import { getCanonicalUrl } from '../lib/config.js'
+import { getProductSeoMetadata } from '../lib/seo.js'
 import { buildSingleProductEnquiryUrl } from '../lib/whatsapp.js'
 
 export function ProductPage({ onAdd, wishlist, setWishlist }) {
@@ -43,15 +43,16 @@ export function ProductPage({ onAdd, wishlist, setWishlist }) {
   const galleryImages = (product.gallery && product.gallery.length > 0)
     ? product.gallery
     : [
-        { src: product.image, alt: product.title },
+        { src: product.image, srcSet: product.imageSrcSet, alt: product.title },
         { src: product.hover, alt: `${product.title} detail` },
       ]
   const liked = wishlist.includes(product.id)
+  const seoMetadata = getProductSeoMetadata(product)
   
   const waMessageUrl = buildSingleProductEnquiryUrl({
     title: product.title,
     category: product.category,
-    url: typeof window !== 'undefined' ? window.location.href : getCanonicalUrl(`/product/${product.id}`),
+    url: seoMetadata.url,
     phone: siteSettings?.primaryWhatsAppNumber
   })
 
@@ -70,15 +71,14 @@ export function ProductPage({ onAdd, wishlist, setWishlist }) {
   return (
     <main className="product-page">
       <SEO
-        title={`${product.title} | Handloom Store Jagat Farm Greater Noida`}
-        description={`${product.title} in ${product.category}. Handcrafted by master weavers at Riti Handlooms, Jagat Farm, Greater Noida (near Knowledge Park 2). WhatsApp enquiry available.`}
-        image={product.image}
+        title={seoMetadata.title}
+        description={seoMetadata.description}
+        image={seoMetadata.image}
+        imageAlt={seoMetadata.imageAlt}
+        url={seoMetadata.url}
+        type="product"
         product={product}
-        breadcrumbs={[
-          { name: 'Home', url: getCanonicalUrl('/') },
-          { name: product.category, url: getCanonicalUrl(categoryHref) },
-          { name: product.title, url: getCanonicalUrl(`/product/${product.id}`) }
-        ]}
+        breadcrumbs={seoMetadata.breadcrumbs}
       />
       <div className="container">
         <div className="breadcrumb">
@@ -89,7 +89,13 @@ export function ProductPage({ onAdd, wishlist, setWishlist }) {
             <img
               className="gallery-main"
               src={galleryImages[activeImageIndex].src}
+              srcSet={galleryImages[activeImageIndex].srcSet || undefined}
+              sizes="(max-width: 760px) 100vw, 55vw"
+              width="1200"
+              height="1500"
               alt={galleryImages[activeImageIndex].alt || product.title}
+              loading={activeImageIndex === 0 ? 'eager' : 'lazy'}
+              fetchPriority={activeImageIndex === 0 ? 'high' : 'auto'}
             />
             <div className="gallery-thumbnails">
               {galleryImages.map((item, index) => (
@@ -99,7 +105,13 @@ export function ProductPage({ onAdd, wishlist, setWishlist }) {
                   onClick={() => setActiveImageIndex(index)}
                   aria-label={`View image ${index + 1}`}
                 >
-                  <img src={item.thumbSrc || item.src} alt="" />
+                  <img
+                    src={item.thumbSrc || item.src}
+                    width="200"
+                    height="250"
+                    alt=""
+                    loading="lazy"
+                  />
                 </button>
               ))}
             </div>
@@ -107,15 +119,11 @@ export function ProductPage({ onAdd, wishlist, setWishlist }) {
           <div className="detail-info">
             <h1>{product.title}</h1>
             <div className="detail-craft-tag">
-              <BadgeCheck size={16} />
-              <span>Direct Handloom Weave · Natural Fibres · ALL SIZE</span>
+              <Tag size={16} />
+              <span>{product.category}</span>
             </div>
 
-            <p>
-              Crafted in small batches by skilled artisans, this timeless piece brings natural comfort and considered design to your everyday living.
-            </p>
-
-            <div className="stock"><span />Available for Handloom Order</div>
+            {product.description && <p>{product.description}</p>}
 
             <div style={{ display: 'flex', gap: '10px', margin: '20px 0' }}>
               <button
@@ -157,33 +165,28 @@ export function ProductPage({ onAdd, wishlist, setWishlist }) {
             </a>
 
             <div className="detail-trust">
-              <span><ShieldCheck /> Authentic Weave</span>
-              <span><RefreshCcw /> Direct Support</span>
-              <span><Truck /> Safe Delivery</span>
+              <span><ShieldCheck /> Product details</span>
+              <span><RefreshCcw /> Customer support</span>
+              <span><WhatsApp /> Enquire directly</span>
             </div>
           </div>
         </div>
 
         <div className="product-tabs">
           <details open>
-            <summary>Description & Handloom Weave</summary>
+            <summary>Product details</summary>
+            <p>{product.description || 'Contact Riti Handlooms for more information about this product.'}</p>
+          </details>
+          <details>
+            <summary>Collection</summary>
             <p>
-              {product.description || 'Handwoven textiles designed for lasting comfort, crafted using natural fibres, artisan detailing, and easy-care finishes.'}
+              <b>Category:</b> {product.category}
             </p>
           </details>
           <details>
-            <summary>Specifications</summary>
+            <summary>Product enquiry</summary>
             <p>
-              <b>Category:</b> {product.category}<br />
-              <b>Fabric:</b> {product.fabric || '100% Pure Natural Handloom Cotton'}<br />
-              <b>Size:</b> ALL SIZE<br />
-              <b>Care:</b> Gentle cold machine or hand wash. Dry in shade.
-            </p>
-          </details>
-          <details>
-            <summary>Enquiry & Delivery Schedule</summary>
-            <p>
-              All enquiries and orders are fulfilled directly via WhatsApp for personal assistance and confirmed dispatch schedules from Greater Noida.
+              Contact the store on WhatsApp to ask about this product and discuss next steps.
             </p>
           </details>
         </div>

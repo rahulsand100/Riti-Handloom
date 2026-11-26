@@ -168,8 +168,20 @@ export function Header({ cartCount, onCart, wishlistCount, onSearchOpen, onOpenB
             {search && (
               <div className="suggestions">
                 {suggestions.slice(0, 5).map(p => (
-                  <Link key={p.id} to={`/product/${p.id}`} onClick={() => setSearchOpen(false)}>
-                    <img src={p.image} alt="" />
+                  <Link
+                    key={p.id}
+                    to={`/product/${encodeURIComponent(p.slug || p.id)}`}
+                    onClick={() => setSearchOpen(false)}
+                  >
+                    <img
+                      src={p.image}
+                      srcSet={p.imageSrcSet || undefined}
+                      sizes="64px"
+                      width="800"
+                      height="1000"
+                      alt=""
+                      loading="lazy"
+                    />
                     <div>
                       <b>{p.title}</b>
                       <span className="all-size-tag">ALL SIZE</span>
