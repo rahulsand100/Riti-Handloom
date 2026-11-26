@@ -53,7 +53,7 @@ if (sanityConfigError) {
   console.error(`[Riti Handlooms Config] ${sanityConfigError}`)
 }
 
-const DEFAULT_SITE_URL = 'https://ritihandloom.in'
+const DEFAULT_SITE_URL = 'https://www.ritihandloom.com'
 const envSiteUrl = cleanEnv('VITE_SITE_URL')
 const resolvedSiteUrl = new URL(envSiteUrl || DEFAULT_SITE_URL).origin
 const socialImageUrl = cleanEnv('VITE_SOCIAL_IMAGE_URL', `${resolvedSiteUrl}/riti-social-placeholder.png`)

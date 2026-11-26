@@ -24,7 +24,7 @@ function escapeXml(value) {
     .replace(/'/g, '&apos;')
 }
 
-export function normalizeSiteUrl(value = 'https://ritihandloom.in') {
+export function normalizeSiteUrl(value = 'https://www.ritihandloom.com') {
   const url = new URL(value)
   if (url.protocol !== 'https:' || /^(localhost|127\.0\.0\.1)$/i.test(url.hostname)) {
     throw new Error('VITE_SITE_URL must be the public HTTPS production domain.')

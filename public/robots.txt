@@ -5,4 +5,4 @@ Disallow: /studio/
 Disallow: /admin/
 
 # Sitemap location
-Sitemap: https://ritihandloom.in/sitemap.xml
+Sitemap: https://www.ritihandloom.com/sitemap.xml

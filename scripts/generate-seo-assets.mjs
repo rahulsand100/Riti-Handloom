@@ -15,7 +15,7 @@ for (const [key, value] of Object.entries(loadedEnv)) {
   if (!process.env[key]) process.env[key] = value
 }
 
-const siteUrl = normalizeSiteUrl(process.env.VITE_SITE_URL || 'https://ritihandloom.in')
+const siteUrl = normalizeSiteUrl(process.env.VITE_SITE_URL || 'https://www.ritihandloom.com')
 const projectId = process.env.VITE_SANITY_PROJECT_ID || 'rhynfvzd'
 const dataset = process.env.VITE_SANITY_DATASET || 'production'
 const apiVersion = process.env.VITE_SANITY_API_VERSION || '2024-01-01'
