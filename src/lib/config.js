@@ -36,7 +36,7 @@ function cleanEnv(key, fallback = '', allowInProd = true) {
   return ''
 }
 
-const sanityProjectId = cleanEnv('VITE_SANITY_PROJECT_ID', 'rhynfvzd', false)
+const sanityProjectId = cleanEnv('VITE_SANITY_PROJECT_ID', '15jlzurr', false)
 const sanityDataset = cleanEnv('VITE_SANITY_DATASET', 'production', true)
 const sanityApiVersion = cleanEnv('VITE_SANITY_API_VERSION', '2024-01-01', true)
 
