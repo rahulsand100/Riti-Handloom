@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import {
   ArrowRight, ArrowLeft, Camera as Instagram,
   BadgeCheck, ShieldCheck, RefreshCcw, MessageCircle as WhatsApp,
-  MapPin, Navigation, Phone, CheckCircle2
+  MapPin, Navigation, Phone, CheckCircle2, Star
 } from 'lucide-react'
 import { SectionTitle } from '../components/common/SectionTitle.jsx'
 import { ProductCard } from '../components/product/ProductCard.jsx'
@@ -339,17 +339,17 @@ export function Home({ onAdd, wishlist, setWishlist }) {
 
               <div className="local-store-actions">
                 <a
-                  href={`https://maps.google.com/?q=${encodeURIComponent(`Riti Handloom, ${siteSettings?.storeAddress || siteConfig.storeAddress}`)}`}
+                  href={siteConfig.googleMapsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn primary"
                   style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
                 >
-                  <Navigation size={16} /> Search on Google Maps
+                  <Navigation size={16} /> View on Google Maps
                 </a>
                 <a
                   href={getWhatsAppUrl(
-                    'Namaste Riti Handlooms! I am visiting your store in Jagat Farm.',
+                    'Namaste Riti Handloom! I am visiting your store at Shop No. 14, GM Mall, Jagat Farm.',
                     siteSettings?.primaryWhatsAppNumber
                   )}
                   target="_blank"
@@ -359,19 +359,28 @@ export function Home({ onAdd, wishlist, setWishlist }) {
                 >
                   <WhatsApp size={16} /> Ask for Directions
                 </a>
+                <a
+                  href={siteConfig.googleReviewUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn secondary"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+                >
+                  <Star size={16} /> Review us on Google
+                </a>
               </div>
             </div>
 
             <div className="local-store-map-preview">
               <div className="map-badge">
                 <b>RITI HANDLOOM</b>
-                <span>Jagat Farm, Greater Noida</span>
+                <span>Shop No. 14, GM Mall · Jagat Farm</span>
               </div>
               <img
-                src="/riti-store-photo-placeholder.svg"
+                src="/riti-store-photo.jpg"
                 width="900"
                 height="700"
-                alt="Riti Handloom store illustration"
+                alt="Inside Riti Handloom showroom at Shop No. 14, GM Mall, Gamma 1, Jagat Farm, Greater Noida displaying bedsheets, blankets, curtains, and home furnishings"
                 loading="lazy"
                 decoding="async"
               />

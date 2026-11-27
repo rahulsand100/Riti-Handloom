@@ -77,6 +77,7 @@ export const siteConfig = {
   contactPhone: cleanEnv('VITE_CONTACT_PHONE', '+91 95557 90429'),
   contactEmail: cleanEnv('VITE_CONTACT_EMAIL', 'hello@ritihandloom.in'),
   instagramUrl: cleanEnv('VITE_INSTAGRAM_URL', 'https://instagram.com/ritihandloom'),
+  googleMapsUrl: 'https://www.google.com/maps?cid=15851598683298363234',
   googleReviewUrl: 'https://g.page/r/CWJ3DGAEMfzbEAE/review',
   storeAddress: cleanEnv(
     'VITE_STORE_ADDRESS',
