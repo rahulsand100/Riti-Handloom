@@ -76,6 +76,21 @@ export function createLocalBusinessSchema() {
     hasMap: siteConfig.googleMapsUrl,
     description: 'Physical handloom and home furnishing store and authorised Kurlon dealer at Shop No. 14, GM Mall, Gamma 1, Jagat Farm, Greater Noida, Uttar Pradesh, India.',
     telephone: siteConfig.contactPhone.replace(/\s+/g, ''),
+    openingHoursSpecification: [
+      {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: [
+          'Monday',
+          'Tuesday',
+          'Wednesday',
+          'Thursday',
+          'Friday',
+          'Saturday'
+        ],
+        opens: '09:30',
+        closes: '21:00'
+      }
+    ],
     address: {
       '@type': 'PostalAddress',
       streetAddress: 'Shop No. 14, GM Mall, Gamma 1',
@@ -128,7 +143,7 @@ export function getHomeFaqs(categoryNames = []) {
     },
     {
       question: 'Where is Riti Handloom located in Jagat Farm, Greater Noida?',
-      answer: 'Riti Handloom is a physical handloom and home furnishing store located at Shop No. 14, GM Mall, Gamma 1, Jagat Farm, Greater Noida, Uttar Pradesh 201310, near Punjab National Bank.'
+      answer: 'Riti Handloom is a physical handloom and home furnishing store located at Shop No. 14, GM Mall, Gamma 1, Jagat Farm, Greater Noida, Uttar Pradesh 201310, near Punjab National Bank. Open Monday to Saturday from 9:30 AM to 9:00 PM (closed Sunday).'
     },
     {
       question: 'Is Riti Handloom an authorised Kurlon dealer in Jagat Farm?',

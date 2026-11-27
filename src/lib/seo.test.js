@@ -21,7 +21,10 @@ test('local business schema contains only the confirmed business facts', () => {
   assert.equal(parsed.address.addressRegion, 'Uttar Pradesh')
   assert.equal(parsed.address.addressCountry, 'IN')
   assert.equal('geo' in parsed, false)
-  assert.equal('openingHoursSpecification' in parsed, false)
+  assert.equal(parsed.openingHoursSpecification.length, 1)
+  assert.equal(parsed.openingHoursSpecification[0].opens, '09:30')
+  assert.equal(parsed.openingHoursSpecification[0].closes, '21:00')
+  assert.equal(parsed.openingHoursSpecification[0].dayOfWeek.length, 6)
   assert.equal('priceRange' in parsed, false)
 })
 

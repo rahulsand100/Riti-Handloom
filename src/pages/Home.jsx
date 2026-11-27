@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import {
   ArrowRight, ArrowLeft, Camera as Instagram,
   BadgeCheck, ShieldCheck, RefreshCcw, MessageCircle as WhatsApp,
-  MapPin, Navigation, Phone, CheckCircle2, Star
+  MapPin, Navigation, Phone, CheckCircle2, Star, Clock
 } from 'lucide-react'
 import { SectionTitle } from '../components/common/SectionTitle.jsx'
 import { ProductCard } from '../components/product/ProductCard.jsx'
@@ -334,6 +334,13 @@ export function Home({ onAdd, wishlist, setWishlist }) {
                   <div>
                     <b>{siteSettings?.secondaryPhoneNumber || siteConfig.contactPhone}</b>
                     <small>Call the store</small>
+                  </div>
+                </div>
+                <div className="prox-item">
+                  <Clock size={18} />
+                  <div>
+                    <b>Mon – Sat: 9:30 AM – 9:00 PM</b>
+                    <small>Sunday: Closed</small>
                   </div>
                 </div>
               </div>
