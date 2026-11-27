@@ -41,7 +41,7 @@ export function Home({ onAdd, wishlist, setWishlist }) {
       label: 'RITI HANDLOOM · THE HOME EDIT',
       description: 'Thoughtful textiles for the little moments that make a home.',
       image: image('photo-1505693416388-ac5ce068fe85', 1800, 900),
-      link: '/category/bed-sets',
+      link: '/category/bedsheets',
       linkText: 'Discover the collection'
     },
     {
@@ -312,11 +312,11 @@ export function Home({ onAdd, wishlist, setWishlist }) {
           <SectionTitle>VISIT RITI HANDLOOMS</SectionTitle>
           <div className="local-store-card">
             <div className="local-store-info">
-              <span className="local-tag">JAGAT FARM · GREATER NOIDA · UTTAR PRADESH</span>
-              <h2>A physical handloom and home furnishing store in Jagat Farm</h2>
+              <span className="local-tag">GM MALL · GAMMA 1 · JAGAT FARM · GREATER NOIDA</span>
+              <h2>A physical handloom and home furnishing store in Jagat Farm, Greater Noida</h2>
               <p className="local-lead">
-                Riti Handlooms is located in Jagat Farm, Greater Noida, Uttar Pradesh, India.
-                Visit the store or contact the team if you need help with directions.
+                Riti Handlooms is located at Shop No. 14, GM Mall, Gamma 1, Jagat Farm, Greater Noida,
+                Uttar Pradesh 201310. Visit our store or contact our team on WhatsApp for directions.
               </p>
 
               <div className="local-proximity-grid">

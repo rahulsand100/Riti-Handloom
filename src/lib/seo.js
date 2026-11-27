@@ -71,32 +71,28 @@ export function createLocalBusinessSchema() {
     '@id': `${siteConfig.siteUrl}/#localbusiness`,
     name: 'Riti Handlooms',
     url: siteConfig.siteUrl,
-    description: 'Premier physical handloom and home furnishing store in Jagat Farm, Greater Noida, Uttar Pradesh, India. Specializing in luxury bedsheets, curtains, handwoven towels, and quilts.',
+    description: 'Physical handloom and home furnishing store at Shop No. 14, GM Mall, Gamma 1, Jagat Farm, Greater Noida, Uttar Pradesh, India.',
     telephone: siteConfig.contactPhone.replace(/\s+/g, ''),
-    priceRange: '₹₹',
-    currenciesAccepted: 'INR',
-    paymentAccepted: 'Cash, UPI, Credit Card, Debit Card',
     address: {
       '@type': 'PostalAddress',
-      streetAddress: 'Jagat Farm Commercial Complex, Near Knowledge Park 2 & Pari Chowk',
-      addressLocality: 'Greater Noida',
+      streetAddress: 'Shop No. 14, GM Mall, Gamma 1',
+      addressLocality: 'Jagat Farm, Greater Noida',
       addressRegion: 'Uttar Pradesh',
-      postalCode: '201308',
+      postalCode: '201310',
       addressCountry: 'IN'
     },
-    geo: {
-      '@type': 'GeoCoordinates',
-      latitude: 28.4744,
-      longitude: 77.5030
-    },
-    areaServed: [
-      'Greater Noida',
-      'Pari Chowk',
-      'Knowledge Park',
-      'Noida',
-      'Delhi NCR'
-    ],
-    sameAs: siteConfig.instagramUrl ? [siteConfig.instagramUrl] : []
+    ...(siteConfig.instagramUrl ? { sameAs: [siteConfig.instagramUrl] } : {})
+  }
+}
+
+export function createWebSiteSchema() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': `${siteConfig.siteUrl}/#website`,
+    name: 'Riti Handlooms',
+    alternateName: ['Riti Handloom', 'Ritihandloom'],
+    url: siteConfig.siteUrl
   }
 }
 

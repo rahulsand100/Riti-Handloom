@@ -80,7 +80,7 @@ export function Footer() {
       </div>
       <div className="container footer-bottom">
         <span>© 2026 Riti Handlooms</span>
-        <span>Store in Jagat Farm, Greater Noida (near Knowledge Park 2 & Pari Chowk) · Direct WhatsApp Enquiries</span>
+        <span>Shop No. 14, GM Mall, Gamma 1, Jagat Farm, Greater Noida · Direct WhatsApp Enquiries</span>
       </div>
     </footer>
   )

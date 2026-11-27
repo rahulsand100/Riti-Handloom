@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { siteConfig, getCanonicalUrl } from '../../lib/config.js'
-import { buildPageStructuredData, createLocalBusinessSchema } from '../../lib/seo.js'
+import { buildPageStructuredData, createLocalBusinessSchema, createWebSiteSchema } from '../../lib/seo.js'
 
 export function SEO({
   title = 'Riti Handlooms | Home Furnishings in Jagat Farm, Greater Noida',
@@ -58,17 +58,14 @@ export function SEO({
     setMeta('meta[name="twitter:image"]', 'name', 'twitter:image', socialImage)
     setMeta('meta[name="twitter:image:alt"]', 'name', 'twitter:image:alt', socialImageAlt)
 
-    let robotsTag = document.querySelector('meta[name="robots"]')
-    if (noindex) {
-      if (!robotsTag) {
-        robotsTag = document.createElement('meta')
-        robotsTag.name = 'robots'
-        document.head.appendChild(robotsTag)
-      }
-      robotsTag.content = 'noindex,follow'
-    } else {
-      robotsTag?.remove()
-    }
+    setMeta(
+      'meta[name="robots"]',
+      'name',
+      'robots',
+      noindex
+        ? 'noindex,follow'
+        : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'
+    )
 
     if (!document.getElementById('riti-local-business-schema')) {
       const localBusinessTag = document.createElement('script')
@@ -76,6 +73,14 @@ export function SEO({
       localBusinessTag.type = 'application/ld+json'
       localBusinessTag.textContent = JSON.stringify(createLocalBusinessSchema())
       document.head.appendChild(localBusinessTag)
+    }
+
+    if (!document.getElementById('riti-website-schema')) {
+      const webSiteTag = document.createElement('script')
+      webSiteTag.id = 'riti-website-schema'
+      webSiteTag.type = 'application/ld+json'
+      webSiteTag.textContent = JSON.stringify(createWebSiteSchema())
+      document.head.appendChild(webSiteTag)
     }
 
     let pageSchemaTag = document.getElementById('riti-page-jsonld-schema')

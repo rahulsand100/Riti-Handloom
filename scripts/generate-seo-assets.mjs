@@ -87,7 +87,14 @@ if (!catalogue || !Array.isArray(catalogue.categories) || !Array.isArray(catalog
 
 const [
   { siteConfig, getCanonicalUrl },
-  { buildPageStructuredData, createLocalBusinessSchema, getCategorySeoMetadata, getProductSeoMetadata, HOME_SEO_METADATA }
+  {
+    buildPageStructuredData,
+    createLocalBusinessSchema,
+    createWebSiteSchema,
+    getCategorySeoMetadata,
+    getProductSeoMetadata,
+    HOME_SEO_METADATA
+  }
 ] = await Promise.all([
   import('../src/lib/config.js'),
   import('../src/lib/seo.js')
@@ -96,6 +103,7 @@ const outputDirectory = path.resolve(process.cwd(), 'dist')
 const indexPath = path.join(outputDirectory, 'index.html')
 const indexHtml = await readFile(indexPath, 'utf8')
 const localBusinessJsonLd = JSON.stringify(createLocalBusinessSchema()).replace(/</g, '\\u003c')
+const webSiteJsonLd = JSON.stringify(createWebSiteSchema()).replace(/</g, '\\u003c')
 
 function escapeHtml(value) {
   return String(value)
@@ -159,12 +167,17 @@ function updatePageMetadata(html, metadata, { type = 'website', noindex = false,
   }
 
   if (noindex) {
-    updated = replaceRequired(
-      updated,
-      /<\/head>/i,
-      '<meta name="robots" content="noindex,follow" /></head>',
-      'head close tag for noindex'
-    )
+    const robotsPattern = /<meta name="robots" content="[^"]*"\s*\/?>/i
+    if (robotsPattern.test(updated)) {
+      updated = updated.replace(robotsPattern, '<meta name="robots" content="noindex,follow" />')
+    } else {
+      updated = replaceRequired(
+        updated,
+        /<\/head>/i,
+        '<meta name="robots" content="noindex,follow" /></head>',
+        'head close tag for noindex'
+      )
+    }
   }
 
   if (schemas.length > 0) {
@@ -239,7 +252,7 @@ const homeMetadata = {
 }
 const homeFallback = {
   bodyTitle: 'Riti Handlooms',
-  bodyDescription: 'A physical handloom and home furnishing store in Jagat Farm, Greater Noida, Uttar Pradesh, India. Browse products and categories in the online catalogue or contact the store.',
+  bodyDescription: 'A physical handloom and home furnishing store at Shop No. 14, GM Mall, Gamma 1, Jagat Farm, Greater Noida, Uttar Pradesh 201310, India. Browse products and categories in the online catalogue or contact the store.',
   links: [
     { name: 'Browse the catalogue', url: '/shop' },
     ...catalogue.categories.map(category => ({
@@ -309,7 +322,7 @@ const staticPages = [
 const baseHtml = replaceRequired(
   indexHtml,
   /<\/head>/i,
-  `<script id="riti-local-business-schema" type="application/ld+json">${localBusinessJsonLd}</script></head>`,
+  `<script id="riti-local-business-schema" type="application/ld+json">${localBusinessJsonLd}</script><script id="riti-website-schema" type="application/ld+json">${webSiteJsonLd}</script></head>`,
   'head close tag for business structured data'
 )
 let pageCount = 1
