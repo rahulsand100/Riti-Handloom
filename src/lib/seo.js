@@ -1,8 +1,8 @@
 import { getCanonicalUrl, siteConfig } from './config.js'
 
 export const HOME_SEO_METADATA = Object.freeze({
-  title: 'Riti Handlooms | Home Furnishings in Jagat Farm, Greater Noida',
-  description: 'Explore home furnishings at Riti Handlooms, a physical handloom and home furnishing store in Jagat Farm, Greater Noida, Uttar Pradesh. Browse the catalogue, visit the store, or contact the team.',
+  title: 'Riti Handloom | Home Furnishings in Jagat Farm, Greater Noida',
+  description: 'Explore home furnishings and Kurlon mattresses at Riti Handloom, an authorised Kurlon dealer at Shop No. 14, GM Mall, Gamma 1, Jagat Farm, Greater Noida, Uttar Pradesh. Browse the catalogue or contact us on WhatsApp.',
   url: getCanonicalUrl('/')
 })
 
@@ -25,11 +25,11 @@ export function getCategorySeoMetadata({
 
   return {
     title: categoryName
-      ? `${categoryName} in Greater Noida | Riti Handlooms, Jagat Farm`
-      : 'Home Furnishings Catalogue | Riti Handlooms, Greater Noida',
+      ? `${categoryName} in Greater Noida | Riti Handloom, Jagat Farm`
+      : 'Home Furnishings Catalogue | Riti Handloom, Greater Noida',
     description: description
-      ? `${description} Browse the ${fallbackName.toLowerCase()} collection at Riti Handlooms in Jagat Farm, Greater Noida. Contact us on WhatsApp to ask about a product.`
-      : `Browse ${fallbackName.toLowerCase()} at Riti Handlooms, a home furnishing store in Jagat Farm, Greater Noida. Contact us on WhatsApp to ask about a product.`,
+      ? `${description} Browse the ${fallbackName.toLowerCase()} collection at Riti Handloom in Jagat Farm, Greater Noida. Contact us on WhatsApp to ask about a product.`
+      : `Browse ${fallbackName.toLowerCase()} at Riti Handloom, a home furnishing store in Jagat Farm, Greater Noida. Contact us on WhatsApp to ask about a product.`,
     image: socialImage || siteConfig.socialImageUrl,
     imageAlt: socialImageAlt || siteConfig.socialImageAlt,
     url: categoryUrl,
@@ -49,10 +49,10 @@ export function getProductSeoMetadata(product) {
   const description = product.description?.trim()
 
   return {
-    title: `${product.title} | Riti Handlooms, Greater Noida`,
+    title: `${product.title} | Riti Handloom, Greater Noida`,
     description: description
-      ? `${description} Contact Riti Handlooms in Jagat Farm, Greater Noida, on WhatsApp to enquire.`
-      : `${product.title} is listed in the ${product.category} collection at Riti Handlooms, a home furnishing store in Jagat Farm, Greater Noida. Contact us on WhatsApp to enquire.`,
+      ? `${description} Contact Riti Handloom in Jagat Farm, Greater Noida, on WhatsApp to enquire.`
+      : `${product.title} is listed in the ${product.category} collection at Riti Handloom, a home furnishing store in Jagat Farm, Greater Noida. Contact us on WhatsApp to enquire.`,
     image: product.socialImage || siteConfig.socialImageUrl,
     imageAlt: product.socialImage ? (product.socialImageAlt || product.title) : siteConfig.socialImageAlt,
     url: productUrl,
@@ -69,9 +69,10 @@ export function createLocalBusinessSchema() {
     '@context': 'https://schema.org',
     '@type': 'HomeGoodsStore',
     '@id': `${siteConfig.siteUrl}/#localbusiness`,
-    name: 'Riti Handlooms',
+    name: 'Riti Handloom',
+    alternateName: ['Riti Handlooms', 'Ritihandloom'],
     url: siteConfig.siteUrl,
-    description: 'Physical handloom and home furnishing store at Shop No. 14, GM Mall, Gamma 1, Jagat Farm, Greater Noida, Uttar Pradesh, India.',
+    description: 'Physical handloom and home furnishing store and authorised Kurlon dealer at Shop No. 14, GM Mall, Gamma 1, Jagat Farm, Greater Noida, Uttar Pradesh, India.',
     telephone: siteConfig.contactPhone.replace(/\s+/g, ''),
     address: {
       '@type': 'PostalAddress',
@@ -90,8 +91,8 @@ export function createWebSiteSchema() {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     '@id': `${siteConfig.siteUrl}/#website`,
-    name: 'Riti Handlooms',
-    alternateName: ['Riti Handloom', 'Ritihandloom'],
+    name: 'Riti Handloom',
+    alternateName: ['Riti Handlooms', 'Ritihandloom'],
     url: siteConfig.siteUrl
   }
 }
@@ -103,10 +104,15 @@ export function buildPageStructuredData({ product = null, breadcrumbs = null } =
     const productSchema = {
       '@context': 'https://schema.org',
       '@type': 'Product',
-      name: product.title,
-      brand: {
+      name: product.title
+    }
+
+    const explicitBrand = typeof product.brand === 'string' ? product.brand.trim() : ''
+    const resolvedBrand = explicitBrand || (/^kurlon\b/i.test(product.title || '') ? 'Kurlon' : '')
+    if (resolvedBrand) {
+      productSchema.brand = {
         '@type': 'Brand',
-        name: 'Riti Handlooms'
+        name: resolvedBrand
       }
     }
 

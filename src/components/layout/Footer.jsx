@@ -79,7 +79,7 @@ export function Footer() {
         </div>
       </div>
       <div className="container footer-bottom">
-        <span>© 2026 Riti Handlooms</span>
+        <span>© 2026 Riti Handloom</span>
         <span>Shop No. 14, GM Mall, Gamma 1, Jagat Farm, Greater Noida · Direct WhatsApp Enquiries</span>
       </div>
     </footer>

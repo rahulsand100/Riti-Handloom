@@ -71,7 +71,7 @@ export const siteConfig = {
   socialImageUrl: new URL(socialImageUrl, resolvedSiteUrl).href,
   socialImageAlt: cleanEnv(
     'VITE_SOCIAL_IMAGE_ALT',
-    'Riti Handlooms — Handloom & Home Furnishings in Jagat Farm, Greater Noida'
+    'Riti Handloom — Handloom & Home Furnishings in Jagat Farm, Greater Noida'
   ),
   whatsappNumber: cleanEnv('VITE_WHATSAPP_NUMBER', '919555790429'),
   contactPhone: cleanEnv('VITE_CONTACT_PHONE', '+91 95557 90429'),

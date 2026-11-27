@@ -251,8 +251,8 @@ const homeMetadata = {
   imageAlt: siteConfig.socialImageAlt
 }
 const homeFallback = {
-  bodyTitle: 'Riti Handlooms',
-  bodyDescription: 'A physical handloom and home furnishing store at Shop No. 14, GM Mall, Gamma 1, Jagat Farm, Greater Noida, Uttar Pradesh 201310, India. Browse products and categories in the online catalogue or contact the store.',
+  bodyTitle: 'Riti Handloom',
+  bodyDescription: 'A physical handloom and home furnishing store and authorised Kurlon dealer at Shop No. 14, GM Mall, Gamma 1, Jagat Farm, Greater Noida, Uttar Pradesh 201310, India. Browse products and categories in the online catalogue or contact the store.',
   links: [
     { name: 'Browse the catalogue', url: '/shop' },
     ...catalogue.categories.map(category => ({
@@ -274,19 +274,19 @@ const staticPages = [
   {
     route: '/about',
     metadata: {
-      title: 'About the Brand | Riti Handlooms, Greater Noida',
-      description: 'Learn about Riti Handlooms, a home furnishing store in Jagat Farm, Greater Noida, Uttar Pradesh. Browse the catalogue and contact the store.',
+      title: 'About the Brand | Riti Handloom, Greater Noida',
+      description: 'Learn about Riti Handloom, a home furnishing store and authorised Kurlon dealer at Shop No. 14, GM Mall, Gamma 1, Jagat Farm, Greater Noida, Uttar Pradesh.',
       image: siteConfig.socialImageUrl,
       imageAlt: siteConfig.socialImageAlt,
       url: getCanonicalUrl('/about')
     },
-    bodyTitle: 'About Riti Handlooms'
+    bodyTitle: 'About Riti Handloom'
   },
   {
     route: '/support',
     metadata: {
-      title: 'Customer Support | Riti Handlooms',
-      description: 'Contact Riti Handlooms on WhatsApp for help with a purchase, return, replacement, or product enquiry.',
+      title: 'Customer Support | Riti Handloom',
+      description: 'Contact Riti Handloom on WhatsApp for help with a purchase, return, replacement, or product enquiry.',
       image: siteConfig.socialImageUrl,
       imageAlt: siteConfig.socialImageAlt,
       url: getCanonicalUrl('/support')
@@ -296,8 +296,8 @@ const staticPages = [
   {
     route: '/cart',
     metadata: {
-      title: 'Enquiry Bag | Riti Handlooms',
-      description: 'Review selected products and prepare an enquiry for Riti Handlooms.',
+      title: 'Enquiry Bag | Riti Handloom',
+      description: 'Review selected products and prepare an enquiry for Riti Handloom.',
       image: siteConfig.socialImageUrl,
       imageAlt: siteConfig.socialImageAlt,
       url: getCanonicalUrl('/cart')
@@ -308,8 +308,8 @@ const staticPages = [
   {
     route: '/wishlist',
     metadata: {
-      title: 'My Wishlist | Riti Handlooms',
-      description: 'Review saved products in your Riti Handlooms wishlist.',
+      title: 'My Wishlist | Riti Handloom',
+      description: 'Review saved products in your Riti Handloom wishlist.',
       image: siteConfig.socialImageUrl,
       imageAlt: siteConfig.socialImageAlt,
       url: getCanonicalUrl('/wishlist')
@@ -360,7 +360,7 @@ for (const category of catalogue.categories) {
     slug: category.slug,
     description: category.description || '',
     socialImage: socialImageUrl(category.image),
-    socialImageAlt: `${category.name} collection at Riti Handlooms`
+    socialImageAlt: `${category.name} collection at Riti Handloom`
   })
   const breadcrumbs = metadata.breadcrumbs
   const products = catalogue.products.filter(product => product.category?.slug === category.slug)
@@ -371,7 +371,7 @@ for (const category of catalogue.categories) {
   const html = createSnapshot(baseHtml, metadata, {
     schemas: buildPageStructuredData({ breadcrumbs }),
     fallbackImage: category.image?.asset?.url,
-    fallbackImageAlt: `${category.name} collection at Riti Handlooms`,
+    fallbackImageAlt: `${category.name} collection at Riti Handloom`,
     fallbackImageWidth: category.image?.asset?.metadata?.dimensions?.width,
     fallbackImageHeight: category.image?.asset?.metadata?.dimensions?.height,
     links

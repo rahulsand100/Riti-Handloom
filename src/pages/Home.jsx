@@ -248,7 +248,7 @@ export function Home({ onAdd, wishlist, setWishlist }) {
 
       <section className="section soft">
         <div className="container">
-          <SectionTitle>EXPLORE RITI HANDLOOMS</SectionTitle>
+          <SectionTitle>EXPLORE RITI HANDLOOM</SectionTitle>
           <div className="trust-grid">
             {[
               [BadgeCheck, 'Browse the catalogue', 'Explore current product and category listings'],
@@ -309,14 +309,15 @@ export function Home({ onAdd, wishlist, setWishlist }) {
 
       <section className="section local-store-section">
         <div className="container">
-          <SectionTitle>VISIT RITI HANDLOOMS</SectionTitle>
+          <SectionTitle>VISIT RITI HANDLOOM</SectionTitle>
           <div className="local-store-card">
             <div className="local-store-info">
               <span className="local-tag">GM MALL · GAMMA 1 · JAGAT FARM · GREATER NOIDA</span>
               <h2>A physical handloom and home furnishing store in Jagat Farm, Greater Noida</h2>
               <p className="local-lead">
-                Riti Handlooms is located at Shop No. 14, GM Mall, Gamma 1, Jagat Farm, Greater Noida,
-                Uttar Pradesh 201310. Visit our store or contact our team on WhatsApp for directions.
+                Riti Handloom is located at Shop No. 14, GM Mall, Gamma 1, Jagat Farm, Greater Noida,
+                Uttar Pradesh 201310. As an authorised Kurlon dealer, we offer Kurlon products alongside
+                handloom bedsheets, curtains, blankets, and towels. Visit our store or contact our team on WhatsApp for directions.
               </p>
 
               <div className="local-proximity-grid">
@@ -338,7 +339,7 @@ export function Home({ onAdd, wishlist, setWishlist }) {
 
               <div className="local-store-actions">
                 <a
-                  href={`https://maps.google.com/?q=${encodeURIComponent(`Riti Handlooms, ${siteSettings?.storeAddress || siteConfig.storeAddress}`)}`}
+                  href={`https://maps.google.com/?q=${encodeURIComponent(`Riti Handloom, ${siteSettings?.storeAddress || siteConfig.storeAddress}`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn primary"
@@ -363,14 +364,14 @@ export function Home({ onAdd, wishlist, setWishlist }) {
 
             <div className="local-store-map-preview">
               <div className="map-badge">
-                <b>RITI HANDLOOMS</b>
+                <b>RITI HANDLOOM</b>
                 <span>Jagat Farm, Greater Noida</span>
               </div>
               <img
                 src="/riti-store-photo-placeholder.svg"
                 width="900"
                 height="700"
-                alt="Store photo placeholder. Replace with a verified Riti Handlooms store photograph."
+                alt="Riti Handloom store illustration"
                 loading="lazy"
                 decoding="async"
               />
@@ -384,18 +385,19 @@ export function Home({ onAdd, wishlist, setWishlist }) {
           <SectionTitle>FREQUENTLY ASKED QUESTIONS</SectionTitle>
           <div className="seo-faq">
             <details>
-              <summary>What products does Riti Handlooms offer?</summary>
+              <summary>What products does Riti Handloom offer?</summary>
               <p>
                 The current online catalogue includes {categories.length
                   ? categories.map(category => category.name).join(', ')
-                  : 'home furnishing categories'}. Browse the catalogue for published items.
+                  : 'home furnishing categories'}. Riti Handloom is also an authorised Kurlon dealer
+                offering Kurlon products at our Greater Noida store.
               </p>
             </details>
             <details>
               <summary>Where is the store located?</summary>
               <p>
-                Riti Handlooms is a physical handloom and home furnishing store in Jagat Farm,
-                Greater Noida, Uttar Pradesh, India. Use the store location details above or
+                Riti Handloom is a physical handloom and home furnishing store at Shop No. 14, GM Mall,
+                Gamma 1, Jagat Farm, Greater Noida, Uttar Pradesh 201310, India. Use the store location details above or
                 contact the team for directions.
               </p>
             </details>

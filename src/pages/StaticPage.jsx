@@ -10,10 +10,10 @@ export function StaticPage({ title }) {
   return (
     <main className="static-page">
       <SEO
-        title={`${title} | Riti Handlooms, Greater Noida`}
+        title={`${title} | Riti Handloom, Greater Noida`}
         description={isAboutPage
-          ? 'Learn about Riti Handlooms, a home furnishing store in Jagat Farm, Greater Noida, Uttar Pradesh. Browse the catalogue and contact the store.'
-          : 'Contact Riti Handlooms in Jagat Farm, Greater Noida for information about the catalogue and customer support.'}
+          ? 'Learn about Riti Handloom, a home furnishing store and authorised Kurlon dealer at Shop No. 14, GM Mall, Gamma 1, Jagat Farm, Greater Noida, Uttar Pradesh.'
+          : 'Contact Riti Handloom in Jagat Farm, Greater Noida for information about the catalogue and customer support.'}
         url={getCanonicalUrl(location.pathname)}
         noindex={!isAboutPage}
       />
@@ -29,7 +29,7 @@ export function StaticPage({ title }) {
                 <small>THE RITI HANDLOOM STORY</small>
                 <h2>Comfort, character and thoughtful details for your home.</h2>
                 <p>
-                  We believe the little details make a house feel like yours. Riti Handloom brings together bedsheets, blankets, pillows, pillow covers and everyday home textiles chosen to make your spaces feel more comfortable and personal.
+                  We believe the little details make a house feel like yours. Located at Shop No. 14, GM Mall, Gamma 1, Jagat Farm, Greater Noida, Riti Handloom brings together bedsheets, blankets, pillows, pillow covers, curtains, and everyday home textiles—and as an authorised Kurlon dealer, offers Kurlon products for your home.
                 </p>
                 <p>
                   From soft layers for the bedroom to finishing touches for the living room, explore pieces made to feel at home in your everyday routine.

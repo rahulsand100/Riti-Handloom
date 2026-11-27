@@ -13,7 +13,8 @@ test('local business schema contains only the confirmed business facts', () => {
   const parsed = JSON.parse(JSON.stringify(schema))
 
   assert.equal(parsed['@type'], 'HomeGoodsStore')
-  assert.equal(parsed.name, 'Riti Handlooms')
+  assert.equal(parsed.name, 'Riti Handloom')
+  assert.deepEqual(parsed.alternateName, ['Riti Handlooms', 'Ritihandloom'])
   assert.equal(parsed.url, siteConfig.siteUrl)
   assert.equal(parsed.address.addressLocality, 'Jagat Farm, Greater Noida')
   assert.equal(parsed.address.addressRegion, 'Uttar Pradesh')

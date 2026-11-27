@@ -3,8 +3,8 @@ import { siteConfig, getCanonicalUrl } from '../../lib/config.js'
 import { buildPageStructuredData, createLocalBusinessSchema, createWebSiteSchema } from '../../lib/seo.js'
 
 export function SEO({
-  title = 'Riti Handlooms | Home Furnishings in Jagat Farm, Greater Noida',
-  description = 'Explore home furnishings at Riti Handlooms, a physical store in Jagat Farm, Greater Noida, Uttar Pradesh. Browse the catalogue or contact the store directly.',
+  title = 'Riti Handloom | Home Furnishings in Jagat Farm, Greater Noida',
+  description = 'Explore home furnishings and Kurlon products at Riti Handloom, an authorised Kurlon dealer at Shop No. 14, GM Mall, Gamma 1, Jagat Farm, Greater Noida, Uttar Pradesh.',
   image = siteConfig.socialImageUrl,
   imageAlt = siteConfig.socialImageAlt,
   url = getCanonicalUrl('/'),
@@ -49,7 +49,7 @@ export function SEO({
     setMeta('meta[property="og:image:height"]', 'property', 'og:image:height', '630')
     setMeta('meta[property="og:url"]', 'property', 'og:url', canonicalUrl)
     setMeta('meta[property="og:type"]', 'property', 'og:type', type)
-    setMeta('meta[property="og:site_name"]', 'property', 'og:site_name', 'Riti Handlooms')
+    setMeta('meta[property="og:site_name"]', 'property', 'og:site_name', 'Riti Handloom')
     setMeta('meta[property="og:locale"]', 'property', 'og:locale', 'en_IN')
 
     setMeta('meta[name="twitter:card"]', 'name', 'twitter:card', 'summary_large_image')
