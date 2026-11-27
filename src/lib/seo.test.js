@@ -4,6 +4,7 @@ import {
   buildPageStructuredData,
   createLocalBusinessSchema,
   getCategorySeoMetadata,
+  getHomeFaqs,
   getProductSeoMetadata
 } from './seo.js'
 import { siteConfig } from './config.js'
@@ -76,4 +77,14 @@ test('category and product metadata use unique canonical paths and configured br
   assert.equal(product.image, siteConfig.socialImageUrl)
   assert.equal(category.breadcrumbs.at(-1).url, category.url)
   assert.equal(product.breadcrumbs.at(-1).url, product.url)
+})
+
+test('FAQ structured data generates valid Question and Answer entities', () => {
+  const faqs = getHomeFaqs(['Bedsheets', 'Window Curtains'])
+  const [faqSchema] = buildPageStructuredData({ faqs })
+
+  assert.equal(faqSchema['@type'], 'FAQPage')
+  assert.equal(faqSchema.mainEntity.length, 6)
+  assert.equal(faqSchema.mainEntity[0]['@type'], 'Question')
+  assert.match(faqSchema.mainEntity[0].acceptedAnswer.text, /Bedsheets, Window Curtains/)
 })

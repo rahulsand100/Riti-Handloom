@@ -10,7 +10,7 @@ import { ProductCard } from '../components/product/ProductCard.jsx'
 import { SEO } from '../components/common/SEO.jsx'
 import { useSanityCatalog } from '../context/useSanityCatalog.js'
 import { siteConfig } from '../lib/config.js'
-import { HOME_SEO_METADATA } from '../lib/seo.js'
+import { getHomeFaqs, HOME_SEO_METADATA } from '../lib/seo.js'
 import { getWhatsAppUrl } from '../lib/whatsapp.js'
 import { categoryPath, bedsheetImages, image } from '../data/mockData.js'
 
@@ -65,6 +65,7 @@ export function Home({ onAdd, wishlist, setWishlist }) {
   const heroSlides = (siteSettings?.heroSlides && siteSettings.heroSlides.length > 0)
     ? siteSettings.heroSlides
     : defaultHeroSlides
+  const homeFaqs = getHomeFaqs(categories.map(category => category.name))
 
   useEffect(() => {
     const timer = setInterval(() => setSlide(s => (s + 1) % heroSlides.length), 5000)
@@ -73,7 +74,7 @@ export function Home({ onAdd, wishlist, setWishlist }) {
 
   return (
     <>
-      <SEO {...HOME_SEO_METADATA} />
+      <SEO {...HOME_SEO_METADATA} faqs={homeFaqs} />
       <section className="hero-slider">
         {heroSlides.map((s, i) => (
           <div
@@ -393,45 +394,17 @@ export function Home({ onAdd, wishlist, setWishlist }) {
         <div className="container">
           <SectionTitle>FREQUENTLY ASKED QUESTIONS</SectionTitle>
           <div className="seo-faq">
-            <details>
-              <summary>What products does Riti Handloom offer?</summary>
-              <p>
-                The current online catalogue includes {categories.length
-                  ? categories.map(category => category.name).join(', ')
-                  : 'home furnishing categories'}. Riti Handloom is also an authorised Kurlon dealer
-                offering Kurlon products at our Greater Noida store.
-              </p>
-            </details>
-            <details>
-              <summary>Where is the store located?</summary>
-              <p>
-                Riti Handloom is a physical handloom and home furnishing store at Shop No. 14, GM Mall,
-                Gamma 1, Jagat Farm, Greater Noida, Uttar Pradesh 201310, India. Use the store location details above or
-                contact the team for directions.
-              </p>
-            </details>
-            <details>
-              <summary>How can I enquire about a product?</summary>
-              <p>
-                Open the product page and choose its WhatsApp enquiry option, or contact the
-                store using the phone and WhatsApp links on this page.
-              </p>
-            </details>
-            <details>
-              <summary>How can I make a wholesale enquiry?</summary>
-              <p>
-                Choose Wholesale &amp; Bulk Orders from the website navigation, add products
-                and quantities, review the details, then prepare the enquiry for WhatsApp.
-              </p>
-            </details>
-            <details>
-              <summary>How can I request return or replacement assistance?</summary>
-              <p>
-                Use the <Link to="/support">Customer Support</Link> form to describe your
-                request. The store will discuss the applicable process with you through
-                WhatsApp; submitting a request does not automatically approve it.
-              </p>
-            </details>
+            {homeFaqs.map((faq, index) => (
+              <details key={faq.question}>
+                <summary>{faq.question}</summary>
+                <p>
+                  {faq.answer}
+                  {index === homeFaqs.length - 1 && (
+                    <> Visit <Link to="/support">Customer Support</Link> to start a request.</>
+                  )}
+                </p>
+              </details>
+            ))}
           </div>
         </div>
       </section>

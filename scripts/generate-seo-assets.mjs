@@ -92,6 +92,7 @@ const [
     createLocalBusinessSchema,
     createWebSiteSchema,
     getCategorySeoMetadata,
+    getHomeFaqs,
     getProductSeoMetadata,
     HOME_SEO_METADATA
   }
@@ -325,10 +326,11 @@ const baseHtml = replaceRequired(
   `<script id="riti-local-business-schema" type="application/ld+json">${localBusinessJsonLd}</script><script id="riti-website-schema" type="application/ld+json">${webSiteJsonLd}</script></head>`,
   'head close tag for business structured data'
 )
+const homeFaqs = getHomeFaqs(catalogue.categories.map(category => category.name.trim()).filter(Boolean))
 let pageCount = 1
 const homepageHtml = createSnapshot(baseHtml, homeMetadata, {
   fallbackImage: null,
-  schemas: [],
+  schemas: buildPageStructuredData({ faqs: homeFaqs }),
   ...homeFallback
 })
 

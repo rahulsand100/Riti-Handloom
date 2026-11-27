@@ -11,6 +11,7 @@ export function SEO({
   type = 'website',
   product = null,
   breadcrumbs = null,
+  faqs = null,
   noindex = false
 }) {
   useEffect(() => {
@@ -90,8 +91,8 @@ export function SEO({
       pageSchemaTag.type = 'application/ld+json'
       document.head.appendChild(pageSchemaTag)
     }
-    pageSchemaTag.textContent = JSON.stringify(buildPageStructuredData({ product, breadcrumbs }))
-  }, [title, description, image, imageAlt, url, type, product, breadcrumbs, noindex])
+    pageSchemaTag.textContent = JSON.stringify(buildPageStructuredData({ product, breadcrumbs, faqs }))
+  }, [title, description, image, imageAlt, url, type, product, breadcrumbs, faqs, noindex])
 
   return null
 }

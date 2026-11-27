@@ -1,8 +1,8 @@
 import { getCanonicalUrl, siteConfig } from './config.js'
 
 export const HOME_SEO_METADATA = Object.freeze({
-  title: 'Riti Handloom | Home Furnishings in Jagat Farm, Greater Noida',
-  description: 'Explore home furnishings and Kurlon mattresses at Riti Handloom, an authorised Kurlon dealer at Shop No. 14, GM Mall, Gamma 1, Jagat Farm, Greater Noida, Uttar Pradesh. Browse the catalogue or contact us on WhatsApp.',
+  title: 'Riti Handloom | Handloom Store in Jagat Farm, Greater Noida',
+  description: 'Visit Riti Handloom at Shop No. 14, GM Mall, Gamma 1, Jagat Farm, Greater Noida for cotton bedsheets, curtains, blankets, towels, and Kurlon mattresses. Authorised Kurlon dealer — browse online or enquire on WhatsApp.',
   url: getCanonicalUrl('/')
 })
 
@@ -84,6 +84,23 @@ export function createLocalBusinessSchema() {
       postalCode: '201310',
       addressCountry: 'IN'
     },
+    areaServed: [
+      'Jagat Farm',
+      'Gamma 1',
+      'Greater Noida',
+      'Pari Chowk',
+      'Knowledge Park',
+      'Noida'
+    ],
+    knowsAbout: [
+      'Handloom textiles',
+      'Cotton bedsheets',
+      'Window curtains',
+      'Blankets and dohars',
+      'Bath towels',
+      'Pillow covers',
+      'Kurlon mattresses and sleep products'
+    ],
     ...(siteConfig.instagramUrl ? { sameAs: [siteConfig.instagramUrl] } : {})
   }
 }
@@ -99,7 +116,40 @@ export function createWebSiteSchema() {
   }
 }
 
-export function buildPageStructuredData({ product = null, breadcrumbs = null } = {}) {
+export function getHomeFaqs(categoryNames = []) {
+  const categoryList = categoryNames.length > 0
+    ? categoryNames.join(', ')
+    : 'Bedsheets, Blankets, Curtains, Window Curtains, Pillow Covers, and Towels'
+
+  return [
+    {
+      question: 'What handloom and home furnishing products does Riti Handloom in Jagat Farm offer?',
+      answer: `Riti Handloom offers ${categoryList} at Shop No. 14, GM Mall, Gamma 1, Jagat Farm, Greater Noida. Browse our online catalogue or message us on WhatsApp for product details.`
+    },
+    {
+      question: 'Where is Riti Handloom located in Jagat Farm, Greater Noida?',
+      answer: 'Riti Handloom is a physical handloom and home furnishing store located at Shop No. 14, GM Mall, Gamma 1, Jagat Farm, Greater Noida, Uttar Pradesh 201310, near Punjab National Bank.'
+    },
+    {
+      question: 'Is Riti Handloom an authorised Kurlon dealer in Jagat Farm?',
+      answer: 'Yes. Riti Handloom is an authorised Kurlon dealer offering Kurlon products alongside handloom bedsheets, curtains, blankets, pillow covers, and towels at our Jagat Farm, Greater Noida store.'
+    },
+    {
+      question: 'How can I enquire about a product?',
+      answer: 'Open any product page and choose its WhatsApp enquiry option, or contact our Jagat Farm store directly using the phone and WhatsApp links on this page.'
+    },
+    {
+      question: 'How can I make a wholesale or bulk enquiry?',
+      answer: 'Choose Wholesale & Bulk Orders from the website navigation, add products and quantities, review the details, then send the prepared enquiry on WhatsApp.'
+    },
+    {
+      question: 'How can I request return or replacement assistance?',
+      answer: 'Use the Customer Support page to describe your request. Our team will review and discuss the applicable process with you on WhatsApp; submitting a request does not automatically approve it.'
+    }
+  ]
+}
+
+export function buildPageStructuredData({ product = null, breadcrumbs = null, faqs = null } = {}) {
   const schemas = []
 
   if (product) {
@@ -139,6 +189,25 @@ export function buildPageStructuredData({ product = null, breadcrumbs = null } =
           name: crumb.name,
           item: crumb.url
         }))
+    })
+  }
+
+  const validFaqs = Array.isArray(faqs)
+    ? faqs.filter(item => item?.question?.trim() && item?.answer?.trim())
+    : []
+
+  if (validFaqs.length > 0) {
+    schemas.push({
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: validFaqs.map(item => ({
+        '@type': 'Question',
+        name: item.question.trim(),
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: item.answer.trim()
+        }
+      }))
     })
   }
 
