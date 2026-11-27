@@ -86,7 +86,23 @@ export function generateRobotsTxt(siteUrl) {
     'Disallow: /studio/',
     'Disallow: /admin/',
     '',
+    'User-agent: OAI-SearchBot',
+    'Allow: /',
+    '',
+    'User-agent: GPTBot',
+    'Allow: /',
+    '',
+    'User-agent: PerplexityBot',
+    'Allow: /',
+    '',
+    'User-agent: ClaudeBot',
+    'Allow: /',
+    '',
+    'User-agent: Google-Extended',
+    'Allow: /',
+    '',
     `Sitemap: ${origin}/sitemap.xml`,
+    `# AI context: ${origin}/llms.txt`,
     ''
   ].join('\n')
 }

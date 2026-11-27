@@ -72,6 +72,7 @@ export function createLocalBusinessSchema() {
     name: 'Riti Handloom',
     alternateName: ['Riti Handlooms', 'Ritihandloom'],
     url: siteConfig.siteUrl,
+    logo: `${siteConfig.siteUrl}/riti-logo.png`,
     image: `${siteConfig.siteUrl}/riti-store-photo.jpg`,
     hasMap: siteConfig.googleMapsUrl,
     description: 'Physical handloom and home furnishing store and authorised Kurlon dealer at Shop No. 14, GM Mall, Gamma 1, Jagat Farm, Greater Noida, Uttar Pradesh, India.',
